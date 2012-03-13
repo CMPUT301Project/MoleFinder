@@ -19,14 +19,14 @@ import android.util.Log;
  */
 
 /*
- * To store the images in the database they must be stored as a blob. I searched the internet and
+ * To store the images in the database they must be stored as a blob. I searched the Internet and
  * found that you convert the image into a byte[] and then can insert it into the DB. once in the DB
  * to turn it back into an image a method needs to be called. These are the methods.
  * 
  * private byte[] getBitmapAsByteArray(Bitmap bitmap) { 
  * 
  * ByteArrayOutputStream outputStream = new ByteArrayOutputStream(); 
- * // Middle parameter is quality, but since PNG is lossless, it 
+ * // Middle parameter is quality, but since PNG is lossless, it s
  * doesn't matter 
  * bitmap.compress(CompressFormat.PNG, 0, outputStream); 
  * return outputStream.toByteArray(); 
@@ -42,7 +42,7 @@ import android.util.Log;
  */
 
 
-public class DbController{
+public class DatabaseManager{
 
 	/* declaration of global variables used in this class*/
 	public static final String KEY_TAG = "tag";	
@@ -60,7 +60,7 @@ public class DbController{
 	private static final String DATABASE_TAG_TABLE = "TagTable";
 	private static final int DATABASE_VERSION = 2;
 
-	/**
+	/*
 	 * Database creation sql statement
 	 */
 	private static final String DATABASE_CREATE_IMAGE =
@@ -73,6 +73,9 @@ public class DbController{
 	
 	private final Context mCtx;
 
+	/*
+	 * Helper class that initializes the DatabaseManager object
+	 */
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 
 		DatabaseHelper(Context context) {
@@ -100,7 +103,7 @@ public class DbController{
 	 * 
 	 * @param ctx the Context within which to work
 	 */
-	public DbController(Context ctx) {
+	public DatabaseManager(Context ctx) {
 		this.mCtx = ctx;
 	}
 
@@ -113,12 +116,15 @@ public class DbController{
 	 *         initialization call)
 	 * @throws SQLException if the database could be neither opened or created
 	 */
-	public DbController open() throws SQLException {
+	public DatabaseManager open() throws SQLException {
 		mDbHelper = new DatabaseHelper(mCtx);
 		mDb = mDbHelper.getWritableDatabase();
 		return this;
 	}
 
+	/**
+	 * Closes the database.
+	 */
 	public void close() {
 		mDbHelper.close();
 	}
@@ -176,6 +182,8 @@ public class DbController{
 	/**
 	 * Delete all entries with the specified tag in the database
 	 * 
+	 * @param tag used to categorize the images
+	 * @return true if deleted, false otherwise
 	 */
 	public boolean deleteAllEntries(String tag) {
 
@@ -186,6 +194,7 @@ public class DbController{
 	/**
 	 * Return a Cursor over the list of all Images in the database
 	 * 
+	 * @param tag used to categorize the images
 	 * @return Cursor over all notes
 	 */
 	public Cursor fetchAllImages(String tag) {
@@ -198,7 +207,7 @@ public class DbController{
 	/**
 	 * Return a Cursor over the list of all tags in the database
 	 * 
-	 * @return Cursor over all notes
+	 * @return Cursor over all tags
 	 */
 	public Cursor fetchTags(){
 		
