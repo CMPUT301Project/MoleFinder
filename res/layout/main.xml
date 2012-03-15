@@ -5,31 +5,31 @@
     android:orientation="vertical" >
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/buttonCaptureImage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Take Photo" />
+        android:text="Capture Image" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buttonCompare"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Compare" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/buttonReviewImages"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Review" />
+        android:text="Review Images" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/buttonNewTag"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="New Tag" />
     
         <Button
-        android:id="@+id/button5"
+        android:id="@+id/buttonEditTag"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Edit Tag" />
