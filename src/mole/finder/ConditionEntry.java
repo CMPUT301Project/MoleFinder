@@ -9,7 +9,7 @@ import android.graphics.BitmapFactory;
 
 public class ConditionEntry extends DatabaseEntry {
 	// database rows
-	private String tag, comment;
+	private String tag, comment, date;
 	private Bitmap image;
 
 	// constructor 1 (comment is optional)
@@ -19,9 +19,10 @@ public class ConditionEntry extends DatabaseEntry {
 		this.image = BitmapFactory.decodeByteArray(image, 0, image.length); 
 	}
 	// constructor 2
-	public ConditionEntry(int id, String tag, byte[] image, String comment) {
+	public ConditionEntry(int id, String tag, byte[] image, String comment, String date) {
 		this(id, tag, image);
 		this.setComment(comment);
+		this.setDate(date);
 	}
 
 	// return the image as a byte array, use for saving entry to DB
@@ -31,8 +32,13 @@ public class ConditionEntry extends DatabaseEntry {
 		return outputStream.toByteArray(); 
 	} 
 	
-	// getters/setters, changing the image doesn't make any
-	// sense => only need to set on tag and comment
+	@Override
+	public String toString() {
+		return new String(getId() + " " + getTag() + 
+				" " + getDate());
+	}
+	
+	// getters/setters
 	public String getTag() {
 		return tag;
 	}
@@ -47,5 +53,11 @@ public class ConditionEntry extends DatabaseEntry {
 	}
 	public Bitmap getImage() {
 		return this.image;
+	}
+	public String getDate() {
+		return date;
+	}
+	public void setDate(String date) {
+		this.date = date;
 	}
 }

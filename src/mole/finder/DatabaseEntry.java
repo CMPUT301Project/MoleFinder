@@ -8,6 +8,9 @@ public abstract class DatabaseEntry {
 	public DatabaseEntry(int id) {
 		this.id = id;		
 	}
+	
+	// return a String representation of the entry
+	public abstract String toString();
 
 	// getters/setters
 	public int getId() {

@@ -13,6 +13,11 @@ public class ConditionTag extends DatabaseEntry {
 		this(id, name);
 		this.setComment(comment);
 	}
+	
+	@Override
+	public String toString() {
+		return new String(getId() + " " + getName());
+	}
 
 	
 	// getters/setters
@@ -31,5 +36,4 @@ public class ConditionTag extends DatabaseEntry {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-
 }

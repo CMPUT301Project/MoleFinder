@@ -148,7 +148,7 @@ public class DatabaseManager{
 
 		return mDb.insert(DATABASE_IMAGE_TABLE, null, initialValues);
 	}
-	// I think these should return actual entry objects
+
 	
 	/**
 	 * Create a new Tag Entry using the information the user provided. If the entry is
