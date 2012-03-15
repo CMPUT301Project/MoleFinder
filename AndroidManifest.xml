@@ -18,6 +18,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name=".CaptureImageActivity"
+            android:label="Capture Image">
+        </activity>
+        
+        <activity
+            android:name=".CompareActivity"
+            android:label="Compare Images">
+        </activity>
+        
+        <activity
+            android:name=".ReviewImagesActivity"
+            android:label="Review Images">
+        </activity>
+        
+        <activity
+            android:name=".NewTagActivity"
+            android:label="New Tag">
+        </activity>
+        
+        <activity
+            android:name=".EditTagActivity"
+            android:label="Edit Tag">
+        </activity>
+        
     </application>
 
 </manifest>
