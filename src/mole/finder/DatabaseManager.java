@@ -188,7 +188,7 @@ public class DatabaseManager{
 	 */
 	public boolean deleteAllEntries(String tag) {
 
-		return (mDb.delete(DATABASE_IMAGE_TABLE, KEY_TAG + " = " + "'" + tag + "'", null) > 0) || 
+		return (mDb.delete(DATABASE_IMAGE_TABLE, KEY_TAG + " = " + "'" + tag + "'", null) > 0) && 
 				(mDb.delete(DATABASE_TAG_TABLE, KEY_TAG + " = " + "'" + tag + "'", null) > 0);
 	}
 
