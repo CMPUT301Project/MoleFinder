@@ -139,10 +139,10 @@ public class DatabaseManager{
 	 * @param body the body of the note
 	 * @return rowId or -1 if failed
 	 */
-	public long createImageEntry(String tag, String date, String comments, byte[] image) {
+	public long createImageEntry(String tag, String comments, byte[] image) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_TAG, tag);		
-		initialValues.put(KEY_DATE, date);
+		initialValues.put(KEY_DATE, "sysdate");
 		initialValues.put(KEY_COMMENTS, comments);
 		initialValues.put(KEY_IMAGE, image);
 
