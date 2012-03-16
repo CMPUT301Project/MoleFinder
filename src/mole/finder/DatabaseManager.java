@@ -108,11 +108,10 @@ public class DatabaseManager{
 
 	/**
 	 * Create a new Image Entry using the information the user provided. If the entry is
-	 * successfully created return the new rowId for that note, otherwise return
+	 * successfully created return the new rowId for that entry, otherwise return
 	 * a -1 to indicate failure.
 	 * 
-	 * @param title the title of the note
-	 * @param body the body of the note
+	 * @param String tag, String date, String comments, String image
 	 * @return rowId or -1 if failed
 	 */
 	public long createImageEntry(String tag, String date, String comments, String image) {
@@ -131,8 +130,7 @@ public class DatabaseManager{
 	 * successfully created return the new rowId for that note, otherwise return
 	 * a -1 to indicate failure.
 	 * 
-	 * @param title the title of the note
-	 * @param body the body of the note
+	 * @param String tag, String comments
 	 * @return rowId or -1 if failed
 	 */
 	public long createTagEntry(String tag, String comments) {
@@ -189,6 +187,34 @@ public class DatabaseManager{
 	public Cursor fetchAllTags(){
 		
 		return mDb.query(DATABASE_TAG_TABLE, new String[] {KEY_ROWID, KEY_TAG, KEY_COMMENTS}, null, null, null, null, null);
+	}
+	
+	/**
+	 * Updates the values of a row in the Tag table
+	 * 
+	 * @param long rowId, String tag, String comments
+	 * @return rowId or -1 if failed
+	 */
+	public boolean editTag(long rowId, String tag, String comments){
+		
+		ContentValues updateValues = new ContentValues();
+		updateValues.put(KEY_TAG, tag);
+		updateValues.put(KEY_COMMENTS, comments);
+		return (mDb.update(DATABASE_TAG_TABLE, updateValues, KEY_ROWID + "=" + rowId, null) > 0);
+	}
+	
+	/**
+	 * Updates the values of a row in the Image table
+	 * 
+	 * @param long rowId, String tag, String comments
+	 * @return rowId or -1 if failed
+	 */
+	public boolean editImage(long rowId, String tag, String comments){
+		
+		ContentValues updateValues = new ContentValues();
+		updateValues.put(KEY_TAG, tag);
+		updateValues.put(KEY_COMMENTS, comments);
+		return (mDb.update(DATABASE_IMAGE_TABLE, updateValues, KEY_ROWID + "=" + rowId, null) > 0);
 	}
 	
 	/**
