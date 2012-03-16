@@ -14,6 +14,8 @@ public class MoleFinderActivity extends Activity {
 	private Button buttonReviewImages;
 	private Button buttonNewTag;
 	private Button buttonEditTag;
+	private String imageName;
+	private String Date;
 
 
 	/** Called when the activity is first created. */
@@ -21,14 +23,18 @@ public class MoleFinderActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		final CameraController Camera = new CameraController();
+		
 
 		// setup buttons
 		// capture images
 		buttonCaptureImage = (Button) findViewById(R.id.buttonCaptureImage);
 		buttonCaptureImage.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				CameraController Camera = new CameraController();
 		    	Intent i = Camera.takeAPhoto();
+		    	Bundle extras = i.getExtras();
+		    	imageName = extras.getString("imageName");
+		    	Date = extras.getString("date");
 				startActivityForResult(i,CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 			}
 		});
@@ -67,18 +73,18 @@ public class MoleFinderActivity extends Activity {
 	}
 	
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		super.onActivityResult(requestCode, resultCode, data);
-		
-		if(requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
+		switch(requestCode){
+		case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
 			
 			if(resultCode== RESULT_OK){
-				
-				//ImageButton button = (ImageButton) findViewById(R.id.TakeAPhoto);
-				
-				//button.setImageDrawable(Drawable.createFromPath(imageUri.getPath()));
-				
+
+				Intent i = new Intent(MoleFinderActivity.this, NewImageActivity.class);
+				i.putExtra("imageName", imageName);
+				i.putExtra("date", Date);
+				startActivity(i);
+	
 			}
 		}
 	}

@@ -55,6 +55,10 @@
             android:name=".EditTagActivity"
             android:label="Edit Tag" >
         </activity>
+                <activity
+            android:name=".NewImageActivity"
+            android:label="New Image" >
+        </activity>
     </application>
 
 </manifest>

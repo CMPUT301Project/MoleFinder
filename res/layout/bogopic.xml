@@ -5,13 +5,11 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <!-- Preview: listitem=@android:layout/simple_list_item_1 -->
-
-    <ImageButton
-        android:id="@+id/TakeAPhoto"
+    <ImageView
+        android:id="@+id/BogoPicImage"
         android:layout_width="fill_parent"
-        android:layout_height="307dp"
-        android:layout_weight="0.75"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.93"
         android:src="@drawable/ic_launcher" />
 
     <LinearLayout
@@ -20,19 +18,18 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/Accept"
+            android:id="@+id/Save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.50"
-            android:text="Accept" />
+            android:text="Save" />
 
         <Button
-            android:id="@+id/Cancel"
+            android:id="@+id/Retake"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.50"
-            android:text="Cancel" />
-
+            android:text="Retake" />
     </LinearLayout>
 
 </LinearLayout>

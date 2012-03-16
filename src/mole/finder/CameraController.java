@@ -15,6 +15,7 @@ public class CameraController {
 	
 	private Uri imageUri;	
 	private String imageName;
+	private String Date;
 	private int counter=0;
     
     protected Intent takeAPhoto(){
@@ -30,6 +31,7 @@ public class CameraController {
     	}
     	
     	setImageName();
+
     	String imageFilePath = folder + "/" + imageName + ".jpg"; //can overwrite itself
     	
     	File imageFile = new File(imageFilePath);
@@ -37,7 +39,8 @@ public class CameraController {
     	imageUri = Uri.fromFile(imageFile);
     	
     	intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-    	
+    	intent.putExtra("date", Date);
+    	intent.putExtra("imageName", imageName);
     	return intent;
     }
     
@@ -45,9 +48,9 @@ public class CameraController {
     	
     	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-		String Date = dateFormat.format(new Date()).toString();
+		Date = dateFormat.format(new Date()).toString();
 		counter++;
     	imageName = Date.concat("-" +  String.valueOf(counter));
     }
-
+    
 }

@@ -48,7 +48,7 @@ import android.provider.MediaStore;
 
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
 public class BogoPicGenActivity extends Activity {
@@ -62,16 +62,7 @@ public class BogoPicGenActivity extends Activity {
         
         setBogoPic();
         
-        ImageButton button = (ImageButton)findViewById(R.id.TakeAPhoto);
-        OnClickListener listener = new OnClickListener() {
-            public void onClick(View v) {
-                //takeAPhoto();
-            	setBogoPic();
-            }
-        }; 
-        button.setOnClickListener(listener);
-        
-        Button acceptButton = (Button)findViewById(R.id.Accept);
+        Button acceptButton = (Button)findViewById(R.id.Save);
         
         acceptButton.setOnClickListener( new OnClickListener() {
             public void onClick(View v) {
@@ -79,18 +70,15 @@ public class BogoPicGenActivity extends Activity {
             }        	
         });
         
-        Button cancelButton = (Button)findViewById(R.id.Cancel);
+        Button retakeButton = (Button)findViewById(R.id.Retake);
         
-        cancelButton.setOnClickListener( new OnClickListener() {
+        retakeButton.setOnClickListener( new OnClickListener() {
             public void onClick(View v) {
-            	processIntent(true);
+            	setBogoPic();
             }        	
         });
 
-        
-        
-        
-		        
+        		        
         //takeAPhoto();
     }
 
@@ -98,11 +86,12 @@ public class BogoPicGenActivity extends Activity {
 
     private Bitmap ourBMP;
     private void setBogoPic() {
-    	Toast.makeText(this, "Generating Photo", Toast.LENGTH_LONG).show();
-		ImageButton button = (ImageButton)findViewById(R.id.TakeAPhoto);
+    	Toast.makeText(this, "Generating Photo", Toast.LENGTH_SHORT).show();
+        ImageView imageView = (ImageView)findViewById(R.id.BogoPicImage);
 		ourBMP = BogoPicGen.generateBitmap(400, 400);
-		button.setImageBitmap(ourBMP);
+		imageView.setImageBitmap(ourBMP);
 	}
+    
     private File getPicturePath(Intent intent) {
         Uri uri = (Uri) intent.getExtras().get(MediaStore.EXTRA_OUTPUT);
         return new File(uri.getPath());
