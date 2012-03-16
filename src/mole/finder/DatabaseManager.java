@@ -10,37 +10,13 @@ import android.util.Log;
 
 
 /**
- * DbController is the database controller for the MoleFinder application,
- * the database contains two tables. One table is for storing the users images
+ * DatabaseManager is the database controller for the MoleFinder application,
+ * the database contains two tables. One table is for storing the references to users images
  * and the other table is the tags of the images used for sorting. This class gives the 
  * database functionality such as deleting, inserting and fetching database entries.
  * @author jletourn
  *
  */
-
-/*
- * To store the images in the database they must be stored as a blob. I searched the Internet and
- * found that you convert the image into a byte[] and then can insert it into the DB. once in the DB
- * to turn it back into an image a method needs to be called. These are the methods.
- * 
- * private byte[] getBitmapAsByteArray(Bitmap bitmap) { 
- * 
- * ByteArrayOutputStream outputStream = new ByteArrayOutputStream(); 
- * // Middle parameter is quality, but since PNG is lossless, it s
- * doesn't matter 
- * bitmap.compress(CompressFormat.PNG, 0, outputStream); 
- * return outputStream.toByteArray(); 
- * } 
- * 
- * This method returns the byte[] that can be stored in the DB.
- * 
- * to read the blob from the DB use this:
- * byte[] bitmapData = cursor.getBlob(cursor.getColumnIndex("data")); 
- * 
- * to convert the byte[] back to an image that can be viewed us this:
- * BitmapFactory.decodeByteArray(bitmapData, 0, bitmapData.length); 
- */
-
 
 public class DatabaseManager{
 
@@ -65,7 +41,7 @@ public class DatabaseManager{
 	 */
 	private static final String DATABASE_CREATE_IMAGE =
 			"create table " + DATABASE_IMAGE_TABLE + " (_id integer primary key autoincrement, "
-					+ "tag text not null, date text not null, comments text, image BLOB not null);";
+					+ "tag text not null, date text not null, comments text, image text not null);";
 	
 	private static final String DATABASE_CREATE_TAG =
 			"create table " + DATABASE_TAG_TABLE + " (_id integer primary key autoincrement, "
@@ -139,16 +115,16 @@ public class DatabaseManager{
 	 * @param body the body of the note
 	 * @return rowId or -1 if failed
 	 */
-	public long createImageEntry(String tag, String comments, byte[] image) {
+	public long createImageEntry(String tag, String date, String comments, String image) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_TAG, tag);		
-		initialValues.put(KEY_DATE, "sysdate");
+		initialValues.put(KEY_DATE, date);
 		initialValues.put(KEY_COMMENTS, comments);
 		initialValues.put(KEY_IMAGE, image);
 
 		return mDb.insert(DATABASE_IMAGE_TABLE, null, initialValues);
 	}
-
+	// I think these should return actual entry objects
 	
 	/**
 	 * Create a new Tag Entry using the information the user provided. If the entry is
@@ -210,9 +186,19 @@ public class DatabaseManager{
 	 * 
 	 * @return Cursor over all tags
 	 */
-	public Cursor fetchTags(){
+	public Cursor fetchAllTags(){
 		
-		return mDb.query(DATABASE_TAG_TABLE, new String[] {KEY_TAG, KEY_COMMENTS}, null, null, null, null, null);
+		return mDb.query(DATABASE_TAG_TABLE, new String[] {KEY_ROWID, KEY_TAG, KEY_COMMENTS}, null, null, null, null, null);
+	}
+	
+	/**
+	 * Return a Cursor over the specified tag in the database
+	 * 
+	 * @return Cursor of the specified tag
+	 */
+	public Cursor fetchTag(String tag){
+		
+		return mDb.query(DATABASE_TAG_TABLE, new String[] {KEY_TAG, KEY_COMMENTS},  KEY_TAG + " = " + "'" + tag + "'", null, null, null, null);
 	}
 
 }

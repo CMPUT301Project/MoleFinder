@@ -92,7 +92,7 @@ public class MoleFinderModel {
 	 */
 	public void fetchTags() {
 		clearTags();
-		Cursor cur = DBManager.fetchTags();
+		Cursor cur = DBManager.fetchAllTags();
 		cur.moveToFirst();
 		while (!cur.isAfterLast()) {
 			ConditionTag tag = cursorToTag(cur);
