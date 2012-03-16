@@ -1,7 +1,5 @@
 package mole.finder.test;
 
-import java.io.ByteArrayOutputStream;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -50,6 +48,7 @@ public class DatabaseManagerTester extends AndroidTestCase {
 		String storedImage = images.getString(images.getColumnIndex(DatabaseManager.KEY_IMAGE));
 		assertNotNull("The image was not stored in the Database", storedImage);
 		assertEquals("The expected and actual images are different",image, storedImage);
+		DBManager.close();
 	}
 	
 	/**
@@ -68,6 +67,7 @@ public class DatabaseManagerTester extends AndroidTestCase {
 		String trueComments = tags.getString(tags.getColumnIndex(DatabaseManager.KEY_COMMENTS));
 		assertEquals("the expected tag and actual tag are different",tag,trueTag);
 		assertEquals("the expected comment and actual comment are different",comments,trueComments);
+		DBManager.close();
 	}
 
 	/**
@@ -86,6 +86,7 @@ public class DatabaseManagerTester extends AndroidTestCase {
 		DBManager.deleteAllEntries(tag);
 		Cursor images = DBManager.fetchAllImages(tag);
 		assertFalse("image was not deleted",images.moveToLast());
+		DBManager.close();
 	}
 
 	/**
@@ -106,6 +107,50 @@ public class DatabaseManagerTester extends AndroidTestCase {
 		Cursor tags = DBManager.fetchAllTags();
 		assertFalse("image was not deleted",images.moveToLast());
 		assertFalse("tag was not deleted", tags.moveToLast());
+		DBManager.close();
 	}
-
+	
+	/**
+	 * tests that the DatabaseManager can update an entry in the image table
+	 */
+	public void testUpdateImageEntry() {
+		Context context = getContext();
+		DBManager = new DatabaseManager(context);
+		DBManager.open();
+		String tag = "tag";
+		String comments = "comments";
+		String date = "01-01-12";
+		String image = date.concat(tag);
+		DBManager.createTagEntry(tag,comments);
+		DBManager.createImageEntry(tag, date, comments, image);
+		String updateTag = "TAG";
+		DBManager.editImage(0, updateTag, comments);
+		Cursor images = DBManager.fetchImage(0);
+		images.moveToFirst();
+		String trueTag = images.getString(images.getColumnIndex(DatabaseManager.KEY_TAG));
+		assertEqual("image was not updated", updateTag, trueTag);
+		DBManager.close();
+	}
+	
+	/**
+	 * tests that the DatabaseManager can update an entry in the tag table
+	 */
+	public void testUpdateImageEntry() {
+		Context context = getContext();
+		DBManager = new DatabaseManager(context);
+		DBManager.open();
+		String tag = "tag";
+		String comments = "comments";
+		String date = "01-01-12";
+		String image = date.concat(tag);
+		DBManager.createTagEntry(tag,comments);
+		DBManager.createImageEntry(tag, date, comments, image);
+		String updateTag = "TAG";
+		DBManager.editTag(0, updateTag, comments);
+		Cursor tags = DBManager.fetchTag(0);
+		tags.moveToFirst();
+		String trueTag = images.getString(images.getColumnIndex(DatabaseManager.KEY_TAG));
+		assertEqual("tag was not updated", updateTag, trueTag);
+		DBManager.close();
+	}
 }

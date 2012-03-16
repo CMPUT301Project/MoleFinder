@@ -42,7 +42,7 @@ public class NewImageActivity extends Activity{
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
 				Cursor tags = (Cursor)(parent.getItemAtPosition(pos));
-				Tag = tags.getString(tags.getColumnIndex("vehicle2"));
+				Tag = tags.getString(tags.getColumnIndex(DatabaseManager.KEY_TAG));
 				fillSpinner();
 			}
 			public void onNothingSelected(AdapterView<?> parent) {
@@ -67,17 +67,22 @@ public class NewImageActivity extends Activity{
 			public void onClick(View v) {
 
 				DBManager.createImageEntry(Tag, Date, Comments, imageName);
+				DBManager.close();
+				finish();
 			}
 		});
 		
 		buttonCancel = (Button) findViewById(R.id.buttonCancel);
 		buttonCancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				DBManager.close();
 				finish();
 			}
 		});
 		
     }
+    
+
     
     private void fillSpinner() {
     	// get tags
