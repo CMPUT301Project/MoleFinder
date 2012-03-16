@@ -40,13 +40,13 @@ public class DatabaseManager{
 	 * Database creation sql statement
 	 */
 	private static final String DATABASE_CREATE_IMAGE =
-			"create table " + DATABASE_IMAGE_TABLE + " (_id integer primary key autoincrement, "
-					+ "tag text not null, date text not null, comments text, image text not null);";
-	
+		"create table " + DATABASE_IMAGE_TABLE + " (_id integer primary key autoincrement, "
+		+ "tag text not null, date text not null, comments text, image text not null);";
+
 	private static final String DATABASE_CREATE_TAG =
-			"create table " + DATABASE_TAG_TABLE + " (_id integer primary key autoincrement, "
-					+ "tag text not null, comments text);";
-	
+		"create table " + DATABASE_TAG_TABLE + " (_id integer primary key autoincrement, "
+		+ "tag text not null, comments text);";
+
 	private final Context mCtx;
 
 	/*
@@ -124,7 +124,7 @@ public class DatabaseManager{
 		return mDb.insert(DATABASE_IMAGE_TABLE, null, initialValues);
 	}
 	// I think these should return actual entry objects
-	
+
 	/**
 	 * Create a new Tag Entry using the information the user provided. If the entry is
 	 * successfully created return the new rowId for that note, otherwise return
@@ -140,7 +140,7 @@ public class DatabaseManager{
 
 		return mDb.insert(DATABASE_TAG_TABLE, null, initialValues);
 	}
-	
+
 
 	/**
 	 * Delete the entry with the given rowId
@@ -153,7 +153,7 @@ public class DatabaseManager{
 		return mDb.delete(DATABASE_IMAGE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
 	}
 
-	
+
 	/**
 	 * Delete all entries with the specified tag in the database
 	 * 
@@ -163,7 +163,7 @@ public class DatabaseManager{
 	public boolean deleteAllEntries(String tag) {
 
 		return (mDb.delete(DATABASE_IMAGE_TABLE, KEY_TAG + " = " + "'" + tag + "'", null) > 0) && 
-				(mDb.delete(DATABASE_TAG_TABLE, KEY_TAG + " = " + "'" + tag + "'", null) > 0);
+		(mDb.delete(DATABASE_TAG_TABLE, KEY_TAG + " = " + "'" + tag + "'", null) > 0);
 	}
 
 	/**
@@ -173,22 +173,22 @@ public class DatabaseManager{
 	 * @return Cursor over all notes
 	 */
 	public Cursor fetchAllImages(String tag) {
-		
+
 
 		return mDb.query(DATABASE_IMAGE_TABLE, new String[] {KEY_TAG, KEY_DATE,
 				KEY_COMMENTS, KEY_IMAGE}, KEY_TAG + " = " + "'" + tag + "'", null, null, null, null);
 	}
-	
+
 	/**
 	 * Return a Cursor over the list of all tags in the database
 	 * 
 	 * @return Cursor over all tags
 	 */
 	public Cursor fetchAllTags(){
-		
+
 		return mDb.query(DATABASE_TAG_TABLE, new String[] {KEY_ROWID, KEY_TAG, KEY_COMMENTS}, null, null, null, null, null);
 	}
-	
+
 	/**
 	 * Updates the values of a row in the Tag table
 	 * 
@@ -196,13 +196,13 @@ public class DatabaseManager{
 	 * @return rowId or -1 if failed
 	 */
 	public boolean editTag(long rowId, String tag, String comments){
-		
+
 		ContentValues updateValues = new ContentValues();
 		updateValues.put(KEY_TAG, tag);
 		updateValues.put(KEY_COMMENTS, comments);
 		return (mDb.update(DATABASE_TAG_TABLE, updateValues, KEY_ROWID + "=" + rowId, null) > 0);
 	}
-	
+
 	/**
 	 * Updates the values of a row in the Image table
 	 * 
@@ -210,21 +210,35 @@ public class DatabaseManager{
 	 * @return rowId or -1 if failed
 	 */
 	public boolean editImage(long rowId, String tag, String comments){
-		
+
 		ContentValues updateValues = new ContentValues();
 		updateValues.put(KEY_TAG, tag);
 		updateValues.put(KEY_COMMENTS, comments);
 		return (mDb.update(DATABASE_IMAGE_TABLE, updateValues, KEY_ROWID + "=" + rowId, null) > 0);
 	}
-	
+
 	/**
 	 * Return a Cursor over the specified tag in the database
 	 * 
 	 * @return Cursor of the specified tag
 	 */
 	public Cursor fetchTag(String tag){
-		
-		return mDb.query(DATABASE_TAG_TABLE, new String[] {KEY_TAG, KEY_COMMENTS},  KEY_TAG + " = " + "'" + tag + "'", null, null, null, null);
+
+		return mDb.query(DATABASE_TAG_TABLE, new String[] {KEY_TAG, KEY_COMMENTS}, KEY_TAG + "=" + tag, null, null, null, null);
 	}
 
+	/**
+	 * Return a Cursor over the specified tag in the database
+	 * 
+	 * @return Cursor of the specified tag
+	 */
+	public Cursor fetchImage(String imageName){
+
+		return mDb.query(DATABASE_IMAGE_TABLE, new String[] {KEY_TAG, KEY_DATE,
+				KEY_COMMENTS, KEY_IMAGE}, KEY_IMAGE + " = " + "'" + imageName + "'", null, null, null, null);}
+
+
+	public Cursor fetchaTag(int id) {
+		return mDb.query(DATABASE_TAG_TABLE, new String[] { KEY_ROWID, KEY_TAG, KEY_COMMENTS }, 
+				KEY_ROWID + " = " + id, null, null, null, null);}
 }

@@ -46,6 +46,10 @@
         <activity
             android:name=".ReviewImagesActivity"
             android:label="Review Images" >
+        </activity>       
+        <activity 
+            android:name=".ReviewTagsActivity"
+            android:label="Review Tags">
         </activity>
         <activity
             android:name=".NewTagActivity"
@@ -55,6 +59,12 @@
             android:name=".EditTagActivity"
             android:label="Edit Tag" >
         </activity>
+        
+        <activity
+            android:name=".SaveImageActivity"
+            android:label="Save Image">
+        </activity>
+        
                 <activity
             android:name=".NewImageActivity"
             android:label="New Image" >

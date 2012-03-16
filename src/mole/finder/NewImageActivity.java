@@ -11,6 +11,14 @@ import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
+/**
+ * This is the NewImageActivity class that is called when a new image is saved.
+ * The user is asked to input a tag name and optional comments to be stored with the image.
+ *  //To-Do - Stop user from pressing save when tag is null.
+ * @author jletourn
+ *
+ */
+
 public class NewImageActivity extends Activity{
 	
 	private Button buttonSave;
@@ -30,10 +38,13 @@ public class NewImageActivity extends Activity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.newphoto); 
+        
+        //create and open the Database
 		DBManager = new DatabaseManager(getBaseContext());
 		DBManager.open();
 		Intent intent = getIntent();
 		Bundle extras = intent.getExtras();
+		//get the saved image name and date
 		imageName = extras.getString("imageName");
 		Date = extras.getString("date");
         
@@ -43,7 +54,7 @@ public class NewImageActivity extends Activity{
 
 				Cursor tags = (Cursor)(parent.getItemAtPosition(pos));
 				Tag = tags.getString(tags.getColumnIndex(DatabaseManager.KEY_TAG));
-				fillSpinner();
+				fillSpinner(); //populates spinner
 			}
 			public void onNothingSelected(AdapterView<?> parent) {
 			}
@@ -83,7 +94,9 @@ public class NewImageActivity extends Activity{
     }
     
 
-    
+    /**
+     * Uses a cursor to populate the tag spinner
+     */
     private void fillSpinner() {
     	// get tags
     	Cursor tagCursor = DBManager.fetchAllTags();

@@ -5,14 +5,14 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textTagName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tag Name:"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/editTagName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
@@ -20,7 +20,7 @@
     </EditText>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textTagComments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Comments:"
@@ -33,7 +33,7 @@
     </FrameLayout>
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/editTagComments"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.68"
@@ -45,14 +45,21 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/buttonTagSave"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:text="Save" />
+        
+        <Button
+            android:id="@+id/buttonTagDelete"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="Delete" />
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/buttonTagCancel"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="1"

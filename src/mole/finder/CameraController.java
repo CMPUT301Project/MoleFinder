@@ -10,6 +10,13 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 
+/**
+ * This is the CameraController class that will set up the file path and name
+ * the image that is being stored. This is derived from the CameraExample we seen in the 
+ * Lab.
+ * @author jletourn
+ *
+ */
 
 public class CameraController {
 	
@@ -18,6 +25,10 @@ public class CameraController {
 	private String Date;
 	private int counter=0;
     
+	/**
+	 * Sets the file path and environment to take and store an image
+	 * @return
+	 */
     protected Intent takeAPhoto(){
     
     	Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -44,6 +55,9 @@ public class CameraController {
     	return intent;
     }
     
+    /**
+     * Sets a unique name for the image to be stored.
+     */
     public void setImageName(){
     	
     	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
