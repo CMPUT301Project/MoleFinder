@@ -35,14 +35,15 @@ public class ReviewImagesActivity extends Activity {
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		
 		// init view
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.review); 
-
+		
 		// init database
 		DBManager = new DatabaseManager(getBaseContext());
 		DBManager.open();
-
+		
 		// populate spinner on load
 		spinner = (Spinner) findViewById(R.id.spinner1);
 		list = (ListView) findViewById(R.id.listView1);		
@@ -56,14 +57,14 @@ public class ReviewImagesActivity extends Activity {
 		spinner.setOnItemSelectedListener(setupSpinListener());
 		list.setOnItemClickListener(setupListListener());
 		
-		DBManager.close();
+		DBManager.close();	
 	}
 	
 	@Override
 	public void onResume() {
-		super.onResume();
-		//randomEntries();
+		super.onResume();		
 		DBManager.open();
+		randomEntries();
 		fillSpinner();
 		spinner.setSelection(spinnerPos);
 		DBManager.close();

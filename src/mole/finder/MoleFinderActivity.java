@@ -66,7 +66,7 @@ public class MoleFinderActivity extends Activity {
 		buttonEditTag = (Button) findViewById(R.id.buttonEditTag);
 		buttonEditTag.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent i = new Intent(MoleFinderActivity.this, EditTagActivity.class);
+				Intent i = new Intent(MoleFinderActivity.this, ReviewTagsActivity.class);
 				startActivity(i);
 			}
 		});			

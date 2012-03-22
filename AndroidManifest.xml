@@ -65,7 +65,7 @@
             android:label="Save Image">
         </activity>
         
-                <activity
+        <activity
             android:name=".NewImageActivity"
             android:label="New Image" >
         </activity>

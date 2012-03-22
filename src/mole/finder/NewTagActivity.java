@@ -121,7 +121,7 @@ public class NewTagActivity extends Activity {
 			// rewrite the comment
 			else {
 				DBManager.open();
-				DBManager.createTagEntry(nowName, nowComment);
+				//DBManager.createTagEntry(nowName, nowComment);
 				//DBManager.overwriteTag(nowName, nowComment);
 				DBManager.close();
 			}

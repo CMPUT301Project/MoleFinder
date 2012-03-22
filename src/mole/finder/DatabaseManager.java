@@ -161,9 +161,16 @@ public class DatabaseManager{
 	 * @return true if deleted, false otherwise
 	 */
 	public boolean deleteAllEntries(String tag) {
+		
+		// don't short circuit this
 
-		return (mDb.delete(DATABASE_IMAGE_TABLE, KEY_TAG + " = " + "'" + tag + "'", null) > 0) && 
-		(mDb.delete(DATABASE_TAG_TABLE, KEY_TAG + " = " + "'" + tag + "'", null) > 0);
+		//return (mDb.delete(DATABASE_IMAGE_TABLE, KEY_TAG + " = " + "'" + tag + "'", null) > 0) && 
+		//(mDb.delete(DATABASE_TAG_TABLE, KEY_TAG + " = " + "'" + tag + "'", null) > 0);
+		
+		boolean images = mDb.delete(DATABASE_IMAGE_TABLE, KEY_TAG + " = " + "'" + tag + "'", null) > 0;
+		boolean tags = mDb.delete(DATABASE_TAG_TABLE, KEY_TAG + " = " + "'" + tag + "'", null) > 0;
+		
+		return images && tags;
 	}
 
 	/**
@@ -175,7 +182,7 @@ public class DatabaseManager{
 	public Cursor fetchAllImages(String tag) {
 
 
-		return mDb.query(DATABASE_IMAGE_TABLE, new String[] {KEY_TAG, KEY_DATE,
+		return mDb.query(DATABASE_IMAGE_TABLE, new String[] {KEY_ROWID, KEY_TAG, KEY_DATE,
 				KEY_COMMENTS, KEY_IMAGE}, KEY_TAG + " = " + "'" + tag + "'", null, null, null, null);
 	}
 
