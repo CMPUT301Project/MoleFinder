@@ -1,5 +1,7 @@
-package mole.finder;
+package activity.classes;
 
+import model.classes.DatabaseManager;
+import mole.finder.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;

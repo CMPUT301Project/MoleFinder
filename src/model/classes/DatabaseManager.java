@@ -1,4 +1,4 @@
-package mole.finder;
+package model.classes;
 
 import android.content.ContentValues;
 import android.content.Context;

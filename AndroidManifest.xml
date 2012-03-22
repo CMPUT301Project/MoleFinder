@@ -66,7 +66,7 @@
         </activity>
         
         <activity
-            android:name=".NewImageActivity"
+            android:name="activity.classes.NewImageActivity"
             android:label="New Image" >
         </activity>
     </application>

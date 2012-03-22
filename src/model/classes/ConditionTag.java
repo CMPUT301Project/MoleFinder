@@ -1,4 +1,4 @@
-package mole.finder;
+package model.classes;
 
 public class ConditionTag extends DatabaseEntry {
 	private String name, comment;

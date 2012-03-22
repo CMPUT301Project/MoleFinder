@@ -1,4 +1,4 @@
-package mole.finder;
+package model.classes;
 
 import java.util.ArrayList;
 import java.util.List;

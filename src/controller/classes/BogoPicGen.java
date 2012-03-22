@@ -1,4 +1,4 @@
-package mole.finder;
+package controller.classes;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;

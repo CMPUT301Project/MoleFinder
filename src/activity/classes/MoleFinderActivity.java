@@ -1,5 +1,7 @@
-package mole.finder;
+package activity.classes;
 
+import controller.classes.CameraController;
+import mole.finder.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -42,32 +44,32 @@ public class MoleFinderActivity extends Activity {
 		buttonCompare = (Button) findViewById(R.id.buttonCompare);
 		buttonCompare.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent i = new Intent(MoleFinderActivity.this, CompareActivity.class);
-				startActivity(i);
+				Intent intent = new Intent(MoleFinderActivity.this, CompareActivity.class);
+				startActivity(intent);
 			}
 		});
 		// review images
 		buttonReviewImages = (Button) findViewById(R.id.buttonReviewImages);
 		buttonReviewImages.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent i = new Intent(MoleFinderActivity.this, ReviewImagesActivity.class);
-				startActivity(i);
+				Intent intent = new Intent(MoleFinderActivity.this, ReviewImagesActivity.class);
+				startActivity(intent);
 			}
 		});		
 		// new tag
 		buttonNewTag = (Button) findViewById(R.id.buttonNewTag);
 		buttonNewTag.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent i = new Intent(MoleFinderActivity.this, NewTagActivity.class);
-				startActivity(i);
+				Intent intent = new Intent(MoleFinderActivity.this, NewTagActivity.class);
+				startActivity(intent);
 			}
 		});			
 		// edit tag
 		buttonEditTag = (Button) findViewById(R.id.buttonEditTag);
 		buttonEditTag.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent i = new Intent(MoleFinderActivity.this, ReviewTagsActivity.class);
-				startActivity(i);
+				Intent intent = new Intent(MoleFinderActivity.this, ReviewTagsActivity.class);
+				startActivity(intent);
 			}
 		});			
 	}
