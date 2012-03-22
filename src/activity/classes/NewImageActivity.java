@@ -27,11 +27,10 @@ public class NewImageActivity extends Activity{
 	private Button buttonNewTag;
 	private Spinner spinnerTag;
 	private EditText edittextComments;
-	private String Tag;
+	private String tag;
 	private String imageName;
-	private String Date;
-	private String Comments;
-	private DatabaseManager DBManager;
+	private String date;
+	private String comments;
 	
 	
     /** Called when the activity is first created. */
@@ -40,21 +39,23 @@ public class NewImageActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.newphoto); 
         
-        //create and open the Database
-		DBManager = new DatabaseManager(getBaseContext());
-		DBManager.open();
 		Intent intent = getIntent();
 		Bundle extras = intent.getExtras();
 		//get the saved image name and date
 		imageName = extras.getString("imageName");
-		Date = extras.getString("date");
-        
+		date = extras.getString("date");
+        if(tag==null){
+        	buttonSave.setClickable(false);
+        }
 		spinnerTag = (Spinner) findViewById(R.id.spinnerTag);
 		spinnerTag.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
 				Cursor tags = (Cursor)(parent.getItemAtPosition(pos));
-				Tag = tags.getString(tags.getColumnIndex(DatabaseManager.KEY_TAG));
+				tag = tags.getString(tags.getColumnIndex(DatabaseManager.KEY_TAG));
+				if(tag!=null){
+					buttonSave.setClickable(true);
+				}
 				fillSpinner(); //populates spinner
 			}
 			public void onNothingSelected(AdapterView<?> parent) {
@@ -72,14 +73,13 @@ public class NewImageActivity extends Activity{
 		});
 		
 		edittextComments = (EditText) findViewById(R.id.editTextComments);
-		Comments = edittextComments.getText().toString();
+		comments = edittextComments.getText().toString();
 		
 		buttonSave = (Button) findViewById(R.id.buttonSave);
 		buttonSave.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
-				DBManager.createImageEntry(Tag, Date, Comments, imageName);
-				DBManager.close();
+				DBManager.createImageEntry(tag, date, comments, imageName);
 				finish();
 			}
 		});
@@ -87,7 +87,6 @@ public class NewImageActivity extends Activity{
 		buttonCancel = (Button) findViewById(R.id.buttonCancel);
 		buttonCancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				DBManager.close();
 				finish();
 			}
 		});

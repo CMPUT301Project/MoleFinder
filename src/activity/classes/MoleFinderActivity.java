@@ -33,11 +33,11 @@ public class MoleFinderActivity extends Activity {
 		buttonCaptureImage.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				CameraController Camera = new CameraController();
-		    	Intent i = Camera.takeAPhoto();
-		    	Bundle extras = i.getExtras();
+		    	Intent intent = Camera.takeAPhoto();
+		    	Bundle extras = intent.getExtras();
 		    	imageName = extras.getString("imageName");
 		    	Date = extras.getString("date");
-				startActivityForResult(i,CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+				startActivityForResult(intent,CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 			}
 		});
 		// compare images
@@ -82,10 +82,10 @@ public class MoleFinderActivity extends Activity {
 			
 			if(resultCode== RESULT_OK){
 
-				Intent i = new Intent(MoleFinderActivity.this, NewImageActivity.class);
-				i.putExtra("imageName", imageName);
-				i.putExtra("date", Date);
-				startActivity(i);
+				Intent intentNewImageActivity = new Intent(MoleFinderActivity.this, NewImageActivity.class);
+				intentNewImageActivity.putExtra("imageName", imageName);
+				intentNewImageActivity.putExtra("date", Date);
+				startActivity(intentNewImageActivity);
 	
 			}
 		}

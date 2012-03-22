@@ -29,7 +29,6 @@ import android.widget.Toast;
  */
 
 public class ReviewImagesActivity extends Activity {
-	private DatabaseManager DBManager;
 	private Spinner spinner;
 	private int spinnerPos;
 	private ListView list;
@@ -43,10 +42,6 @@ public class ReviewImagesActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.review); 
 		
-		// init database
-		DBManager = new DatabaseManager(getBaseContext());
-		DBManager.open();
-		
 		// populate spinner on load
 		spinner = (Spinner) findViewById(R.id.spinner1);
 		list = (ListView) findViewById(R.id.listView1);		
@@ -59,18 +54,14 @@ public class ReviewImagesActivity extends Activity {
 		// listen for clicks
 		spinner.setOnItemSelectedListener(setupSpinListener());
 		list.setOnItemClickListener(setupListListener());
-		
-		DBManager.close();	
 	}
 	
 	@Override
 	public void onResume() {
 		super.onResume();		
-		DBManager.open();
 		randomEntries();
 		fillSpinner();
 		spinner.setSelection(spinnerPos);
-		DBManager.close();
 	}
 	
 	private void randomEntries() {
@@ -93,7 +84,6 @@ public class ReviewImagesActivity extends Activity {
 		// no list for no tag
 		if (getTag() != null) {
 			// Get all of the rows from the database and create the item list
-			DBManager.open();
 			Cursor imageCursor = DBManager.fetchAllImages(getTag());			
 			startManagingCursor(imageCursor);
 
@@ -107,7 +97,6 @@ public class ReviewImagesActivity extends Activity {
 			SimpleCursorAdapter imageEntry = new SimpleCursorAdapter(this, 
 					R.layout.list_view_layout, imageCursor, from, to);
 			list.setAdapter(imageEntry);
-			DBManager.close();
 		}
 	}
 

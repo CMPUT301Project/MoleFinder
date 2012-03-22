@@ -92,7 +92,7 @@ public class DatabaseManager{
 	 *         initialization call)
 	 * @throws SQLException if the database could be neither opened or created
 	 */
-	public DatabaseManager open() throws SQLException {
+	private DatabaseManager open() throws SQLException {
 		mDbHelper = new DatabaseHelper(mCtx);
 		mDb = mDbHelper.getWritableDatabase();
 		return this;
@@ -101,7 +101,7 @@ public class DatabaseManager{
 	/**
 	 * Closes the database.
 	 */
-	public void close() {
+	private void close() {
 		mDbHelper.close();
 	}
 
@@ -115,13 +115,15 @@ public class DatabaseManager{
 	 * @return rowId or -1 if failed
 	 */
 	public long createImageEntry(String tag, String date, String comments, String image) {
+		open();
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_TAG, tag);		
 		initialValues.put(KEY_DATE, date);
 		initialValues.put(KEY_COMMENTS, comments);
 		initialValues.put(KEY_IMAGE, image);
-
-		return mDb.insert(DATABASE_IMAGE_TABLE, null, initialValues);
+		long success = mDb.insert(DATABASE_IMAGE_TABLE, null, initialValues);
+		close();
+		return success;
 	}
 	// I think these should return actual entry objects
 
@@ -134,11 +136,13 @@ public class DatabaseManager{
 	 * @return rowId or -1 if failed
 	 */
 	public long createTagEntry(String tag, String comments) {
+		open();
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_TAG, tag);		
 		initialValues.put(KEY_COMMENTS, comments);
-
-		return mDb.insert(DATABASE_TAG_TABLE, null, initialValues);
+		long success = mDb.insert(DATABASE_TAG_TABLE, null, initialValues);
+		close();
+		return success;
 	}
 
 
@@ -149,8 +153,10 @@ public class DatabaseManager{
 	 * @return true if deleted, false otherwise
 	 */
 	public boolean deleteImageEntry(long rowId) {
-
-		return mDb.delete(DATABASE_IMAGE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
+		open();
+		boolean success = mDb.delete(DATABASE_IMAGE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
+		close();
+		return success;
 	}
 
 
@@ -161,14 +167,10 @@ public class DatabaseManager{
 	 * @return true if deleted, false otherwise
 	 */
 	public boolean deleteAllEntries(String tag) {
-		
-		// don't short circuit this
-
-		//return (mDb.delete(DATABASE_IMAGE_TABLE, KEY_TAG + " = " + "'" + tag + "'", null) > 0) && 
-		//(mDb.delete(DATABASE_TAG_TABLE, KEY_TAG + " = " + "'" + tag + "'", null) > 0);
-		
+		open();
 		boolean images = mDb.delete(DATABASE_IMAGE_TABLE, KEY_TAG + " = " + "'" + tag + "'", null) > 0;
 		boolean tags = mDb.delete(DATABASE_TAG_TABLE, KEY_TAG + " = " + "'" + tag + "'", null) > 0;
+		close();
 		
 		return images && tags;
 	}
@@ -181,9 +183,11 @@ public class DatabaseManager{
 	 */
 	public Cursor fetchAllImages(String tag) {
 
-
-		return mDb.query(DATABASE_IMAGE_TABLE, new String[] {KEY_ROWID, KEY_TAG, KEY_DATE,
+		open();
+		Cursor cursor = mDb.query(DATABASE_IMAGE_TABLE, new String[] {KEY_ROWID, KEY_TAG, KEY_DATE,
 				KEY_COMMENTS, KEY_IMAGE}, KEY_TAG + " = " + "'" + tag + "'", null, null, null, null);
+		close();
+		return  cursor;
 	}
 
 	/**
@@ -193,7 +197,10 @@ public class DatabaseManager{
 	 */
 	public Cursor fetchAllTags(){
 
-		return mDb.query(DATABASE_TAG_TABLE, new String[] {KEY_ROWID, KEY_TAG, KEY_COMMENTS}, null, null, null, null, null);
+		open();
+		Cursor cursor = mDb.query(DATABASE_TAG_TABLE, new String[] {KEY_ROWID, KEY_TAG, KEY_COMMENTS}, null, null, null, null, null);
+		close();
+		return cursor;
 	}
 
 	/**
@@ -204,10 +211,13 @@ public class DatabaseManager{
 	 */
 	public boolean editTag(long rowId, String tag, String comments){
 
+		open();
 		ContentValues updateValues = new ContentValues();
 		updateValues.put(KEY_TAG, tag);
 		updateValues.put(KEY_COMMENTS, comments);
-		return (mDb.update(DATABASE_TAG_TABLE, updateValues, KEY_ROWID + "=" + rowId, null) > 0);
+		boolean success = (mDb.update(DATABASE_TAG_TABLE, updateValues, KEY_ROWID + "=" + rowId, null) > 0);
+		close();
+		return success;
 	}
 
 	/**
@@ -218,10 +228,13 @@ public class DatabaseManager{
 	 */
 	public boolean editImage(long rowId, String tag, String comments){
 
+		open();
 		ContentValues updateValues = new ContentValues();
 		updateValues.put(KEY_TAG, tag);
 		updateValues.put(KEY_COMMENTS, comments);
-		return (mDb.update(DATABASE_IMAGE_TABLE, updateValues, KEY_ROWID + "=" + rowId, null) > 0);
+		boolean success = (mDb.update(DATABASE_IMAGE_TABLE, updateValues, KEY_ROWID + "=" + rowId, null) > 0);
+		close();
+		return success;
 	}
 
 	/**
@@ -231,21 +244,37 @@ public class DatabaseManager{
 	 */
 	public Cursor fetchTag(String tag){
 
-		return mDb.query(DATABASE_TAG_TABLE, new String[] {KEY_TAG, KEY_COMMENTS}, KEY_TAG + "=" + tag, null, null, null, null);
+		open();
+		Cursor cursor = mDb.query(DATABASE_TAG_TABLE, new String[] {KEY_TAG, KEY_COMMENTS}, KEY_TAG + "=" + tag, null, null, null, null);
+		close();
+		return cursor;
 	}
 
 	/**
-	 * Return a Cursor over the specified tag in the database
+	 * Return a Cursor over the specified tag in the database based on 
 	 * 
 	 * @return Cursor of the specified tag
 	 */
 	public Cursor fetchImage(String imageName){
 
-		return mDb.query(DATABASE_IMAGE_TABLE, new String[] {KEY_TAG, KEY_DATE,
-				KEY_COMMENTS, KEY_IMAGE}, KEY_IMAGE + " = " + "'" + imageName + "'", null, null, null, null);}
+		open();
+		Cursor cursor = mDb.query(DATABASE_IMAGE_TABLE, new String[] {KEY_TAG, KEY_DATE,
+				KEY_COMMENTS, KEY_IMAGE}, KEY_IMAGE + " = " + "'" + imageName + "'", null, null, null, null);
+		close();
+		return cursor;
+	}
 
-
-	public Cursor fetchaTag(int id) {
-		return mDb.query(DATABASE_TAG_TABLE, new String[] { KEY_ROWID, KEY_TAG, KEY_COMMENTS }, 
-				KEY_ROWID + " = " + id, null, null, null, null);}
+	/**
+	 * Return a Cursor over the specified tag in the database based on id.
+	 * 
+	 * @return Cursor of the specified tag
+	 */
+	public Cursor fetchTag(long id) {
+		
+		open();
+		Cursor cursor = mDb.query(DATABASE_TAG_TABLE, new String[] { KEY_ROWID, KEY_TAG, KEY_COMMENTS }, 
+				KEY_ROWID + " = " + id, null, null, null, null);
+		close();
+		return cursor;
+	}
 }

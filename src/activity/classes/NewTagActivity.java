@@ -21,7 +21,6 @@ import android.widget.Toast;
  */
 
 public class NewTagActivity extends Activity { 
-	private DatabaseManager DBManager;
 	private EditText name;
 	private EditText comment;
 	private Button save;
@@ -36,8 +35,6 @@ public class NewTagActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.newtag); 
-
-		DBManager = new DatabaseManager(getBaseContext());
 		
 		initName = "";
 		initComment = "";
@@ -83,9 +80,7 @@ public class NewTagActivity extends Activity {
 							"entries with this tag. Are you sure you wish to continue?")
 							.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog, int id) {
-									DBManager.open();
 									DBManager.deleteAllEntries(initName);
-									DBManager.close();
 									NewTagActivity.this.finish();
 								}
 							})
@@ -126,23 +121,17 @@ public class NewTagActivity extends Activity {
 			}
 			// rewrite the comment
 			else {
-				DBManager.open();
 				//DBManager.createTagEntry(nowName, nowComment);
 				//DBManager.overwriteTag(nowName, nowComment);
-				DBManager.close();
 			}
 		}
 		// old name exists, overwrite it
 		else if (!initName.equals("")) {
-			DBManager.open();
 			//DBManager.overwriteTag(nowName, nowComment);
-			DBManager.close();
 		}
 		else {
 			// or save the new tag to the database
-			DBManager.open();
-			DBManager.createTagEntry(nowName, nowComment);
-			DBManager.close();			
+			DBManager.createTagEntry(nowName, nowComment);			
 		}
 		NewTagActivity.this.finish();
 	}
@@ -155,8 +144,7 @@ public class NewTagActivity extends Activity {
 	private void setEditText() {
 		if (getExtra("ID") != null) {        	
 			int id = Integer.parseInt(getExtra("ID").toString());
-			DBManager.open();
-			Cursor tagCur = DBManager.fetchaTag(id);
+			Cursor tagCur = DBManager.fetchTag(id);
 
 			tagCur.moveToFirst();
 			initName = tagCur.getString(tagCur.getColumnIndex(DatabaseManager.KEY_TAG));
@@ -165,7 +153,6 @@ public class NewTagActivity extends Activity {
 			comment.setText(initComment);
 
 			tagCur.close();
-			DBManager.close();
 		}
 	}
 

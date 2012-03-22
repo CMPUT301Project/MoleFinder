@@ -23,7 +23,6 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 
 public class ReviewTagsActivity extends Activity {
-	private DatabaseManager DBManager;
 	private ListView list;
 	private Spinner spinner;
 
@@ -34,9 +33,6 @@ public class ReviewTagsActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.review); 
-
-		// open the database
-		DBManager = new DatabaseManager(getBaseContext());
 		
 
 		// ui
@@ -44,10 +40,7 @@ public class ReviewTagsActivity extends Activity {
 		spinner = (Spinner) findViewById(R.id.spinner1);
 		spinner.setVisibility(View.GONE); 
 		
-		// fill list
-		DBManager.open();
 		updateList();
-		DBManager.close();
 		
 		// listen for clicks
 		list.setOnItemClickListener(setupListListener());
@@ -56,9 +49,7 @@ public class ReviewTagsActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		DBManager.open();
 		updateList();
-		DBManager.close();
 	}
 
 	/** This uses the activity's tag attribute to create a list
@@ -93,9 +84,9 @@ public class ReviewTagsActivity extends Activity {
 					long row) {
 				Cursor cur = (Cursor) parent.getItemAtPosition(pos);
 				int next = cur.getInt(cur.getColumnIndex(DatabaseManager.KEY_ROWID));				
-				Intent i = new Intent(ReviewTagsActivity.this, NewTagActivity.class);
-				i.putExtra("ID", next);
-				startActivity(i);
+				Intent intent = new Intent(ReviewTagsActivity.this, NewTagActivity.class);
+				intent.putExtra("ID", next);
+				startActivity(intent);
 			}
 		};
 		return listener;
