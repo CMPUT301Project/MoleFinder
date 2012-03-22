@@ -20,9 +20,13 @@ import android.widget.Toast;
 
 public class NewTagActivity extends Activity { 
 	private DatabaseManager DBManager;
-	private EditText name, comment;
-	private Button save, cancel, delete;
-	private String initName, initComment;
+	private EditText name;
+	private EditText comment;
+	private Button save;
+	private Button cancel; 
+	private Button delete;
+	private String initName;
+	private String initComment;
 
 
 	/** Called when the activity is first created. */
