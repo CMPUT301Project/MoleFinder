@@ -1,4 +1,4 @@
-package mole.finder;
+package controller.classes;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -29,7 +29,7 @@ public class CameraController {
 	 * Sets the file path and environment to take and store an image
 	 * @return
 	 */
-    protected Intent takeAPhoto(){
+    public Intent takeAPhoto(){
     
     	Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     	

@@ -1,5 +1,6 @@
-package mole.finder;
+package activity.classes;
 
+import mole.finder.R;
 import android.app.Activity;
 import android.os.Bundle;
 

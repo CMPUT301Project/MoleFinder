@@ -1,5 +1,7 @@
-package mole.finder;
+package activity.classes;
 
+import model.classes.DatabaseManager;
+import mole.finder.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;

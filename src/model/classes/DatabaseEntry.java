@@ -1,4 +1,4 @@
-package mole.finder;
+package model.classes;
 
 public abstract class DatabaseEntry {
 	// row id this entry

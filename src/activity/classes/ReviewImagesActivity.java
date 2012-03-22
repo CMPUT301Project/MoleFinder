@@ -1,7 +1,10 @@
-package mole.finder;
+package activity.classes;
 
 import java.text.DateFormat;
 import java.util.Date;
+
+import model.classes.DatabaseManager;
+import mole.finder.R;
 
 import android.app.Activity;
 import android.content.Intent;
