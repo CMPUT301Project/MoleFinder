@@ -20,4 +20,7 @@ public abstract class DatabaseEntry {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	public abstract String getTitle();
+	public abstract String getDescription();
 }

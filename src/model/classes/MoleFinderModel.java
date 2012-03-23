@@ -1,6 +1,8 @@
 package model.classes;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -20,8 +22,9 @@ public class MoleFinderModel {
 	// db access
 	private DatabaseManager DBManager;
 	// active entries - easily view in a list
-	private List<ConditionEntry> conditions;
-	private List<ConditionTag> tags;
+	private List<DatabaseEntry> conditions;
+	private List<DatabaseEntry> tags;
+	
 	
 	/** Returns the current instance of the MoleFinderModel,
 	 * or if none exists, creates one.
@@ -42,9 +45,10 @@ public class MoleFinderModel {
 	 */
 	private MoleFinderModel(Context context) {
 		DBManager = new DatabaseManager(context);
-		conditions = new ArrayList<ConditionEntry>();
-		tags = new ArrayList<ConditionTag>();
+		conditions = new ArrayList<DatabaseEntry>();
+		tags = new ArrayList<DatabaseEntry>();
 		getTags(); // fill on construction
+		temp(); // test database items
 	}
 	
 	/** Empty the current list of conditions.
@@ -64,16 +68,18 @@ public class MoleFinderModel {
 	 * 
 	 * @param tag The grouping of conditions entries
 	 */
-	public void fetchConditions(String tag) {
+	public void fetchConditions(String tag) {		
 		clearConditions();
+		DBManager.open();
 		Cursor cur = DBManager.fetchAllImages(tag);
 		cur.moveToFirst();
 		while (!cur.isAfterLast()) {
-			ConditionEntry entry = cursorToCondition(cur);
+			DatabaseEntry entry = cursorToCondition(cur);
 			conditions.add(entry);
 			cur.moveToNext();
 		}
 		cur.close();
+		DBManager.close();
 	}
 	
 	/** Converts the first element in the cursor to a ConditionEntry.
@@ -92,14 +98,16 @@ public class MoleFinderModel {
 	 */
 	public void fetchTags() {
 		clearTags();
+		DBManager.open();
 		Cursor cur = DBManager.fetchAllTags();
 		cur.moveToFirst();
 		while (!cur.isAfterLast()) {
-			ConditionTag tag = cursorToTag(cur);
+			DatabaseEntry tag = cursorToTag(cur);
 			tags.add(tag);
 			cur.moveToNext();
 		}
 		cur.close();
+		DBManager.close();
 	}
 	
 	/** Converts the first element in the cursor to a ConditionTag.
@@ -131,7 +139,7 @@ public class MoleFinderModel {
 	 * 
 	 * @return The current list of ConditionEntry objects
 	 */
-	public List<ConditionEntry> getConditions () {
+	public List<DatabaseEntry> getConditions () {
 		return conditions;
 	}
 	
@@ -139,7 +147,21 @@ public class MoleFinderModel {
 	 * 
 	 * @return The current list of ConditionTag objects
 	 */
-	public List<ConditionTag> getTags() {
+	public List<DatabaseEntry> getTags() {
 		return tags;
+	}
+	
+	// start DB with some test objects
+	private void temp() {			
+		DBManager.open();
+		DBManager.deleteAllEntries("Face");
+		DBManager.deleteAllEntries("Foot");
+		DBManager.createTagEntry("Face", "This is your face.");
+		String today = DateFormat.getDateInstance().format(new Date());
+		String img = "img";
+		DBManager.createImageEntry("Face", today, "Look at that thing on your face", img);
+		DBManager.createTagEntry("Foot", "This is your foot. You only get one.");
+		DBManager.createImageEntry("Foot", today, "You only have one foot?", img);
+		DBManager.close();
 	}
 }

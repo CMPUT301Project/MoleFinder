@@ -1,9 +1,8 @@
 package activity.classes;
 
-import model.classes.DatabaseManager;
+import model.classes.MoleFinderModel;
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.SimpleCursorAdapter;
 
 
 /** The FView abstract class provides the basic functionality
@@ -13,23 +12,25 @@ import android.widget.SimpleCursorAdapter;
  * @author mbessett
  *
  */
-public abstract class FView extends Activity {
-	protected DatabaseManager DBManager;
+public abstract class FActivity extends Activity {
+	protected MoleFinderModel model;
 	
 	/** Create a DatabaseManager, link UI elements to their IDs,
+	 * allow custom initialization for the derived classes,
 	 * allow for clickable UI items, and update the information.
 	 * 
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setViewContent();
+		setContentView(myLayout());
 		
-		DBManager = new DatabaseManager(getBaseContext());
+		model = MoleFinderModel.getInstance(getBaseContext());
 		findViews();
-		customInit(); 
-		setClickListeners();
+		customInit();
 		updateView();
+		setClickListeners();
+		
 	}
 	
 	/** Keep the data on the page consistent with the database tables.
@@ -40,8 +41,8 @@ public abstract class FView extends Activity {
 		super.onResume();
 		updateView();
 	}
-	
-	/** Link references to gui items.
+
+	/** Link references to UI elements.
 	 * 
 	 */
 	protected abstract void findViews();
@@ -51,15 +52,22 @@ public abstract class FView extends Activity {
 	 */
 	protected abstract void setClickListeners();
 	
-	/** Perform operations necessary to 
+	/** Perform operations necessary to keep the information in
+	 * the activity consistent with the internal storage.
 	 * 
 	 */
 	protected abstract void updateView();
 	
-	/** 
+	/** Some classes may need initialization in a particular
+	 * order. This method provides the ability to do that.
 	 * 
 	 */
 	protected abstract void customInit();
+	
+	/** Get the layout id for this object's XML layout file.
+	 * 
+	 */
+	protected abstract int myLayout();
 	
 	
 	/** Retrieve extras passed to the view. User must explicitly

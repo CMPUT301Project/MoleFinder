@@ -1,7 +1,7 @@
 package activity.classes;
 
+import mole.finder.*;
 import controller.classes.CameraController;
-import mole.finder.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +26,6 @@ public class MoleFinderActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
-
 		// setup buttons
 		// capture images
 		buttonCaptureImage = (Button) findViewById(R.id.buttonCaptureImage);
@@ -71,7 +70,7 @@ public class MoleFinderActivity extends Activity {
 				Intent intent = new Intent(MoleFinderActivity.this, ReviewTagsActivity.class);
 				startActivity(intent);
 			}
-		});			
+		});		
 	}
 	
 	@Override
@@ -90,4 +89,5 @@ public class MoleFinderActivity extends Activity {
 			}
 		}
 	}
+
 }

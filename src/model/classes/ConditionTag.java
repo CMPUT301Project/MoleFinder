@@ -13,10 +13,14 @@ public class ConditionTag extends DatabaseEntry {
 		this(id, name);
 		this.setComment(comment);
 	}
+	// constructor 3
+	public ConditionTag(ConditionTag input) {
+		this(input.getId(), input.getName(), input.getComment());
+	}
 	
 	@Override
 	public String toString() {
-		return new String(getId() + " " + getName());
+		return getName();
 	}
 
 	
@@ -35,5 +39,13 @@ public class ConditionTag extends DatabaseEntry {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+	@Override
+	public String getTitle() {
+		return getName();
+	}
+	@Override
+	public String getDescription() {
+		return getComment();
 	}
 }

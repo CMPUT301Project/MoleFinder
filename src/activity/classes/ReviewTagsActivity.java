@@ -1,17 +1,15 @@
 package activity.classes;
 
+
 import model.classes.DatabaseManager;
 import mole.finder.R;
-import android.app.Activity;
+import adapter.classes.MoleFinderArrayAdapter;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 /** The ReviewTagsActivity class displays a clickable list
@@ -22,55 +20,48 @@ import android.widget.AdapterView.OnItemClickListener;
  *
  */
 
-public class ReviewTagsActivity extends Activity {
-	private ListView list;
+public class ReviewTagsActivity extends FActivity {
 	private Spinner spinner;
+	private ListView list;
 
-	/** Called when the view is created.
+	/** Link the Spinner and ListView to their respective ids.
 	 * 
 	 */
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.review); 
-		
-
-		// ui
+	protected void findViews() {
 		list = (ListView) findViewById(R.id.listView1);
-		spinner = (Spinner) findViewById(R.id.spinner1);
-		spinner.setVisibility(View.GONE); 
-		
-		updateList();
-		
-		// listen for clicks
-		list.setOnItemClickListener(setupListListener());
-	}
-	
-	@Override
-	public void onResume() {
-		super.onResume();
-		updateList();
+		spinner = (Spinner) findViewById(R.id.spinner1);		
 	}
 
-	/** This uses the activity's tag attribute to create a list
-	 * of Condition entries with the same tag
-	 *
+	/** Make the ListView clickable.
+	 * 
 	 */
-	private void updateList() {
-		// Get all of the rows from the database and create the item list
-		Cursor tagCursor = DBManager.fetchAllTags();
-		startManagingCursor(tagCursor);
+	@Override
+	protected void setClickListeners() {
+		list.setOnItemClickListener(setupListListener());		
+	}
 
-		// Create an array to specify the fields we want to display in the list
-		String[] from = new String[] { DatabaseManager.KEY_TAG, DatabaseManager.KEY_COMMENTS };
+	/** Keep the list of tags consistent with the database.
+	 * 
+	 */
+	@Override
+	protected void updateView() {
+		model.fetchTags();
+		list.setAdapter(new MoleFinderArrayAdapter(this, R.layout.list_view_layout,
+				R.id.date_text, R.id.tag_text, model.getTags()));
+	}
 
-		// and an array of the fields we want to bind those fields to
-		int[] to = new int[] { R.id.date_text, R.id.tag_text };
+	/** Hide the spinner. 
+	 * 
+	 */
+	@Override
+	protected void customInit() {
+		spinner.setVisibility(View.GONE);
+	}
 
-		// Now create a simple cursor adapter and set it to display
-		SimpleCursorAdapter tagEntry = new SimpleCursorAdapter(this, 
-				R.layout.list_view_layout, tagCursor, from, to);
-		list.setAdapter(tagEntry);
+	@Override
+	protected int myLayout() {
+		return R.layout.review;
 	}
 	
 	/** Setup the OnItemSelectedListener for the Condition ListView

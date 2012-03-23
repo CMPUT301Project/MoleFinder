@@ -79,7 +79,7 @@ public class NewImageActivity extends Activity{
 		buttonSave.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
-				DBManager.createImageEntry(tag, date, comments, imageName);
+				//DBManager.createImageEntry(tag, date, comments, imageName);
 				finish();
 			}
 		});
@@ -99,7 +99,7 @@ public class NewImageActivity extends Activity{
      */
     private void fillSpinner() {
     	// get tags
-    	Cursor tagCursor = DBManager.fetchAllTags();
+    	Cursor tagCursor = null;//DBManager.fetchAllTags();
     	startManagingCursor(tagCursor);
 
     	// bind values

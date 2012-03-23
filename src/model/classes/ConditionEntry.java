@@ -60,4 +60,12 @@ public class ConditionEntry extends DatabaseEntry {
 	public void setDate(String date) {
 		this.date = date;
 	}
+	@Override
+	public String getTitle() {
+		return getDate();
+	}
+	@Override
+	public String getDescription() {
+		return getTag();
+	}
 }

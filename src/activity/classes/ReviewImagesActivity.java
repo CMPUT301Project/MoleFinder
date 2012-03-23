@@ -1,21 +1,17 @@
 package activity.classes;
 
-import java.text.DateFormat;
-import java.util.Date;
-
-import model.classes.DatabaseManager;
 import mole.finder.R;
 
-import android.app.Activity;
+import adapter.classes.MoleFinderArrayAdapter;
+import adapter.classes.MoleFinderSpinnerAdapter;
+import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.content.SharedPreferences;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -28,99 +24,91 @@ import android.widget.Toast;
  *
  */
 
-public class ReviewImagesActivity extends Activity {
+public class ReviewImagesActivity extends FActivity {
 	private Spinner spinner;
 	private int spinnerPos;
 	private ListView list;
 	private String tag;	
+	
+	private final String PREFS = "ReviewImagesSpinnerPos";
+	private final String S_KEY = "pos";
 
-	/** Called when the activity is first created. */
+	/** Preserve last spinner position.
+	 * 
+	 */
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		
-		// init view
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.review); 
-		
-		// populate spinner on load
-		spinner = (Spinner) findViewById(R.id.spinner1);
-		list = (ListView) findViewById(R.id.listView1);		
-		
-		// random db objects
-		randomEntries();
+	public void onResume() {
+		super.onResume();
+		//spinner.setSelection(getSpinnerPos());
+		readState(ReviewImagesActivity.this);
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+        if (!saveState(ReviewImagesActivity.this)) {
+            Toast.makeText(this,
+                    "Failed to write state!", Toast.LENGTH_LONG).show();
+         }
+	}
+	
+	private boolean saveState(Context context) {
+        SharedPreferences prefs =
+                context.getSharedPreferences(this.PREFS, MODE_WORLD_READABLE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(this.S_KEY, getSpinnerPos());
+        return editor.commit();
+	}
+	
+	private boolean readState(Context context) {
+		SharedPreferences prefs = context.getSharedPreferences(this.PREFS, MODE_WORLD_READABLE);
+		setSpinnerPos(prefs.getInt(this.S_KEY, 0));
+		return (prefs.contains(this.S_KEY));
+	}
 
-		// all tags into spinner
-		fillSpinner();
-		// listen for clicks
+	/** Find Spinner and ListView.    
+	 * Get the position and value of the spinner from the file, or a default value if the
+	 * key-value pair does not exist.
+	 */
+	@Override
+	protected void findViews() {
+		spinner = (Spinner) findViewById(R.id.spinner1);
+		list = (ListView) findViewById(R.id.listView1);	
+	}
+
+	/** Allow list and spinner items to be clicked.
+	 * 
+	 */
+	@Override
+	protected void setClickListeners() {
 		spinner.setOnItemSelectedListener(setupSpinListener());
 		list.setOnItemClickListener(setupListListener());
 	}
-	
-	@Override
-	public void onResume() {
-		super.onResume();		
-		randomEntries();
-		fillSpinner();
-		spinner.setSelection(spinnerPos);
-	}
-	
-	private void randomEntries() {
-		// temporary test objects		
-		DBManager.deleteAllEntries("Face");
-		DBManager.deleteAllEntries("Foot");
-		DBManager.createTagEntry("Face", "This is your face.");
-		String today = DateFormat.getDateInstance().format(new Date());
-		String img = "img";
-		DBManager.createImageEntry("Face", today, "Look at that thing on your face", img);
-		DBManager.createTagEntry("Foot", "This is your foot. You only get one.");
-		DBManager.createImageEntry("Foot", today, "You only have one foot?", img);
-	}
 
-	/** This uses the activity's tag attribute to create a list
-	 * of Condition entries with the same tag
-	 *
-	 */
-	private void updateList() {
-		// no list for no tag
-		if (getTag() != null) {
-			// Get all of the rows from the database and create the item list
-			Cursor imageCursor = DBManager.fetchAllImages(getTag());			
-			startManagingCursor(imageCursor);
-
-			// Create an array to specify the fields we want to display in the list
-			String[] from = new String[] { DatabaseManager.KEY_DATE, DatabaseManager.KEY_TAG };
-
-			// and an array of the fields we want to bind those fields to
-			int[] to = new int[] { R.id.date_text, R.id.tag_text };
-
-			// Now create a simple cursor adapter and set it to display
-			SimpleCursorAdapter imageEntry = new SimpleCursorAdapter(this, 
-					R.layout.list_view_layout, imageCursor, from, to);
-			list.setAdapter(imageEntry);
-		}
-	}
-
-	/** Load all the tags currently in the database and display them
-	 * in the Spinner for the user to select.
+	/** Keep the list of tags in the Spinner updated.
 	 * 
 	 */
-	private void fillSpinner() {
-		// get the tags from the database
-		Cursor tagCursor = DBManager.fetchAllTags();
-		startManagingCursor(tagCursor);
-
-		// bind values
-		String[] from = new String[] { DatabaseManager.KEY_TAG };
-		int[] to = new int[] { android.R.id.text1 };
-
-		// set adapter
-		SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(this, 
-				android.R.layout.simple_spinner_item, tagCursor, from, to);
-		mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinner.setAdapter(mAdapter); 
+	@Override
+	protected void updateView() {
+		model.fetchTags();
+		spinner.setAdapter(new MoleFinderSpinnerAdapter(this, model.getTags()));		
 	}
 
-	/** Setup the OnItemSelectedListener for the Tag Spinner
+	/** Do not display list of condition entries on creation.
+	 * 
+	 */
+	@Override
+	protected void customInit() {
+		setTag("");
+	}
+
+	@Override
+	protected int myLayout() {
+		return R.layout.review;
+	}
+	
+	/** Setup the OnItemSelectedListener for the Tag Spinner, and
+	 * remember the Spinner position.
 	 * 
 	 */
 	private OnItemSelectedListener setupSpinListener() {
@@ -131,20 +119,29 @@ public class ReviewImagesActivity extends Activity {
 			public void onItemSelected(AdapterView<?> parent, View v,
 					int pos, long row) {
 				// grab item
-				Cursor cur = (Cursor) parent.getItemAtPosition(pos);
-				spinnerPos = pos;
+				Object tag = parent.getItemAtPosition(pos);				
 				// set attributes
-				setTag(cur.getString(cur.getColumnIndex(DatabaseManager.KEY_TAG)));
+				setTag(tag.toString());
+				setSpinnerPos(pos);
 		        // only need to update the list when new tag selected
 		        updateList();
 			}
-
 			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// do nothing				
-			}
+			public void onNothingSelected(AdapterView<?> arg0) {}
 		};
 		return listener;
+	}
+	
+	/** This uses the activity's tag attribute to create a list
+	 * of Condition entries with the same tag
+	 *
+	 */
+	private void updateList() {
+		if (getTag() != "") {
+		model.fetchConditions(getTag());
+		list.setAdapter(new MoleFinderArrayAdapter(this, R.layout.list_view_layout,
+				R.id.date_text, R.id.tag_text, model.getConditions()));
+		}
 	}
 	
 	/** Setup the OnItemSelectedListener for the Condition ListView
@@ -156,21 +153,30 @@ public class ReviewImagesActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, int pos,
 					long row) {
-				Cursor cur = (Cursor) parent.getItemAtPosition(pos);
-				int next = cur.getInt(cur.getColumnIndex(DatabaseManager.KEY_ROWID));
-				Intent i = new Intent(ReviewImagesActivity.this, SaveImageActivity.class);
-				i.putExtra("ID", next);
-				startActivity(i);
+				//Cursor cur = (Cursor) parent.getItemAtPosition(pos);
+				//int next = cur.getInt(cur.getColumnIndex(DatabaseManager.KEY_ROWID));
+				Intent intent = new Intent(ReviewImagesActivity.this, NewImageActivity.class);
+				//intent.putExtra("ID", next);
+				startActivity(intent);
 			}
 		};
 		return listener;
 	}
-
+	
+	// getters/setters
 	public String getTag() {
 		return tag;
 	}
 
 	public void setTag(String tag) {
 		this.tag = tag;
+	}
+
+	public int getSpinnerPos() {
+		return spinnerPos;
+	}
+
+	public void setSpinnerPos(int spinnerPos) {
+		this.spinnerPos = spinnerPos;
 	}
 }

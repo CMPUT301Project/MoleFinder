@@ -80,7 +80,7 @@ public class NewTagActivity extends Activity {
 							"entries with this tag. Are you sure you wish to continue?")
 							.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog, int id) {
-									DBManager.deleteAllEntries(initName);
+									//DBManager.deleteAllEntries(initName);
 									NewTagActivity.this.finish();
 								}
 							})
@@ -131,7 +131,7 @@ public class NewTagActivity extends Activity {
 		}
 		else {
 			// or save the new tag to the database
-			DBManager.createTagEntry(nowName, nowComment);			
+			//DBManager.createTagEntry(nowName, nowComment);			
 		}
 		NewTagActivity.this.finish();
 	}
@@ -144,7 +144,7 @@ public class NewTagActivity extends Activity {
 	private void setEditText() {
 		if (getExtra("ID") != null) {        	
 			int id = Integer.parseInt(getExtra("ID").toString());
-			Cursor tagCur = DBManager.fetchTag(id);
+			Cursor tagCur = null;//DBManager.fetchTag(id);
 
 			tagCur.moveToFirst();
 			initName = tagCur.getString(tagCur.getColumnIndex(DatabaseManager.KEY_TAG));
