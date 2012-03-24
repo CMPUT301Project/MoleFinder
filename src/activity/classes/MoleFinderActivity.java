@@ -2,14 +2,13 @@ package activity.classes;
 
 import mole.finder.*;
 import controller.classes.CameraController;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class MoleFinderActivity extends Activity {
-	// button objects
+public class MoleFinderActivity extends FActivity {
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 	private Button buttonCaptureImage;
 	private Button buttonCompare;
@@ -18,60 +17,6 @@ public class MoleFinderActivity extends Activity {
 	private Button buttonEditTag;
 	private String imageName;
 	private String Date;
-
-
-	/** Called when the activity is first created. */
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
-		
-		// setup buttons
-		// capture images
-		buttonCaptureImage = (Button) findViewById(R.id.buttonCaptureImage);
-		buttonCaptureImage.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				CameraController Camera = new CameraController();
-		    	Intent intent = Camera.takeAPhoto();
-		    	Bundle extras = intent.getExtras();
-		    	imageName = extras.getString("imageName");
-		    	Date = extras.getString("date");
-				startActivityForResult(intent,CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-			}
-		});
-		// compare images
-		buttonCompare = (Button) findViewById(R.id.buttonCompare);
-		buttonCompare.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent(MoleFinderActivity.this, CompareActivity.class);
-				startActivity(intent);
-			}
-		});
-		// review images
-		buttonReviewImages = (Button) findViewById(R.id.buttonReviewImages);
-		buttonReviewImages.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent(MoleFinderActivity.this, ReviewImagesActivity.class);
-				startActivity(intent);
-			}
-		});		
-		// new tag
-		buttonNewTag = (Button) findViewById(R.id.buttonNewTag);
-		buttonNewTag.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent(MoleFinderActivity.this, NewTagActivity.class);
-				startActivity(intent);
-			}
-		});			
-		// edit tag
-		buttonEditTag = (Button) findViewById(R.id.buttonEditTag);
-		buttonEditTag.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent(MoleFinderActivity.this, ReviewTagsActivity.class);
-				startActivity(intent);
-			}
-		});		
-	}
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -88,6 +33,58 @@ public class MoleFinderActivity extends Activity {
 	
 			}
 		}
+	}
+
+	@Override
+	protected void findViews() {
+		buttonCaptureImage = (Button) findViewById(R.id.buttonCaptureImage);
+		buttonCompare = (Button) findViewById(R.id.buttonCompare);
+		buttonReviewImages = (Button) findViewById(R.id.buttonReviewImages);
+		buttonNewTag = (Button) findViewById(R.id.buttonNewTag);
+		buttonEditTag = (Button) findViewById(R.id.buttonEditTag);
+	}
+
+	@Override
+	protected void setClickListeners() {
+		buttonCaptureImage.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				CameraController Camera = new CameraController();
+		    	Intent intent = Camera.takeAPhoto();
+		    	Bundle extras = intent.getExtras();
+		    	imageName = extras.getString("imageName");
+		    	Date = extras.getString("date");
+				startActivityForResult(intent,CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+			}
+		});
+		buttonCompare.setOnClickListener(switchActListener(CompareActivity.class));
+		buttonReviewImages.setOnClickListener(switchActListener(ReviewImagesActivity.class));
+		buttonNewTag.setOnClickListener(switchActListener(NewTagActivity.class));
+		buttonEditTag.setOnClickListener(switchActListener(ReviewTagsActivity.class));
+	}
+	
+	private OnClickListener switchActListener(final Class<?> newAct) {
+		return new OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MoleFinderActivity.this, newAct);
+				startActivity(intent);
+			}
+		};
+	}
+
+	@Override
+	protected void updateView() {
+		// nothing to update
+	}
+
+	@Override
+	protected void customInit() {
+		// nothing to do
+	}
+
+	@Override
+	protected int myLayout() {
+		return R.layout.main;
 	}
 
 }
