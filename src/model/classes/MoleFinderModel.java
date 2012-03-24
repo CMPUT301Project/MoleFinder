@@ -110,6 +110,46 @@ public class MoleFinderModel {
 		DBManager.close();
 	}
 	
+	/** Acquire one ConditionTag object from the database.
+	 * 
+	 * @param id RowId in the database tag table.
+	 * @return A ConditionTag object corresponding to that
+	 * row in the table.
+	 */
+	public ConditionTag getOneTag(long id) {
+		DBManager.open();
+		
+		Cursor cursor = DBManager.fetchTag(id);
+		cursor.moveToFirst();
+		ConditionTag tag = cursorToTag(cursor);
+		
+		cursor.close();
+		DBManager.close();
+		return tag;
+	}
+	
+	/** The name or comment of this tag has changed
+	 * 
+	 * @param tag
+	 */
+	// THIS METHOD NEEDS TO CHECK IF THE TAG NAME HAS CHANGED,
+	//  AND UPDATE ANY IMAGE ENTRIES USING THAT TAG
+	public void overwriteTag(ConditionTag tag) {
+		DBManager.open();
+		DBManager.editTag(tag.getId(), tag.getName(), tag.getComment());
+		DBManager.close();
+	}
+	
+	/** Store a new ConditionTag in the database.
+	 * 
+	 * @param tag The tag to save to the database.
+	 */
+	public void saveTag(ConditionTag tag) {
+		DBManager.open();
+		DBManager.createTagEntry(tag.getName(), tag.getComment());
+		DBManager.close();
+	}
+	
 	/** Converts the first element in the cursor to a ConditionTag.
 	 * 
 	 * @param cur List of ConditionTag data returned from database 

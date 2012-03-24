@@ -22,5 +22,5 @@ public abstract class DatabaseEntry {
 	}
 	
 	public abstract String getTitle();
-	public abstract String getDescription();
+	public abstract String getDescription(); 
 }

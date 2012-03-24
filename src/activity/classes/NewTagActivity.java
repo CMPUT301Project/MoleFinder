@@ -1,10 +1,9 @@
 package activity.classes;
 
-import model.classes.DatabaseManager;
+import model.classes.ConditionTag;
 import mole.finder.R;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,47 +21,42 @@ public class NewTagActivity extends FActivity {
 	private Button save;
 	private Button cancel; 
 	private Button delete;
-	
-	private String initName;
-	private String initComment;
+
+	private ConditionTag initTag;
 	
 	/** Save the current tag to the database 
 	 * 
 	 */
 	private void saveTag() {
-		String nowName = name.getText().toString();
-		String nowComment = comment.getText().toString();
+		ConditionTag nowTag = new ConditionTag(initTag);
+		String curName = name.getText().toString();
+		nowTag.setName(curName);
+		nowTag.setComment(comment.getText().toString());
 		// disallow empty names
-		if (nowName.equals("")) {
+		if (curName.equals("")) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage("Tag name cannot be empty.")
-			.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+			builder.setMessage("Tag name cannot be empty.");
+			builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					dialog.cancel();
 				}
-			})
-			.show();
+			});
+			builder.show();
 			return;
 		}
-		// check repeated data
-		else if (nowName.equals(initName)) {
-			// nothing has changed, nothing to do
-			if (nowComment.equals(initComment)) {
-				NewTagActivity.this.finish();
-			}
-			// rewrite the comment
-			else {
-				//DBManager.createTagEntry(nowName, nowComment);
-				//DBManager.overwriteTag(nowName, nowComment);
-			}
-		}
-		// old name exists, overwrite it
-		else if (!initName.equals("")) {
-			//DBManager.overwriteTag(nowName, nowComment);
-		}
-		else {
-			// or save the new tag to the database
-			//DBManager.createTagEntry(nowName, nowComment);			
+		// check for repeat data
+		int status = initTag.compareTo(nowTag);
+		switch (status) {
+		case ConditionTag.IDENTICAL:
+			NewTagActivity.this.finish(); break;
+		case ConditionTag.DUMMY_ID:
+			model.saveTag(nowTag); break;
+		case ConditionTag.DIFF_NAME:
+			model.overwriteTag(nowTag); break;
+			// NEED TO ADD CODE TO THE MODEL TO UPDATE 
+			// IMAGE ENTRY TAGS FOR A TAG THAT HAS CHANGED NAME
+		case ConditionTag.DIFF_COMMENT:
+			model.overwriteTag(nowTag); break;
 		}
 		NewTagActivity.this.finish();
 	}
@@ -88,7 +82,7 @@ public class NewTagActivity extends FActivity {
 				NewTagActivity.this.finish();			
 			}
 		});
-		if (initName.equals("")) {
+		if (initTag.getId() == ConditionTag.DUMMY_ID) {
 			delete.setVisibility(View.GONE);
 		}
 		else {
@@ -120,23 +114,16 @@ public class NewTagActivity extends FActivity {
 	@Override
 	protected void updateView() {
 		if (getExtra("ID") != null) {        	
-			//int id = Integer.parseInt(getExtra("ID").toString());
-			Cursor tagCur = null;//DBManager.fetchTag(id);
-
-			tagCur.moveToFirst();
-			initName = tagCur.getString(tagCur.getColumnIndex(DatabaseManager.KEY_TAG));
-			initComment = tagCur.getString(tagCur.getColumnIndex(DatabaseManager.KEY_COMMENTS));
-			name.setText(initName);
-			comment.setText(initComment);
-
-			tagCur.close();
+			long id = Long.parseLong(getExtra("ID").toString());
+			initTag = model.getOneTag(id);
+			name.setText(initTag.getName());
+			comment.setText(initTag.getComment());
 		}
 	}
 	
 	@Override
 	protected void customInit() {
-		initName = "";
-		initComment = "";
+		initTag = ConditionTag.createDummyTag();
 	}
 
 	@Override

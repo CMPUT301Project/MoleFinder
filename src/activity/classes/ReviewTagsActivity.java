@@ -1,11 +1,10 @@
 package activity.classes;
 
 
-import model.classes.DatabaseManager;
+import model.classes.DatabaseEntry;
 import mole.finder.R;
 import adapter.classes.MoleFinderArrayAdapter;
 import android.content.Intent;
-import android.database.Cursor;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -73,10 +72,9 @@ public class ReviewTagsActivity extends FActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, int pos,
 					long row) {
-				Cursor cur = (Cursor) parent.getItemAtPosition(pos);
-				int next = cur.getInt(cur.getColumnIndex(DatabaseManager.KEY_ROWID));				
+				DatabaseEntry entry = (DatabaseEntry) parent.getItemAtPosition(pos);
 				Intent intent = new Intent(ReviewTagsActivity.this, NewTagActivity.class);
-				intent.putExtra("ID", next);
+				intent.putExtra("ID", entry.getId());
 				startActivity(intent);
 			}
 		};
