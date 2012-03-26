@@ -38,6 +38,22 @@ public class ConditionEntry extends DatabaseEntry {
 				" " + getDate());
 	}
 	
+	/** Primary descriptor of a ConditionEntry is the date.
+	 * 
+	 */
+	@Override
+	public String getTitle() {
+		return getDate();
+	}
+	
+	/** Secondary descriptor of a ConditionEntry is the associated tag. 
+	 * 
+	 */
+	@Override
+	public String getDescription() {
+		return getTag();
+	}
+	
 	// getters/setters
 	public String getTag() {
 		return tag;
@@ -60,12 +76,5 @@ public class ConditionEntry extends DatabaseEntry {
 	public void setDate(String date) {
 		this.date = date;
 	}
-	@Override
-	public String getTitle() {
-		return getDate();
-	}
-	@Override
-	public String getDescription() {
-		return getTag();
-	}
+
 }

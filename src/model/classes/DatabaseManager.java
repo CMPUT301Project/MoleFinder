@@ -148,6 +148,15 @@ public class DatabaseManager{
 	public boolean deleteImageEntry(long rowId) {
 		return (mDb.delete(DATABASE_IMAGE_TABLE, KEY_ROWID + "=" + rowId, null) > 0);
 	}
+	
+	/** Delete the tag with the given rowId
+	 * 
+	 * @param rowId Id of tag to delete
+	 * @return true if deleted, else false
+	 */
+	public boolean deleteTag(long rowId) {
+		return (mDb.delete(DATABASE_TAG_TABLE, KEY_ROWID + " = " + rowId, null) > 0);
+	}
 
 
 	/**

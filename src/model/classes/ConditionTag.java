@@ -45,22 +45,38 @@ public class ConditionTag extends DatabaseEntry {
 		else if (this.getName().equals(other.getName())) {
 			// identical 
 			if (this.getComment().equals(other.getComment())) {
-				return 0;
+				return IDENTICAL;
 			}
 			// different comments
 			else {
-				return 2;
+				return DIFF_COMMENT;
 			}
 		}
 		// different name
 		else {
-			return 1;
+			return DIFF_NAME;
 		}
 	}
 	
 	@Override
 	public String toString() {
 		return getName();
+	}
+	
+	/** Primary descriptor of a ConditionTag is the name of the tag.
+	 * 
+	 */
+	@Override
+	public String getTitle() {
+		return getName();
+	}
+	
+	/** Secondary descriptor of a ConditionTag is the comment.
+	 * 
+	 */
+	@Override
+	public String getDescription() {
+		return getComment();
 	}
 
 	
@@ -79,13 +95,5 @@ public class ConditionTag extends DatabaseEntry {
 
 	public void setComment(String comment) {
 		this.comment = comment;
-	}
-	@Override
-	public String getTitle() {
-		return getName();
-	}
-	@Override
-	public String getDescription() {
-		return getComment();
 	}
 }

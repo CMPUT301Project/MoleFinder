@@ -4,9 +4,11 @@ import model.classes.ConditionTag;
 import mole.finder.R;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /** NewTagActivity creates or overwrites a tag stored in 
  * the database.
@@ -48,13 +50,11 @@ public class NewTagActivity extends FActivity {
 		int status = initTag.compareTo(nowTag);
 		switch (status) {
 		case ConditionTag.IDENTICAL:
-			NewTagActivity.this.finish(); break;
+			break;
 		case ConditionTag.DUMMY_ID:
 			model.saveTag(nowTag); break;
 		case ConditionTag.DIFF_NAME:
-			model.overwriteTag(nowTag); break;
-			// NEED TO ADD CODE TO THE MODEL TO UPDATE 
-			// IMAGE ENTRY TAGS FOR A TAG THAT HAS CHANGED NAME
+			model.overwriteCascade(initTag.getName(), nowTag); break;
 		case ConditionTag.DIFF_COMMENT:
 			model.overwriteTag(nowTag); break;
 		}
@@ -86,6 +86,7 @@ public class NewTagActivity extends FActivity {
 			delete.setVisibility(View.GONE);
 		}
 		else {
+			// NEED CASCADING DELETE HERE AS WELL!!!
 			delete.setOnClickListener(new View.OnClickListener() {	
 				public void onClick(View v) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(NewTagActivity.this);
@@ -93,7 +94,7 @@ public class NewTagActivity extends FActivity {
 							"entries with this tag. Are you sure you wish to continue?");
 					builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog, int id) {
-									//DBManager.deleteAllEntries(initName);
+									model.deleteTag(initTag);
 									NewTagActivity.this.finish();
 								}
 							});

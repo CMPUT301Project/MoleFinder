@@ -48,7 +48,7 @@ public class MoleFinderModel {
 		conditions = new ArrayList<DatabaseEntry>();
 		tags = new ArrayList<DatabaseEntry>();
 		getTags(); // fill on construction
-		temp(); // test database items
+		//temp(); // test database items
 	}
 	
 	/** Empty the current list of conditions.
@@ -128,14 +128,51 @@ public class MoleFinderModel {
 		return tag;
 	}
 	
-	/** The name or comment of this tag has changed
+	/** Delete the tag and all images associated with it. 
 	 * 
-	 * @param tag
+	 * @param tag The tag to remove. 
 	 */
-	// THIS METHOD NEEDS TO CHECK IF THE TAG NAME HAS CHANGED,
-	//  AND UPDATE ANY IMAGE ENTRIES USING THAT TAG
+	public void deleteTag(ConditionTag tag) {
+		DBManager.open();
+		DBManager.deleteAllEntries(tag.getName());		
+		DBManager.close();
+	}
+	
+	/** The comment of this tag has changed, overwrite it.
+	 * 
+	 * @param tag The ConditionTag to overwrite.
+	 */
 	public void overwriteTag(ConditionTag tag) {
 		DBManager.open();
+		DBManager.editTag(tag.getId(), tag.getName(), tag.getComment());
+		DBManager.close();
+	}
+	
+	/** An attribute of this object has changed, overwrite it. 
+	 * 
+	 * @param entry The ConditionEntry object to change. 
+	 */
+	public void overwriteImage(ConditionEntry entry) {
+		DBManager.open();
+		DBManager.editImage(entry.getId(), entry.getTag(), entry.getComment());
+		DBManager.close();
+	}
+	
+	/** The name of this tag has changed, overwrite it and update all 
+	 * applicable ConditionEntry's that use this tag. 
+	 * 
+	 * @param tag The ConditionTag to update. 
+	 */
+	public void overwriteCascade(String oldTagName, ConditionTag tag) {
+		DBManager.open();
+		Cursor cursor = DBManager.fetchAllImages(oldTagName);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			ConditionEntry entry = cursorToCondition(cursor);
+			DBManager.editImage(entry.getId(), tag.getName(), entry.getComment());
+			cursor.moveToNext();
+		}
+		cursor.close();
 		DBManager.editTag(tag.getId(), tag.getName(), tag.getComment());
 		DBManager.close();
 	}
