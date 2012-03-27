@@ -1,36 +1,26 @@
 package model.classes;
 
-import java.io.ByteArrayOutputStream;
-
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory;
-
 
 public class ConditionEntry extends DatabaseEntry {
 	// database rows
-	private String tag, comment, date;
-	private Bitmap image;
+	private String tag;
+	private String comment;
+	private String date;
+	private String image;
+
 
 	// constructor 1 (comment is optional)
-	public ConditionEntry(int id, String tag, byte[] image) {
+	public ConditionEntry(int id, String tag, String image) {
 		super(id);
 		this.setTag(tag);
-		this.image = BitmapFactory.decodeByteArray(image, 0, image.length); 
+		this.setImage(image);
 	}
 	// constructor 2
-	public ConditionEntry(int id, String tag, byte[] image, String comment, String date) {
+	public ConditionEntry(int id, String tag, String image, String comment, String date) {
 		this(id, tag, image);
 		this.setComment(comment);
 		this.setDate(date);
 	}
-
-	// return the image as a byte array, use for saving entry to DB
-	public byte[] getBitmapAsByteArray() { 
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(); 
-		this.image.compress(CompressFormat.PNG, 0, outputStream); 
-		return outputStream.toByteArray(); 
-	} 
 	
 	@Override
 	public String toString() {
@@ -61,14 +51,17 @@ public class ConditionEntry extends DatabaseEntry {
 	public void setTag(String tag) {
 		this.tag = tag;
 	}
+	public void setImage(String image) {
+		this.image = image;
+	}
 	public String getComment() {
 		return comment;
 	}
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	public Bitmap getImage() {
-		return this.image;
+	public String getImage() {
+		return image;
 	}
 	public String getDate() {
 		return date;

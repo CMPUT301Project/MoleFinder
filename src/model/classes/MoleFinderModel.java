@@ -90,7 +90,7 @@ public class MoleFinderModel {
 	public ConditionEntry cursorToCondition(Cursor cur) {
 		// (id, tag, image, comment, date)
 		return new ConditionEntry(cur.getInt(0), cur.getString(1), 
-				cur.getBlob(4), cur.getString(3), cur.getString(2));
+				cur.getString(4), cur.getString(3), cur.getString(2));
 	}
 	
 	/** Fills the tag list with all of the tags in the database.
@@ -184,6 +184,16 @@ public class MoleFinderModel {
 	public void saveTag(ConditionTag tag) {
 		DBManager.open();
 		DBManager.createTagEntry(tag.getName(), tag.getComment());
+		DBManager.close();
+	}
+	
+	/** Store a new ConditionTag in the database.
+	 * 
+	 * @param tag The tag to save to the database.
+	 */
+	public void saveImage(ConditionEntry entry) {
+		DBManager.open();
+		DBManager.createImageEntry(entry.getTag(), entry.getDate(), entry.getComment(), entry.getImage());
 		DBManager.close();
 	}
 	
