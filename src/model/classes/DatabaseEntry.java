@@ -38,5 +38,11 @@ public abstract class DatabaseEntry {
 	 * 
 	 * @return A String value containing secondary descriptive information.
 	 */
-	public abstract String getDescription(); 
+	public abstract String getDescription();
+	
+	/** Provide an image for the imageView
+	 * 
+	 * @return A String value representing the image on the SD card.
+	 */
+	public abstract String getImageName();
 }

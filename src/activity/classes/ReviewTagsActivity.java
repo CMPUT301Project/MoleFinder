@@ -46,8 +46,8 @@ public class ReviewTagsActivity extends FActivity {
 	@Override
 	protected void updateView() {
 		model.fetchTags();
-		list.setAdapter(new MoleFinderArrayAdapter(this, R.layout.list_view_layout,
-				R.id.date_text, R.id.tag_text, model.getTags()));
+		list.setAdapter(new MoleFinderArrayAdapter(this, R.layout.tag_row_layout,
+				R.id.tag_text, R.id.comments_text, model.getTags()));
 	}
 
 	/** Hide the spinner. 

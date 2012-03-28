@@ -140,13 +140,14 @@ public class ReviewImagesActivity extends FActivity {
 		if (getTag() != "") {
 		model.fetchConditions(getTag());
 		list.setAdapter(new MoleFinderArrayAdapter(this, R.layout.list_view_layout,
-				R.id.date_text, R.id.tag_text, model.getConditions()));
+				R.id.imageView, R.id.date_text, R.id.tag_text, model.getConditions()));
 		}
 	}
 	
 	/** Setup the OnItemSelectedListener for the Condition ListView
 	 * 
 	 */
+	// TODO When image is clicked on display the image larger
 	private OnItemClickListener setupListListener() {
 		// allow for clicks
 		OnItemClickListener listener = new OnItemClickListener() {
@@ -155,7 +156,7 @@ public class ReviewImagesActivity extends FActivity {
 					long row) {
 				//Cursor cur = (Cursor) parent.getItemAtPosition(pos);
 				//int next = cur.getInt(cur.getColumnIndex(DatabaseManager.KEY_ROWID));
-				Intent intent = new Intent(ReviewImagesActivity.this, NewImageActivity.class);
+				Intent intent = new Intent(ReviewImagesActivity.this, ImageActivity.class);
 				//intent.putExtra("ID", next);
 				startActivity(intent);
 			}
