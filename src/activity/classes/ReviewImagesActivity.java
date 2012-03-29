@@ -154,10 +154,9 @@ public class ReviewImagesActivity extends FActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, int pos,
 					long row) {
-				//Cursor cur = (Cursor) parent.getItemAtPosition(pos);
-				//int next = cur.getInt(cur.getColumnIndex(DatabaseManager.KEY_ROWID));
+
 				Intent intent = new Intent(ReviewImagesActivity.this, ImageActivity.class);
-				//intent.putExtra("ID", next);
+				intent.putExtra("pos", pos);
 				startActivity(intent);
 			}
 		};

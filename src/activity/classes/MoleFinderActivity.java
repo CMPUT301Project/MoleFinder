@@ -16,7 +16,8 @@ public class MoleFinderActivity extends FActivity {
 	private Button buttonNewTag;
 	private Button buttonEditTag;
 	private String imageName;
-	private String Date;
+	private String date;
+	private CameraController camera;
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -28,7 +29,7 @@ public class MoleFinderActivity extends FActivity {
 
 				Intent intentNewImageActivity = new Intent(MoleFinderActivity.this, NewImageActivity.class);
 				intentNewImageActivity.putExtra("imageName", imageName);
-				intentNewImageActivity.putExtra("date", Date);
+				intentNewImageActivity.putExtra("date", date);
 				startActivity(intentNewImageActivity);
 	
 			}
@@ -48,11 +49,11 @@ public class MoleFinderActivity extends FActivity {
 	protected void setClickListeners() {
 		buttonCaptureImage.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				CameraController Camera = new CameraController();
-		    	Intent intent = Camera.takeAPhoto();
+				
+		    	Intent intent = camera.takeAPhoto(getBaseContext());
 		    	Bundle extras = intent.getExtras();
 		    	imageName = extras.getString("imageName");
-		    	Date = extras.getString("date");
+		    	date = extras.getString("date");
 				startActivityForResult(intent,CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 			}
 		});
@@ -79,7 +80,7 @@ public class MoleFinderActivity extends FActivity {
 
 	@Override
 	protected void customInit() {
-		// nothing to do
+		camera = new CameraController();
 	}
 
 	@Override
