@@ -1,9 +1,11 @@
 package activity.classes;
 
+import model.classes.DatabaseEntry;
 import mole.finder.R;
 
 import adapter.classes.MoleFinderArrayAdapter;
 import adapter.classes.MoleFinderSpinnerAdapter;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -18,20 +20,30 @@ import android.widget.Toast;
 /** The ReviewImagesActivity displays a list of available tags
  * in the spinner at the top, and once selected displays a list
  * of conditions that are currently stored in the database with
- * the corresponding tag. 
+ * the corresponding tag. Be sure to include the "FORWARD" extra
+ * when calling this view or you will not be able to link to the 
+ * next page and you may get exceptions. 
  * 
  * @author mbessett
  *
  */
 
 public class ReviewImagesActivity extends FActivity {
+	// UI items
 	private Spinner spinner;
-	private int spinnerPos;
 	private ListView list;
-	private String tag;	
 	
+	// internal variables
+	private int spinnerPos;	
+	private String tag;
+	private String layout;
+	private Class<?> forwardView;	// this is the screen to link to
+									// use the key "FORWARD"
+	
+	// fixed values
 	private final String PREFS = "ReviewImagesSpinnerPos";
 	private final String S_KEY = "pos";
+	
 
 	/** Preserve last spinner position.
 	 * 
@@ -52,6 +64,7 @@ public class ReviewImagesActivity extends FActivity {
          }
 	}
 	
+	// SPINNER POS SAVING DOES NOT WORK!!!!(at least not this way)
 	private boolean saveState(Context context) {
         SharedPreferences prefs =
                 context.getSharedPreferences(this.PREFS, MODE_WORLD_READABLE);
@@ -95,11 +108,22 @@ public class ReviewImagesActivity extends FActivity {
 	}
 
 	/** Do not display list of condition entries on creation.
+	 * Also setup which class to return to after selection.
 	 * 
 	 */
 	@Override
 	protected void customInit() {
 		setTag("");
+		
+		Class<?> next = (Class<?>) getExtra("FORWARD");
+		setForwardView(next);
+		
+		if (getExtra("LAYOUT") != null) {
+			setLayout(getExtra("LAYOUT").toString());
+		}
+		else {
+			setLayout("");
+		}
 	}
 
 	@Override
@@ -154,13 +178,27 @@ public class ReviewImagesActivity extends FActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, int pos,
 					long row) {
-
-				Intent intent = new Intent(ReviewImagesActivity.this, ImageActivity.class);
-				intent.putExtra("pos", pos);
-				startActivity(intent);
+				// get entry from list
+				DatabaseEntry entry = (DatabaseEntry) parent.getItemAtPosition(pos);
+				int id = entry.getId();
+				// send to next page
+				nextView(id);
 			}
 		};
 		return listener;
+	}
+	
+	private void nextView(int id) {
+		Intent intent = new Intent(ReviewImagesActivity.this, getForwardView());
+		intent.putExtra("ID", id);
+		if (!getLayout().equals("")) {
+			intent.putExtra("LAYOUT", getLayout());
+			setResult(Activity.RESULT_OK, intent);
+			this.finish();
+		}
+		else {
+			startActivity(intent);
+		}
 	}
 	
 	// getters/setters
@@ -178,5 +216,21 @@ public class ReviewImagesActivity extends FActivity {
 
 	public void setSpinnerPos(int spinnerPos) {
 		this.spinnerPos = spinnerPos;
+	}
+
+	public void setForwardView(Class<?> forwardView) {
+		this.forwardView = forwardView;
+	}
+
+	public Class<?> getForwardView() {
+		return forwardView;
+	}
+
+	public void setLayout(String layout) {
+		this.layout = layout;
+	}
+
+	public String getLayout() {
+		return layout;
 	}
 }
