@@ -5,14 +5,14 @@
     android:orientation="vertical" >
 
     <ImageView
-        android:id="@+id/ImageView01"
+        android:id="@+id/imageCompareTop"
         android:layout_width="320dp"
         android:layout_height="0dp"
         android:layout_weight="1.00"
         android:src="@android:drawable/ic_menu_gallery" />
 
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/imageCompareBottom"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1.00"

@@ -128,6 +128,24 @@ public class MoleFinderModel {
 		return tag;
 	}
 	
+	/** Acquire one ConditionEntry object from the database.
+	 * 
+	 * @param id RowId in the database image table. 
+	 * @return A ConditionEntry object corresponding to that
+	 * row in the table.
+	 */
+	public ConditionEntry getOneEntry(long id) {
+		DBManager.open();
+		
+		Cursor cursor = DBManager.fetchImage(id);
+		cursor.moveToFirst();
+		ConditionEntry entry = cursorToCondition(cursor);
+		
+		cursor.close();
+		DBManager.close();
+		return entry;		
+	}
+	
 	/** Delete the tag and all images associated with it. 
 	 * 
 	 * @param tag The tag to remove. 

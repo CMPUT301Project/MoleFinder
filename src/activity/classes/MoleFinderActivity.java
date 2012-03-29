@@ -56,10 +56,17 @@ public class MoleFinderActivity extends FActivity {
 				startActivityForResult(intent,CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 			}
 		});
-		buttonCompare.setOnClickListener(switchActListener(CompareActivity.class));
-		buttonReviewImages.setOnClickListener(switchActListener(ReviewImagesActivity.class));
+		buttonCompare.setOnClickListener(switchActListener(CompareActivity.class));		
 		buttonNewTag.setOnClickListener(switchActListener(NewTagActivity.class));
 		buttonEditTag.setOnClickListener(switchActListener(ReviewTagsActivity.class));
+		buttonReviewImages.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MoleFinderActivity.this, ReviewImagesActivity.class);
+				intent.putExtra("FORWARD", NewImageActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 	
 	private OnClickListener switchActListener(final Class<?> newAct) {

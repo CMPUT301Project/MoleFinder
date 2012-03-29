@@ -248,7 +248,17 @@ public class DatabaseManager{
 	 * @return Cursor of the specified tag
 	 */
 	public Cursor fetchTag(long id) {
-		return mDb.query(DATABASE_TAG_TABLE, new String[] { KEY_ROWID, KEY_TAG, KEY_COMMENTS }, 
+		return mDb.query(DATABASE_TAG_TABLE, new String[] { KEY_ROWID, KEY_TAG, KEY_COMMENTS}, 
+				KEY_ROWID + " = " + id, null, null, null, null);
+	}
+	
+	/**
+	 * Return a Cursor over the specified image in the database based on id.
+	 * 
+	 * @return Cursor of the specified tag
+	 */
+	public Cursor fetchImage(long id) {
+		return mDb.query(DATABASE_IMAGE_TABLE, new String[] { KEY_ROWID, KEY_TAG, KEY_DATE, KEY_COMMENTS, KEY_IMAGE }, 
 				KEY_ROWID + " = " + id, null, null, null, null);
 	}
 }
