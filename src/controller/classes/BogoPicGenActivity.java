@@ -46,6 +46,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 
 import android.view.View;
@@ -132,6 +133,7 @@ public class BogoPicGenActivity extends Activity {
     private void saveBMP( File intentPicture, Bitmap ourBMP) throws IOException, FileNotFoundException {
     		OutputStream out = new FileOutputStream(intentPicture);
     		ourBMP.compress(Bitmap.CompressFormat.JPEG, 75, out);
+    		getBaseContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory().getAbsolutePath())));
     		out.close();
     }
     
