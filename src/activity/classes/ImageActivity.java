@@ -42,6 +42,17 @@ public class ImageActivity extends FActivity {
 			}
 		});
 		
+		deleteButton.setOnClickListener(new View.OnClickListener() {	
+			public void onClick(View v) {
+				ConditionEntry entry = model.getOneEntry(id);
+
+	        	File imgFile = new File("/sdcard/MoleFinderPics/" + entry.getImage() + ".jpg");
+	        	imgFile.delete();
+				model.deleteImage(entry);
+				finish();
+			}
+		});
+		
 	}
 
 	@Override

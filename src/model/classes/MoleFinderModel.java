@@ -156,6 +156,12 @@ public class MoleFinderModel {
 		DBManager.close();
 	}
 	
+	public void deleteImage(ConditionEntry entry){
+		DBManager.open();
+		DBManager.deleteImageEntry(entry.getId());		
+		DBManager.close();
+	}
+	
 	/** The comment of this tag has changed, overwrite it.
 	 * 
 	 * @param tag The ConditionTag to overwrite.
@@ -173,6 +179,7 @@ public class MoleFinderModel {
 	public int overwriteImage(ConditionEntry entry) {
 		DBManager.open();
 		if(DBManager.editImage(entry.getId(), entry.getTag(), entry.getComment())){
+			DBManager.close();
 			return 1;
 		}
 		DBManager.close();

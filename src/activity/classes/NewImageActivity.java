@@ -1,4 +1,6 @@
 package activity.classes;
+import java.io.File;
+
 import model.classes.ConditionEntry;
 import model.classes.ConditionTag;
 import model.classes.DatabaseManager;
@@ -113,13 +115,16 @@ public class NewImageActivity extends FActivity{
 
 		buttonCancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				if (getExtra("ID") == null) {
+		        	File imgFile = new File("/sdcard/MoleFinderPics/" + imageName + ".jpg");
+		        	imgFile.delete();
+				}
 				finish();
 			}
 		});
 		
 		buttonSave.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-
 				saveImage();
 				finish();
 			}
