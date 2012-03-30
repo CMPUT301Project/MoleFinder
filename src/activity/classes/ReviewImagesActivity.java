@@ -191,12 +191,14 @@ public class ReviewImagesActivity extends FActivity {
 	private void nextView(int id) {
 		Intent intent = new Intent(ReviewImagesActivity.this, getForwardView());
 		intent.putExtra("ID", id);
-		if (!getLayout().equals("")) {
-			intent.putExtra("LAYOUT", getLayout());
+		String layout = getLayout();
+		if (layout.equals("top") || layout.equals("bottom")) {
+			intent.putExtra("LAYOUT", layout);
 			setResult(Activity.RESULT_OK, intent);
 			this.finish();
 		}
 		else {
+
 			startActivity(intent);
 		}
 	}

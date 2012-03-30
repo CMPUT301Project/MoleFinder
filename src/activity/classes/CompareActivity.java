@@ -19,7 +19,7 @@ import android.widget.Toast;
 /** Display 2 images on the same view for visual inspection
  * by the user. 
  * 
- * @author 
+ * @author mbessett
  *
  */
 
@@ -29,8 +29,6 @@ public class CompareActivity extends FActivity {
 	
 	private String topImage;
 	private String bottomImage;
-	
-	private static final int REQ_CODE = 666;
 
 	@Override
 	protected void findViews() {
@@ -38,24 +36,35 @@ public class CompareActivity extends FActivity {
 		bottom = (ImageView) findViewById(R.id.imageCompareBottom);		
 	}
 
+	/** Clicking on the image views allows the user to select which 
+	 * image is displayed.
+	 * 
+	 */
 	@Override
 	protected void setClickListeners() {
 		top.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = createLinkIntent("top");
-				startActivityForResult(intent, REQ_CODE);
+				startActivityForResult(intent, 1);
 			}
 		});
 		bottom.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = createLinkIntent("bottom");
-				startActivityForResult(intent, REQ_CODE);
+				startActivityForResult(intent, 1);
 			}
 		});
 	}
 	
+	/** Create an intent that links to ReviewImagesActivity, and sets
+	 * the layout extra to either "top" or "bottom" depending on which
+	 * picture you are selecting.
+	 * 
+	 * @param layout Either "top" or "bottom"
+	 * @return The created intent. 
+	 */
 	private Intent createLinkIntent(String layout) {
 		Intent intent = new Intent(CompareActivity.this, ReviewImagesActivity.class);
 		intent.putExtra("FORWARD", CompareActivity.class);
@@ -63,10 +72,11 @@ public class CompareActivity extends FActivity {
 		return intent;
 	}
 
+	/** Display the images, if they exist on the SDCard.
+	 * 
+	 */
 	@Override
 	protected void updateView() {
-		setImageString();
-		
         File topImg = new File("/sdcard/MoleFinderPics/" + getTopImage() + ".jpg");
         File bottomImg = new File("/sdcard/MoleFinderPics/" + getBottomImage() + ".jpg");
         if (topImg.exists()){        	
@@ -76,39 +86,49 @@ public class CompareActivity extends FActivity {
         if (bottomImg.exists()) {
         	Bitmap bmpImg = BitmapFactory.decodeFile(bottomImg.getAbsolutePath());
         	bottom.setImageBitmap(bmpImg);
-        }
-        
-	}
-	
-	private void setImageString() {
-		if (getExtra("LAYOUT") != null && getExtra("ID") != null) {
-			int id = Integer.parseInt(getExtra("ID").toString());
-			ConditionEntry entry = model.getOneEntry(id);
-			String name = entry.getImage();
-			String layout = getExtra("LAYOUT").toString();
-			
-			if (layout.equals("top")) {
-				setTopImage(name);
-			}
-			else if (layout.equals("bottom")) {
-				setBottomImage(name);
-			}
-		}
+        }        
 	}
 
+	/** Images are distinguished in this class by name,
+	 * this method sets the correct image name depending
+	 * on the LAYOUT extra passed when returning from 
+	 * image selection.
+	 * 
+	 * @param data The intent from onActivityResult
+	 */
+	private void setImageString(Intent data) {
+		String layout = data.getStringExtra("LAYOUT");
+		int id = data.getIntExtra("ID", -1);
+		ConditionEntry entry = model.getOneEntry(id);
+		String name = entry.getImage();
+
+		if (layout.equals("top")) {
+			setTopImage(name);
+		}
+		else if (layout.equals("bottom")) {
+			setBottomImage(name);
+		}				
+	}
+
+	/** Returning from image selection, save the name of the image.
+	 * 
+	 */
+	// called BEFORE onResume
 	@Override 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {     
 		super.onActivityResult(requestCode, resultCode, data); 
 		if (resultCode == Activity.RESULT_OK) {
-			updateView();
-		} 
+			setImageString(data);
+		} 		
 	}
 
-
+	/** Comparing new images, clear the image names. 
+	 * 
+	 */
 	@Override
 	protected void customInit() {
-		//setTopImage("");
-		//setBottomImage("");
+		setTopImage("");
+		setBottomImage("");
 	}
 
 	@Override
