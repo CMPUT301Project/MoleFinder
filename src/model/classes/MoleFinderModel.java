@@ -170,10 +170,13 @@ public class MoleFinderModel {
 	 * 
 	 * @param entry The ConditionEntry object to change. 
 	 */
-	public void overwriteImage(ConditionEntry entry) {
+	public int overwriteImage(ConditionEntry entry) {
 		DBManager.open();
-		DBManager.editImage(entry.getId(), entry.getTag(), entry.getComment());
+		if(DBManager.editImage(entry.getId(), entry.getTag(), entry.getComment())){
+			return 1;
+		}
 		DBManager.close();
+		return -1;
 	}
 	
 	/** The name of this tag has changed, overwrite it and update all 

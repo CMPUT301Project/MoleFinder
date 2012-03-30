@@ -6,6 +6,7 @@ public class ConditionEntry extends DatabaseEntry {
 	public static final int DUMMY_ID = -1;
 	public static final int IDENTICAL = 111;
 	public static final int DIFF_NAME = 222;
+	public static final String DUMMY_IMAGE = "1";
 	public static final int DIFF_COMMENT = 333;
 	// database rows
 	private String tag;
@@ -26,6 +27,15 @@ public class ConditionEntry extends DatabaseEntry {
 		this.setComment(comment);
 		this.setDate(date);
 	}
+	// constructor 3
+	public ConditionEntry(ConditionEntry input) {
+		this(input.getId(), input.getTag(), input.getImage());
+	}
+	
+	public static ConditionEntry createDummyEntry() {
+		return new ConditionEntry(DUMMY_ID, DUMMY_NAME, DUMMY_IMAGE);
+	}
+	
 	
 	@Override
 	public String toString() {
@@ -49,13 +59,13 @@ public class ConditionEntry extends DatabaseEntry {
 	 * 			1: Tags have a different name
 	 * 			2: Tags have the same name, different comment
 	 */
-	public int compareTo(ConditionTag other) {
+	public int compareTo(ConditionEntry other) {
 		// comparing to dummy
 		if (this.getId() == DUMMY_ID || other.getId() == DUMMY_ID) {
 			return DUMMY_ID;
 		}
 		// same name
-		else if (this.getImage().equals(other.getName())) {
+		else if (this.getTag().equals(other.getTag())) {
 			// identical 
 			if (this.getComment().equals(other.getComment())) {
 				return IDENTICAL;
@@ -67,7 +77,7 @@ public class ConditionEntry extends DatabaseEntry {
 		}
 		// different name
 		else {
-			return DIFF_NAME;
+			return DIFF_COMMENT;
 		}
 	}
 	

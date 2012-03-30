@@ -40,8 +40,8 @@ public class NewImageActivity extends FActivity{
 	private String date;
 	private String comments;
 	private int spinnerPos;
-	private boolean update = false;
-	
+	private ConditionEntry initImage;
+	private Object tags;
     
 	/** Setup the OnItemSelectedListener for the Tag Spinner, and
 	 * remember the Spinner position.
@@ -55,9 +55,9 @@ public class NewImageActivity extends FActivity{
 			public void onItemSelected(AdapterView<?> parent, View v,
 					int pos, long row) {
 				// grab item
-				Object tag = parent.getItemAtPosition(pos);				
+				tags = parent.getItemAtPosition(pos);
 				// set attributes
-				setTag(tag.toString());
+				setTag(tags.toString());
 				setSpinnerPos(pos);
 		        // only need to update the list when new tag selected
 			}
@@ -101,13 +101,10 @@ public class NewImageActivity extends FActivity{
 		model.fetchTags();
 		spinnerTag.setAdapter(new MoleFinderSpinnerAdapter(this, model.getTags()));		
 		if (getExtra("ID") != null) {
-			update = true;
 			long id = Long.parseLong(getExtra("ID").toString());
-			ConditionEntry initImage = model.getOneEntry(id);
+			initImage = model.getOneEntry(id);
+			tag = initImage.getTag();
 			edittextComments.setText(initImage.getComment());
-		}
-		else{
-			update = false;
 		}
 	}
 
@@ -123,15 +120,7 @@ public class NewImageActivity extends FActivity{
 		buttonSave.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
-				comments = edittextComments.getText().toString();
-				ConditionEntry entry = new ConditionEntry(1, tag, imageName, comments, date);
-				// check for repeat data
-				if(update){
-					model.overwriteImage(entry);
-				}
-				else{
-					model.saveImage(entry);
-				}
+				saveImage();
 				finish();
 			}
 		});
@@ -154,20 +143,53 @@ public class NewImageActivity extends FActivity{
 	 */
 	@Override
 	protected void customInit() {
+		initImage = ConditionEntry.createDummyEntry();
 		Intent intent = getIntent();
 		Bundle extras = intent.getExtras();
 		//get the saved image name and date
 		imageName = extras.getString("imageName");
 		date = extras.getString("date");
-        if(tag==null){
-        	buttonSave.setClickable(false);
-        }
 	}
 
 
 	@Override
 	protected int myLayout() {
 		return R.layout.newphoto;
+	}
+	
+	/** Save the current tag to the database 
+	 * 
+	 */
+	private void saveImage() {
+		ConditionEntry nowImage = new ConditionEntry(initImage);
+		String curName = tags.toString();
+		nowImage.setImage(imageName);
+		nowImage.setTag(curName);
+		nowImage.setDate(date);
+		nowImage.setComment(edittextComments.getText().toString());
+		// disallow empty names
+		if (curName.equals("")) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("Tag name cannot be empty.");
+			builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+			});
+			builder.show();
+			return;
+		}
+		// check for repeat data
+		int status = initImage.compareTo(nowImage);
+		switch (status) {
+		case ConditionTag.IDENTICAL:
+			break;
+		case ConditionEntry.DUMMY_ID:
+			model.saveImage(nowImage); break;
+		case ConditionEntry.DIFF_COMMENT:
+			model.overwriteImage(nowImage); break;
+		}
+		finish();
 	}
     
 }

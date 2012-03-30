@@ -21,7 +21,7 @@ public class ImageActivity extends FActivity {
 	private Button editButton;
 	private Button deleteButton;
 	private int id;
-
+	
 	@Override
 	protected void findViews() {
 		image = (ImageView) findViewById(R.id.full_size_image);
