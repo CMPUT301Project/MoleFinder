@@ -32,51 +32,22 @@ public class ReviewImagesActivity extends FActivity {
 	// UI items
 	private Spinner spinner;
 	private ListView list;
-	
+
 	// internal variables
 	private int spinnerPos;	
 	private String tag;
 	private String layout;
 	private Class<?> forwardView;	// this is the screen to link to
-									// use the key "FORWARD"
-	
+	// use the key "FORWARD"
+
 	// fixed values
 	private final String PREFS = "ReviewImagesSpinnerPos";
 	private final String S_KEY = "pos";
-	
 
-	/** Preserve last spinner position.
-	 * 
-	 */
-	@Override
-	public void onResume() {
-		super.onResume();
-		//spinner.setSelection(getSpinnerPos());
-		readState(ReviewImagesActivity.this);
-	}
-	
 	@Override
 	public void onPause() {
+		setSpinnerPos(spinner.getSelectedItemPosition());
 		super.onPause();
-        if (!saveState(ReviewImagesActivity.this)) {
-            Toast.makeText(this,
-                    "Failed to write state!", Toast.LENGTH_LONG).show();
-         }
-	}
-	
-	// SPINNER POS SAVING DOES NOT WORK!!!!(at least not this way)
-	private boolean saveState(Context context) {
-        SharedPreferences prefs =
-                context.getSharedPreferences(this.PREFS, MODE_WORLD_READABLE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(this.S_KEY, getSpinnerPos());
-        return editor.commit();
-	}
-	
-	private boolean readState(Context context) {
-		SharedPreferences prefs = context.getSharedPreferences(this.PREFS, MODE_WORLD_READABLE);
-		setSpinnerPos(prefs.getInt(this.S_KEY, 0));
-		return (prefs.contains(this.S_KEY));
 	}
 
 	/** Find Spinner and ListView.    
@@ -104,7 +75,8 @@ public class ReviewImagesActivity extends FActivity {
 	@Override
 	protected void updateView() {
 		model.fetchTags();
-		spinner.setAdapter(new MoleFinderSpinnerAdapter(this, model.getTags()));		
+		spinner.setAdapter(new MoleFinderSpinnerAdapter(this, model.getTags()));
+		spinner.setSelection(getSpinnerPos());
 	}
 
 	/** Do not display list of condition entries on creation.
@@ -114,10 +86,10 @@ public class ReviewImagesActivity extends FActivity {
 	@Override
 	protected void customInit() {
 		setTag("");
-		
+
 		Class<?> next = (Class<?>) getExtra("FORWARD");
 		setForwardView(next);
-		
+
 		if (getExtra("LAYOUT") != null) {
 			setLayout(getExtra("LAYOUT").toString());
 		}
@@ -130,7 +102,7 @@ public class ReviewImagesActivity extends FActivity {
 	protected int myLayout() {
 		return R.layout.review;
 	}
-	
+
 	/** Setup the OnItemSelectedListener for the Tag Spinner, and
 	 * remember the Spinner position.
 	 * 
@@ -147,27 +119,27 @@ public class ReviewImagesActivity extends FActivity {
 				// set attributes
 				setTag(tag.toString());
 				setSpinnerPos(pos);
-		        // only need to update the list when new tag selected
-		        updateList();
+				// only need to update the list when new tag selected
+				updateList();
 			}
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {}
 		};
 		return listener;
 	}
-	
+
 	/** This uses the activity's tag attribute to create a list
 	 * of Condition entries with the same tag
 	 *
 	 */
 	private void updateList() {
 		if (getTag() != "") {
-		model.fetchConditions(getTag());
-		list.setAdapter(new MoleFinderArrayAdapter(this, R.layout.list_view_layout,
-				R.id.imageView, R.id.date_text, R.id.tag_text, model.getConditions()));
+			model.fetchConditions(getTag());
+			list.setAdapter(new MoleFinderArrayAdapter(this, R.layout.list_view_layout,
+					R.id.imageView, R.id.date_text, R.id.tag_text, model.getConditions()));
 		}
 	}
-	
+
 	/** Setup the OnItemSelectedListener for the Condition ListView
 	 * 
 	 */
@@ -187,7 +159,7 @@ public class ReviewImagesActivity extends FActivity {
 		};
 		return listener;
 	}
-	
+
 	private void nextView(int id) {
 		Intent intent = new Intent(ReviewImagesActivity.this, getForwardView());
 		intent.putExtra("ID", id);
@@ -198,11 +170,10 @@ public class ReviewImagesActivity extends FActivity {
 			this.finish();
 		}
 		else {
-
 			startActivity(intent);
 		}
 	}
-	
+
 	// getters/setters
 	public String getTag() {
 		return tag;
