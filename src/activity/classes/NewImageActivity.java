@@ -1,10 +1,13 @@
 package activity.classes;
 import model.classes.ConditionEntry;
+import model.classes.ConditionTag;
 import model.classes.DatabaseManager;
 import mole.finder.R;
 import adapter.classes.MoleFinderArrayAdapter;
 import adapter.classes.MoleFinderSpinnerAdapter;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -37,6 +40,7 @@ public class NewImageActivity extends FActivity{
 	private String date;
 	private String comments;
 	private int spinnerPos;
+	private boolean update = false;
 	
     
 	/** Setup the OnItemSelectedListener for the Tag Spinner, and
@@ -96,6 +100,15 @@ public class NewImageActivity extends FActivity{
 	protected void updateView() {
 		model.fetchTags();
 		spinnerTag.setAdapter(new MoleFinderSpinnerAdapter(this, model.getTags()));		
+		if (getExtra("ID") != null) {
+			update = true;
+			long id = Long.parseLong(getExtra("ID").toString());
+			ConditionEntry initImage = model.getOneEntry(id);
+			edittextComments.setText(initImage.getComment());
+		}
+		else{
+			update = false;
+		}
 	}
 
 	@Override
@@ -112,7 +125,13 @@ public class NewImageActivity extends FActivity{
 
 				comments = edittextComments.getText().toString();
 				ConditionEntry entry = new ConditionEntry(1, tag, imageName, comments, date);
-				model.saveImage(entry);
+				// check for repeat data
+				if(update){
+					model.overwriteImage(entry);
+				}
+				else{
+					model.saveImage(entry);
+				}
 				finish();
 			}
 		});
@@ -135,7 +154,6 @@ public class NewImageActivity extends FActivity{
 	 */
 	@Override
 	protected void customInit() {
-
 		Intent intent = getIntent();
 		Bundle extras = intent.getExtras();
 		//get the saved image name and date
