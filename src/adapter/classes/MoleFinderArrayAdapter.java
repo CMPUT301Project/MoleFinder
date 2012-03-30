@@ -56,13 +56,16 @@ public class MoleFinderArrayAdapter extends ArrayAdapter<DatabaseEntry> {
         TextView title = (TextView)row.findViewById(titleTextId);
         TextView comment = (TextView) row.findViewById(commentTextid);
  
-       
-        File imgFile = new File("/sdcard/MoleFinderPics/" + ((ConditionEntry) items.get(pos)).getImage() + ".jpg");
-        if(imgFile.exists()){
-        	
-        	Bitmap image = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-        	Bitmap scaledImage = Bitmap.createScaledBitmap(image, 100, 100, false);
-        	thumbnail.setImageBitmap(scaledImage);
+        // only ConditionEntry objects have thumbnails to display
+        if (items.get(pos) instanceof ConditionEntry) {
+        	ConditionEntry entry = (ConditionEntry) items.get(pos);
+        	File imgFile = new File("/sdcard/MoleFinderPics/" + entry.getImage() + ".jpg");
+        	if(imgFile.exists()){
+
+        		Bitmap image = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+        		Bitmap scaledImage = Bitmap.createScaledBitmap(image, 100, 100, false);
+        		thumbnail.setImageBitmap(scaledImage);
+        	}
         }
         // set text
         title.setText(items.get(pos).getTitle());
