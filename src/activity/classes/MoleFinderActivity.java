@@ -41,6 +41,13 @@ public class MoleFinderActivity extends TabActivity {
         spec.setContent(intent);
         
         tabHost.addTab(spec);
+        
+        intent = new Intent().setClass(this, ReviewPatientsActivity.class);
+        spec = tabHost.newTabSpec("patients");
+        spec.setIndicator("Patients", res.getDrawable(R.drawable.tab_patients));
+        spec.setContent(intent);
+        
+        tabHost.addTab(spec);
 
         // default to tags page
         tabHost.setCurrentTab(1);
