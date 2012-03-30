@@ -96,9 +96,5 @@ public class ConditionTag extends DatabaseEntry {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	@Override
-	public String getImageName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 }

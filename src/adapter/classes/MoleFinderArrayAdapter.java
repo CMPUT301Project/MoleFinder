@@ -3,6 +3,7 @@ package adapter.classes;
 import java.io.File;
 import java.util.List;
 
+import model.classes.ConditionEntry;
 import model.classes.DatabaseEntry;
 
 import android.app.Activity;
@@ -46,7 +47,6 @@ public class MoleFinderArrayAdapter extends ArrayAdapter<DatabaseEntry> {
         this.commentTextid = commentTextId;
     }
  
-	// TODO Image being diplayed is the same one over and over
     public View getView(int pos, View convertView, ViewGroup parent)
     {
     	// current row
@@ -56,8 +56,8 @@ public class MoleFinderArrayAdapter extends ArrayAdapter<DatabaseEntry> {
         TextView title = (TextView)row.findViewById(titleTextId);
         TextView comment = (TextView) row.findViewById(commentTextid);
  
-        
-        File imgFile = new File("/sdcard/MoleFinderPics/" + items.get(pos).getImageName() + ".jpg");
+       
+        File imgFile = new File("/sdcard/MoleFinderPics/" + ((ConditionEntry) items.get(pos)).getImage() + ".jpg");
         if(imgFile.exists()){
         	
         	Bitmap image = BitmapFactory.decodeFile(imgFile.getAbsolutePath());

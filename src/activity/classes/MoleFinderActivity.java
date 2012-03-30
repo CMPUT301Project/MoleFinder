@@ -64,7 +64,7 @@ public class MoleFinderActivity extends FActivity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(MoleFinderActivity.this, ReviewImagesActivity.class);
-				intent.putExtra("FORWARD", NewImageActivity.class);
+				intent.putExtra("FORWARD", ImageActivity.class);
 				startActivity(intent);
 			}
 		});

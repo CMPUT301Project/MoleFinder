@@ -36,13 +36,6 @@ public class ConditionEntry extends DatabaseEntry {
 		return getDate();
 	}
 	
-	/** gets the image name.
-	 * 
-	 */
-	public String getImageName() {
-		return getImage();
-	}
-	
 	/** Secondary descriptor of a ConditionEntry is the associated tag. 
 	 * 
 	 */

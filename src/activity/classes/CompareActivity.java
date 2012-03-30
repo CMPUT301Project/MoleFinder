@@ -84,7 +84,7 @@ public class CompareActivity extends FActivity {
 		if (getExtra("LAYOUT") != null && getExtra("ID") != null) {
 			int id = Integer.parseInt(getExtra("ID").toString());
 			ConditionEntry entry = model.getOneEntry(id);
-			String name = entry.getImageName();
+			String name = entry.getImage();
 			String layout = getExtra("LAYOUT").toString();
 			
 			if (layout.equals("top")) {

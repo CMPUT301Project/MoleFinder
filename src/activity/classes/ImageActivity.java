@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import model.classes.ConditionEntry;
 import mole.finder.R;
 
 // TODO needs button functionality
@@ -33,12 +34,15 @@ public class ImageActivity extends FActivity {
 	protected void updateView() {
     	Intent intent = getIntent();
     	Bundle extras = intent.getExtras();
-    	int pos = extras.getInt("pos");
-    	String imageName = model.getConditions().get(pos).getImageName();
+    	int id = extras.getInt("ID");
+    	ConditionEntry entry = model.getOneEntry(id);
+    	String imageName = entry.getImage();
+    	String commentString = entry.getComment();
         File imgFile = new File("/sdcard/MoleFinderPics/" + imageName + ".jpg");
         if(imgFile.exists()){
         	Bitmap bitmapImage = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
         	image.setImageBitmap(bitmapImage);
+        	comments.setText(commentString);
         }
 	}
 
