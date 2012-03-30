@@ -1,5 +1,6 @@
 package activity.classes;
 
+import controller.classes.CameraController;
 import model.classes.DatabaseEntry;
 import mole.finder.R;
 
@@ -8,10 +9,13 @@ import adapter.classes.MoleFinderSpinnerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
 import android.content.SharedPreferences;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -32,17 +36,43 @@ public class ReviewImagesActivity extends FActivity {
 	// UI items
 	private Spinner spinner;
 	private ListView list;
+	private Button addButton;
+	private Button compareButton;
 
 	// internal variables
 	private int spinnerPos;	
 	private String tag;
 	private String layout;
 	private Class<?> forwardView;	// this is the screen to link to
-	// use the key "FORWARD"
+									// use the key "FORWARD"
+	private String imageName;
+	private String date;
+	private CameraController camera;
 
 	// fixed values
 	private final String PREFS = "ReviewImagesSpinnerPos";
 	private final String S_KEY = "pos";
+	private final int CAPTURE_CODE = 111;
+	private final int COMPARE_CODE = 222;
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
+		switch(requestCode){
+		case CAPTURE_CODE:
+			
+			if(resultCode== RESULT_OK){
+
+				Intent intentNewImageActivity = new Intent(ReviewImagesActivity.this, NewImageActivity.class);
+				intentNewImageActivity.putExtra("imageName", imageName);
+				intentNewImageActivity.putExtra("date", date);
+				startActivity(intentNewImageActivity);
+	
+			} break;
+		case COMPARE_CODE: 
+			break;
+		}
+	}
 
 	@Override
 	public void onPause() {
@@ -58,6 +88,10 @@ public class ReviewImagesActivity extends FActivity {
 	protected void findViews() {
 		spinner = (Spinner) findViewById(R.id.spinner1);
 		list = (ListView) findViewById(R.id.listView1);	
+		addButton = (Button) findViewById(R.id.addNewButton);
+		addButton.setText("Capture New Image");
+		compareButton = (Button) findViewById(R.id.compareButton);
+		compareButton.setText("Compare Two Images");
 	}
 
 	/** Allow list and spinner items to be clicked.
@@ -67,6 +101,23 @@ public class ReviewImagesActivity extends FActivity {
 	protected void setClickListeners() {
 		spinner.setOnItemSelectedListener(setupSpinListener());
 		list.setOnItemClickListener(setupListListener());
+		addButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = camera.takeAPhoto(getBaseContext());
+		    	Bundle extras = intent.getExtras();
+		    	imageName = extras.getString("imageName");
+		    	date = extras.getString("date");
+				startActivityForResult(intent,CAPTURE_CODE);
+			}
+		});
+		compareButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(ReviewImagesActivity.this, CompareActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 
 	/** Keep the list of tags in the Spinner updated.
@@ -85,6 +136,7 @@ public class ReviewImagesActivity extends FActivity {
 	 */
 	@Override
 	protected void customInit() {
+		camera = new CameraController();
 		setTag("");
 
 		Class<?> next = (Class<?>) getExtra("FORWARD");
@@ -92,9 +144,11 @@ public class ReviewImagesActivity extends FActivity {
 
 		if (getExtra("LAYOUT") != null) {
 			setLayout(getExtra("LAYOUT").toString());
+			addButton.setVisibility(View.GONE);
+			compareButton.setVisibility(View.GONE);
 		}
 		else {
-			setLayout("");
+			setLayout("");			
 		}
 	}
 
@@ -118,6 +172,7 @@ public class ReviewImagesActivity extends FActivity {
 				Object tag = parent.getItemAtPosition(pos);				
 				// set attributes
 				setTag(tag.toString());
+
 				setSpinnerPos(pos);
 				// only need to update the list when new tag selected
 				updateList();

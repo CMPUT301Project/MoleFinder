@@ -6,7 +6,9 @@ import mole.finder.R;
 import adapter.classes.MoleFinderArrayAdapter;
 import android.content.Intent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemClickListener;
@@ -22,6 +24,8 @@ import android.widget.AdapterView.OnItemClickListener;
 public class ReviewTagsActivity extends FActivity {
 	private Spinner spinner;
 	private ListView list;
+	private Button addButton;
+	private Button compareButton;
 
 	/** Link the Spinner and ListView to their respective ids.
 	 * 
@@ -29,14 +33,25 @@ public class ReviewTagsActivity extends FActivity {
 	@Override
 	protected void findViews() {
 		list = (ListView) findViewById(R.id.listView1);
-		spinner = (Spinner) findViewById(R.id.spinner1);		
+		spinner = (Spinner) findViewById(R.id.spinner1);
+		addButton = (Button) findViewById(R.id.addNewButton);
+		addButton.setText("Create New Tag");
+		compareButton = (Button) findViewById(R.id.compareButton);
+		compareButton.setVisibility(View.GONE); // no tags comparison
 	}
 
-	/** Make the ListView clickable.
+	/** Make the ListView and Button clickable.
 	 * 
 	 */
 	@Override
 	protected void setClickListeners() {
+		addButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(ReviewTagsActivity.this, NewTagActivity.class);
+				startActivity(intent);
+			}
+		});
 		list.setOnItemClickListener(setupListListener());		
 	}
 

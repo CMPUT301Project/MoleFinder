@@ -29,8 +29,15 @@ public class MoleFinderSpinnerAdapter extends ArrayAdapter<DatabaseEntry> {
         TextView title = (TextView)row.findViewById(android.R.id.text1);
  
         // set text
-        title.setText(items.get(pos).getTitle());
- 
+        
+        // THIS IS STILL GIVING A WEIRD BUG!!!
+        // 	when there are no tags, or when you add the first tag and go to view it
+        //	 will look into more later
+        if (!items.isEmpty()) {
+        	DatabaseEntry item = items.get(pos);
+        	title.setText(item.getTitle());
+        }
+
         return(row);
     }
 }
