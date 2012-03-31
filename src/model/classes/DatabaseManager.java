@@ -26,6 +26,10 @@ public class DatabaseManager{
 	public static final String KEY_COMMENTS = "comments";
 	public static final String KEY_IMAGE = "image";
 	public static final String KEY_ROWID = "_id";
+	
+	public static final String KEY_USERNAME = "user";
+	public static final String KEY_PASSWORD = "password";
+	public static final String KEY_ROLE = "role";
 
 	private static final String TAG = "DbController";
 	private DatabaseHelper mDbHelper;
@@ -34,6 +38,7 @@ public class DatabaseManager{
 	private static final String DATABASE_NAME = "ImageLog";
 	private static final String DATABASE_IMAGE_TABLE = "ImageTable";
 	private static final String DATABASE_TAG_TABLE = "TagTable";
+	private static final String DATABASE_LOGIN_TABLE = "LoginTable";
 	private static final int DATABASE_VERSION = 2;
 
 	/*
@@ -46,6 +51,10 @@ public class DatabaseManager{
 	private static final String DATABASE_CREATE_TAG =
 		"create table " + DATABASE_TAG_TABLE + " (_id integer primary key autoincrement, "
 		+ "tag text not null, comments text);";
+	
+	private static final String DATABASE_CREATE_LOGIN = 
+			"create table " + DATABASE_LOGIN_TABLE + " (_id integer primary key autoincrement, "
+			+ "password text not null, role text not null, user text);";
 
 	private final Context mCtx;
 
@@ -62,7 +71,8 @@ public class DatabaseManager{
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(DATABASE_CREATE_IMAGE);	//runs the create table statement
 			db.execSQL(DATABASE_CREATE_TAG);
-		}
+			db.execSQL(DATABASE_CREATE_LOGIN);
+			}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -121,6 +131,19 @@ public class DatabaseManager{
 		initialValues.put(KEY_COMMENTS, comments);
 		initialValues.put(KEY_IMAGE, image);
 		return mDb.insert(DATABASE_IMAGE_TABLE, null, initialValues);
+	}
+	
+	/**
+	 * Create a new user in the database.
+	 * 
+	 * @param String password
+	 * @return rowId or -1 if failed
+	 */
+	public long createUser(String password, String role) {
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(KEY_PASSWORD, password);
+		initialValues.put(KEY_ROLE, role);
+		return mDb.insert(DATABASE_LOGIN_TABLE, null, initialValues);
 	}
 
 	/**
@@ -229,6 +252,15 @@ public class DatabaseManager{
 	public Cursor fetchTag(String tag){
 		return mDb.query(DATABASE_TAG_TABLE, new String[] {KEY_TAG, KEY_COMMENTS},
 				KEY_TAG + "=" + tag, null, null, null, null);
+	}
+	
+	/**
+	 * Return a Cursor over the specified user in the database
+	 * 
+	 * @return Cursor of the specified user
+	 */
+	public Cursor fetchPassword(){
+		return mDb.query(DATABASE_LOGIN_TABLE, new String[] {KEY_PASSWORD, KEY_ROLE},null, null, null, null, null);
 	}
 
 	/**
