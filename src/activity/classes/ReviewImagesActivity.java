@@ -1,5 +1,8 @@
 package activity.classes;
 
+import java.util.Collections;
+import java.util.List;
+
 import controller.classes.CameraController;
 import model.classes.DatabaseEntry;
 import mole.finder.R;
@@ -38,8 +41,10 @@ public class ReviewImagesActivity extends FActivity {
 	private ListView list;
 	private Button addButton;
 	private Button compareButton;
+	private Button searchButton;
 
 	// internal variables
+	private boolean mostRecentFirst;
 	private int spinnerPos;	
 	private String tag;
 	private String layout;
@@ -80,18 +85,15 @@ public class ReviewImagesActivity extends FActivity {
 		super.onPause();
 	}
 
-	/** Find Spinner and ListView.    
-	 * Get the position and value of the spinner from the file, or a default value if the
-	 * key-value pair does not exist.
+	/** Find Spinner, ListView, and Buttons
 	 */
 	@Override
 	protected void findViews() {
 		spinner = (Spinner) findViewById(R.id.spinner1);
 		list = (ListView) findViewById(R.id.listView1);	
-		addButton = (Button) findViewById(R.id.addNewButton);
-		addButton.setText("Capture New Image");
+		addButton = (Button) findViewById(R.id.addNewButton);		
 		compareButton = (Button) findViewById(R.id.compareButton);
-		compareButton.setText("Compare Two Images");
+		searchButton = (Button) findViewById(R.id.advancedButton);
 	}
 
 	/** Allow list and spinner items to be clicked.
@@ -111,13 +113,18 @@ public class ReviewImagesActivity extends FActivity {
 				startActivityForResult(intent,CAPTURE_CODE);
 			}
 		});
-		compareButton.setOnClickListener(new OnClickListener() {
+		compareButton.setOnClickListener(switchActListener(CompareActivity.class));
+		searchButton.setOnClickListener(switchActListener(AdvancedSearchActivity.class));
+	}
+	
+	private OnClickListener switchActListener(final Class<?> newAct) {
+		return new OnClickListener() {			
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(ReviewImagesActivity.this, CompareActivity.class);
+				Intent intent = new Intent(ReviewImagesActivity.this, newAct);
 				startActivity(intent);
 			}
-		});
+		};
 	}
 
 	/** Keep the list of tags in the Spinner updated.
@@ -126,8 +133,13 @@ public class ReviewImagesActivity extends FActivity {
 	@Override
 	protected void updateView() {
 		model.fetchTags();
-		spinner.setAdapter(new MoleFinderSpinnerAdapter(this, model.getTags()));
-		spinner.setSelection(getSpinnerPos());
+		List<DatabaseEntry> tagList = model.getTags();
+		spinner.setAdapter(new MoleFinderSpinnerAdapter(this, tagList));
+		int currentSize = tagList.size();
+		if (getSpinnerPos() < currentSize) {
+			spinner.setSelection(getSpinnerPos());
+		}
+		updateList();
 	}
 
 	/** Do not display list of condition entries on creation.
@@ -138,6 +150,10 @@ public class ReviewImagesActivity extends FActivity {
 	protected void customInit() {
 		camera = new CameraController();
 		setTag("");
+		setMostRecentFirst(true);
+		addButton.setText("Capture New");
+		compareButton.setText("Compare");
+		searchButton.setText("Adv. Search");
 
 		Class<?> next = (Class<?>) getExtra("FORWARD");
 		setForwardView(next);
@@ -172,9 +188,7 @@ public class ReviewImagesActivity extends FActivity {
 				Object tag = parent.getItemAtPosition(pos);				
 				// set attributes
 				setTag(tag.toString());
-
 				setSpinnerPos(pos);
-				// only need to update the list when new tag selected
 				updateList();
 			}
 			@Override
@@ -190,9 +204,15 @@ public class ReviewImagesActivity extends FActivity {
 	private void updateList() {
 		if (getTag() != "") {
 			model.fetchConditions(getTag());
+			List<DatabaseEntry> conditions = model.getConditions();
+			if (isMostRecentFirst()) {
+				Collections.reverse(conditions);
+			}
+			
 			list.setAdapter(new MoleFinderArrayAdapter(this, R.layout.list_view_layout,
-					R.id.imageView, R.id.date_text, R.id.tag_text, model.getConditions()));
+					R.id.imageView, R.id.date_text, R.id.tag_text, conditions));
 		}
+		
 	}
 
 	/** Setup the OnItemSelectedListener for the Condition ListView
@@ -260,5 +280,13 @@ public class ReviewImagesActivity extends FActivity {
 
 	public String getLayout() {
 		return layout;
+	}
+
+	public boolean isMostRecentFirst() {
+		return mostRecentFirst;
+	}
+
+	public void setMostRecentFirst(boolean mostRecentFirst) {
+		this.mostRecentFirst = mostRecentFirst;
 	}
 }

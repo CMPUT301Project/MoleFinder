@@ -71,6 +71,8 @@ public class MoleFinderArrayAdapter extends ArrayAdapter<DatabaseEntry> {
         title.setText(items.get(pos).getTitle());
         comment.setText(items.get(pos).getDescription());
  
+        notifyDataSetChanged();
         return(row);
+        
     }
 } 

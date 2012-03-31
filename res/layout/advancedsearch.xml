@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+<RelativeLayout 
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:isScrollContainer="true"
+    android:scrollbars="vertical" >
+    
+	<TextView
+        android:id="@+id/spinnerLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge" 
+        android:layout_alignParentTop="true"
+       />
+    
+    <Spinner
+        android:id="@+id/spinner_adv_tag"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinnerLabel"
+         />
+
+    <TextView
+        android:id="@+id/radio_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_below="@id/spinner_adv_tag"
+         />
+
+    <RadioGroup
+        android:id="@+id/radioGroupTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/radio_label"
+         >
+
+        <RadioButton
+            android:id="@+id/radioOneWeek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/radioTwoWeek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             />
+
+        <RadioButton
+            android:id="@+id/radioOneMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             />
+        
+        <RadioButton
+            android:id="@+id/radioThreeMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             />
+        
+        <RadioButton
+            android:id="@+id/radioAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             />
+            
+    </RadioGroup>
+    
+    <TextView
+        android:id="@+id/resultsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge" 
+        android:layout_below="@id/radioGroupTime"
+        />
+    
+    <EditText
+        android:id="@+id/editResults"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number" 
+        android:maxLength="3" 
+        android:layout_below="@id/resultsLabel"
+         >
+
+        <requestFocus />
+    </EditText>
+    
+        <TextView
+        android:id="@+id/orderLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_below="@id/editResults"
+         />
+
+    <RadioGroup
+        android:id="@+id/radioGroupOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/orderLabel"
+         >
+
+        <RadioButton
+            android:id="@+id/radioRecentFirst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/radioRecentLast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             />
+            
+    </RadioGroup>
+    
+    <Button
+        android:id="@+id/buttonSearch"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/radioGroupOrder"
+         />     
+        
+   
+</RelativeLayout>
+</ScrollView>

@@ -76,8 +76,11 @@
         </activity>
         <activity
             android:name="activity.classes.ReviewPatientsActivity"
-            android:label="Review Patients" 
-             >
+            android:label="Review Patients" >
+        </activity>
+        <activity
+            android:name="activity.classes.AdvancedSearchActivity"
+            android:label="Advanced Image Search" >
         </activity>
     </application>
 

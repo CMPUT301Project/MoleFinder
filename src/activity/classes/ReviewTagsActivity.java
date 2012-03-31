@@ -26,6 +26,7 @@ public class ReviewTagsActivity extends FActivity {
 	private ListView list;
 	private Button addButton;
 	private Button compareButton;
+	private Button searchButton;
 
 	/** Link the Spinner and ListView to their respective ids.
 	 * 
@@ -34,10 +35,9 @@ public class ReviewTagsActivity extends FActivity {
 	protected void findViews() {
 		list = (ListView) findViewById(R.id.listView1);
 		spinner = (Spinner) findViewById(R.id.spinner1);
-		addButton = (Button) findViewById(R.id.addNewButton);
-		addButton.setText("Create New Tag");
+		addButton = (Button) findViewById(R.id.addNewButton);		
 		compareButton = (Button) findViewById(R.id.compareButton);
-		compareButton.setVisibility(View.GONE); // no tags comparison
+		searchButton = (Button) findViewById(R.id.advancedButton);
 	}
 
 	/** Make the ListView and Button clickable.
@@ -70,7 +70,10 @@ public class ReviewTagsActivity extends FActivity {
 	 */
 	@Override
 	protected void customInit() {
+		addButton.setText("Create New Tag");
 		spinner.setVisibility(View.GONE);
+		compareButton.setVisibility(View.GONE);
+		searchButton.setVisibility(View.GONE); 
 	}
 
 	@Override
