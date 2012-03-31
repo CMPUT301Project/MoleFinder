@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -18,13 +18,17 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
-            android:name="activity.classes.MoleFinderActivity"
-            android:label="@string/app_name" >
+            android:name="activity.classes.LoginActivity"
+            android:label="Login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="activity.classes.MoleFinderActivity"
+            android:label="@string/app_name" >
         </activity>
         <activity
             android:name="controller.classes.BogoPicGenActivity"
@@ -47,10 +51,10 @@
         <activity
             android:name="activity.classes.ReviewImagesActivity"
             android:label="Review Images" >
-        </activity>       
-        <activity 
+        </activity>
+        <activity
             android:name="activity.classes.ReviewTagsActivity"
-            android:label="Review Tags">
+            android:label="Review Tags" >
         </activity>
         <activity
             android:name="activity.classes.NewTagActivity"
@@ -60,12 +64,10 @@
             android:name="activity.classes.EditTagActivity"
             android:label="Edit Tag" >
         </activity>
-        
         <activity
             android:name="activity.classes.SaveImageActivity"
-            android:label="Save Image">
+            android:label="Save Image" >
         </activity>
-        
         <activity
             android:name="activity.classes.NewImageActivity"
             android:label="New Image" >
@@ -76,8 +78,11 @@
         </activity>
         <activity
             android:name="activity.classes.ReviewPatientsActivity"
-            android:label="Review Patients" 
-             >
+            android:label="Review Patients" >
+        </activity>
+        <activity
+            android:name="activity.classes.NewPasswordActivity"
+            android:label="New User" >
         </activity>
     </application>
 

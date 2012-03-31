@@ -24,6 +24,7 @@ public class MoleFinderModel {
 	// active entries - easily view in a list
 	private List<DatabaseEntry> conditions;
 	private List<DatabaseEntry> tags;
+	private List<DatabaseEntry> users;
 	
 	
 	/** Returns the current instance of the MoleFinderModel,
@@ -47,6 +48,7 @@ public class MoleFinderModel {
 		DBManager = new DatabaseManager(context);
 		conditions = new ArrayList<DatabaseEntry>();
 		tags = new ArrayList<DatabaseEntry>();
+		users = new ArrayList<DatabaseEntry>();
 		getTags(); // fill on construction
 		//temp(); // test database items
 	}
@@ -91,6 +93,16 @@ public class MoleFinderModel {
 		// (id, tag, image, comment, date)
 		return new ConditionEntry(cur.getInt(0), cur.getString(1), 
 				cur.getString(4), cur.getString(3), cur.getString(2));
+	}
+	
+	/** Converts the first element in the cursor to a ConditionUser.
+	 * 
+	 * @param cur List of ConditionUser data returned from database
+	 * @return The converted ConditionUser object
+	 */
+	public ConditionUser cursorToConditionUser(Cursor cur) {
+		// (id, tag, image, comment, date)
+		return new ConditionUser(cur.getInt(0), cur.getString(0), cur.getString(1));
 	}
 	
 	/** Fills the tag list with all of the tags in the database.
@@ -140,6 +152,24 @@ public class MoleFinderModel {
 		Cursor cursor = DBManager.fetchImage(id);
 		cursor.moveToFirst();
 		ConditionEntry entry = cursorToCondition(cursor);
+		
+		cursor.close();
+		DBManager.close();
+		return entry;		
+	}
+	
+	/** Acquire one ConditionUser object from the database.
+	 * 
+	 * @param id RowId in the database image table. 
+	 * @return A ConditionUser object corresponding to that
+	 * row in the table.
+	 */
+	public ConditionUser getUser() {
+		DBManager.open();
+		
+		Cursor cursor = DBManager.fetchPassword();
+		cursor.moveToFirst();
+		ConditionUser entry = cursorToConditionUser(cursor);
 		
 		cursor.close();
 		DBManager.close();
@@ -217,12 +247,32 @@ public class MoleFinderModel {
 	
 	/** Store a new ConditionTag in the database.
 	 * 
-	 * @param tag The tag to save to the database.
+	 * @param ConditionEntry object.
 	 */
 	public void saveImage(ConditionEntry entry) {
 		DBManager.open();
 		DBManager.createImageEntry(entry.getTag(), entry.getDate(), entry.getComment(), entry.getImage());
 		DBManager.close();
+	}
+	
+	/** Store a new ConditionUser in the database.
+	 * 
+	 * @param ConditionUser object.
+	 */
+	public void saveUser(ConditionUser user) {
+		DBManager.open();
+		DBManager.createUser(user.getPassword(), user.getRole());
+		DBManager.close();
+	}
+	
+	public boolean isNewUser(){
+		DBManager.open();
+		Cursor cursor = DBManager.fetchPassword();
+		if(!cursor.moveToFirst()){
+			return true;
+		}
+		DBManager.close();
+		return false;
 	}
 	
 	/** Converts the first element in the cursor to a ConditionTag.
