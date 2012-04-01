@@ -2,10 +2,8 @@ package activity.classes;
 
 import model.classes.ConditionUser;
 import mole.finder.R;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -21,6 +19,14 @@ public class LoginActivity extends FActivity {
 	private Button login;
 	private ConditionUser user;
 	private TextView enterPass;
+	
+	/**
+	 * This is the LoginActivity class, it is used to provide a simple login
+	 * page for user security. It allows the user to login using a password set on
+	 * initial use of the application.
+	 * 
+	 * @author jletourn
+	 */
 	
 	@Override
 	protected void findViews() {
@@ -48,22 +54,17 @@ public class LoginActivity extends FActivity {
 				}
 			}
 		});
-		
-		patient.setChecked(true);
-		patient.setClickable(false);
-		doctor.setClickable(false);
-		
 	}
 
 	@Override
 	protected void updateView() {
-		// TODO Auto-generated method stub
-		
+		patient.setChecked(true);
+		patient.setClickable(false);
+		doctor.setClickable(false);
 	}
 
 	@Override
 	protected void customInit() {
-		
 		if(model.isNewUser()){
 			Intent intent = new Intent(LoginActivity.this, NewPasswordActivity.class);
 			startActivity(intent);
@@ -75,12 +76,16 @@ public class LoginActivity extends FActivity {
 		return R.layout.login;
 	}
 	
+	/**
+	 * passwordCheck is used to verify the users password by comparing
+	 * the value inputed with the value stored in the database.
+	 * @param password
+	 * @return true if passwords are equal and false otherwise
+	 */
 	private boolean passwordCheck(String password){
 		user = model.getUser();
 		String truePassword = user.getPassword();
 		return(password.equals(truePassword));
 
 	}
-	
-
 }

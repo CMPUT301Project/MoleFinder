@@ -5,16 +5,12 @@ import java.io.File;
 import model.classes.ConditionEntry;
 import mole.finder.R;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 /** Display 2 images on the same view for visual inspection
  * by the user. 

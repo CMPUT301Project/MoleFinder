@@ -2,19 +2,17 @@ package activity.classes;
 
 import model.classes.ConditionTag;
 import mole.finder.R;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-/** NewTagActivity creates or overwrites a tag stored in 
+/** This is the NewTagActivity class, it creates or overwrites a tag stored in 
  * the database.
  * 
  * @author mbessett
- *
  */
 
 public class NewTagActivity extends FActivity { 
@@ -25,7 +23,7 @@ public class NewTagActivity extends FActivity {
 	private Button delete;
 
 	private ConditionTag initTag;
-	
+
 	/** Save the current tag to the database 
 	 * 
 	 */
@@ -58,7 +56,12 @@ public class NewTagActivity extends FActivity {
 		case ConditionTag.DIFF_COMMENT:
 			model.overwriteTag(nowTag); break;
 		}
-		NewTagActivity.this.finish();
+		if (getParent() == null) {
+			setResult(Activity.RESULT_OK);
+		} else {
+			getParent().setResult(Activity.RESULT_OK);
+		}
+		finish();
 	}
 
 	@Override
@@ -93,16 +96,16 @@ public class NewTagActivity extends FActivity {
 					builder.setMessage("This operation will delete any and all condition " +
 							"entries with this tag. Are you sure you wish to continue?");
 					builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int id) {
-									model.deleteTag(initTag);
-									NewTagActivity.this.finish();
-								}
-							});
+						public void onClick(DialogInterface dialog, int id) {
+							model.deleteTag(initTag);
+							NewTagActivity.this.finish();
+						}
+					});
 					builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int id) {
-									dialog.cancel();
-								}
-							});
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.cancel();
+						}
+					});
 					builder.show();			
 				}
 			});
@@ -121,7 +124,7 @@ public class NewTagActivity extends FActivity {
 			comment.setText(initTag.getComment());
 		}
 	}
-	
+
 	@Override
 	protected void customInit() {
 		initTag = ConditionTag.createDummyTag();

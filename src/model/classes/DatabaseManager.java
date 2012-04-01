@@ -163,7 +163,7 @@ public class DatabaseManager{
 
 
 	/**
-	 * Delete the entry with the given rowId
+	 * Delete the image entry with the given rowId
 	 * 
 	 * @param rowId id of note to delete
 	 * @return true if deleted, false otherwise
@@ -193,27 +193,6 @@ public class DatabaseManager{
 		boolean tags = mDb.delete(DATABASE_TAG_TABLE, KEY_TAG + " = " + "'" + tag + "'", null) > 0;
 		
 		return images && tags;
-	}
-
-	/**
-	 * Return a Cursor over the list of all Images in the database
-	 * 
-	 * @param tag used to categorize the images
-	 * @return Cursor over all notes
-	 */
-	public Cursor fetchAllImages(String tag) {
-		return mDb.query(DATABASE_IMAGE_TABLE, new String[] {KEY_ROWID, KEY_TAG, KEY_DATE,
-				KEY_COMMENTS, KEY_IMAGE}, KEY_TAG + " = " + "'" + tag + "'", null, null, null, null);
-	}
-
-	/**
-	 * Return a Cursor over the list of all tags in the database
-	 * 
-	 * @return Cursor over all tags
-	 */
-	public Cursor fetchAllTags(){
-		return mDb.query(DATABASE_TAG_TABLE, new String[] {KEY_ROWID, KEY_TAG, KEY_COMMENTS}, 
-				null, null, null, null, null);
 	}
 
 	/**
@@ -264,9 +243,9 @@ public class DatabaseManager{
 	}
 
 	/**
-	 * Return a Cursor over the specified tag in the database based on 
+	 * Return a Cursor over the specified image in the database based on 
 	 * 
-	 * @return Cursor of the specified tag
+	 * @return Cursor of the specified image
 	 */
 	public Cursor fetchImage(String imageName){
 		return mDb.query(DATABASE_IMAGE_TABLE, new String[] {KEY_TAG, KEY_DATE,
@@ -287,10 +266,32 @@ public class DatabaseManager{
 	/**
 	 * Return a Cursor over the specified image in the database based on id.
 	 * 
-	 * @return Cursor of the specified tag
+	 * @return Cursor of the specified image
 	 */
 	public Cursor fetchImage(long id) {
 		return mDb.query(DATABASE_IMAGE_TABLE, new String[] { KEY_ROWID, KEY_TAG, KEY_DATE, KEY_COMMENTS, KEY_IMAGE }, 
 				KEY_ROWID + " = " + id, null, null, null, null);
 	}
+	
+	/**
+	 * Return a Cursor over the list of all Images in the database
+	 * 
+	 * @param tag used to categorize the images
+	 * @return Cursor over all images
+	 */
+	public Cursor fetchAllImages(String tag) {
+		return mDb.query(DATABASE_IMAGE_TABLE, new String[] {KEY_ROWID, KEY_TAG, KEY_DATE,
+				KEY_COMMENTS, KEY_IMAGE}, KEY_TAG + " = " + "'" + tag + "'", null, null, null, null);
+	}
+
+	/**
+	 * Return a Cursor over the list of all tags in the database
+	 * 
+	 * @return Cursor over all tags
+	 */
+	public Cursor fetchAllTags(){
+		return mDb.query(DATABASE_TAG_TABLE, new String[] {KEY_ROWID, KEY_TAG, KEY_COMMENTS}, 
+				null, null, null, null, null);
+	}
+
 }

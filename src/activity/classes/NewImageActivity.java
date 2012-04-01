@@ -3,89 +3,38 @@ import java.io.File;
 
 import model.classes.ConditionEntry;
 import model.classes.ConditionTag;
-import model.classes.DatabaseManager;
 import mole.finder.R;
-import adapter.classes.MoleFinderArrayAdapter;
 import adapter.classes.MoleFinderSpinnerAdapter;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 /**
- * This is the NewImageActivity class that is called when a new image is saved.
- * The user is asked to input a tag name and optional comments to be stored with the image.
- *  //To-Do - Stop user from pressing save when tag is null.
+ * This is the NewImageActivity class it is used to save images and call the camera activities.
  * @author jletourn
  *
  */
 
 public class NewImageActivity extends FActivity{
-	
+
 	private Button buttonSave;
 	private Button buttonCancel;
 	private Button buttonNewTag;
 	private Spinner spinnerTag;
 	private EditText edittextComments;
-	private String tag;
 	private String imageName;
 	private String date;
-	private String comments;
-	private int spinnerPos;
 	private ConditionEntry initImage;
 	private Object tags;
-    
-	/** Setup the OnItemSelectedListener for the Tag Spinner, and
-	 * remember the Spinner position.
-	 * 
-	 */
-	private OnItemSelectedListener setupSpinListener() {
-		// allow for clicks
-		OnItemSelectedListener listener = new OnItemSelectedListener() {
+	private Boolean newTag;
 
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View v,
-					int pos, long row) {
-				// grab item
-				tags = parent.getItemAtPosition(pos);
-				// set attributes
-				setTag(tags.toString());
-				setSpinnerPos(pos);
-		        // only need to update the list when new tag selected
-			}
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {}
-		};
-		return listener;
-	}
-	
-	public void setTag(String tag) {
-		this.tag = tag;
-	}
-
-	public int getSpinnerPos() {
-		return spinnerPos;
-	}
-
-	public void setSpinnerPos(int spinnerPos) {
-		this.spinnerPos = spinnerPos;
-	}
-
-
-	/** Find Spinner and ListView.    
-	 * Get the position and value of the spinner from the file, or a default value if the
-	 * key-value pair does not exist.
-	 */
 	@Override
 	protected void findViews() {
 		edittextComments = (EditText) findViewById(R.id.editTextComments);
@@ -95,9 +44,6 @@ public class NewImageActivity extends FActivity{
 		buttonNewTag = (Button) findViewById(R.id.buttonNewTag);
 	}
 
-	/** Keep the list of tags in the Spinner updated.
-	 * 
-	 */
 	@Override
 	protected void updateView() {
 		model.fetchTags();
@@ -105,7 +51,6 @@ public class NewImageActivity extends FActivity{
 		if (getExtra("ID") != null) {
 			long id = Long.parseLong(getExtra("ID").toString());
 			initImage = model.getOneEntry(id);
-			tag = initImage.getTag();
 			edittextComments.setText(initImage.getComment());
 		}
 	}
@@ -116,36 +61,33 @@ public class NewImageActivity extends FActivity{
 		buttonCancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				if (getExtra("ID") == null) {
-		        	File imgFile = new File("/sdcard/MoleFinderPics/" + imageName + ".jpg");
-		        	imgFile.delete();
+					File imgFile = new File("/sdcard/MoleFinderPics/" + imageName + ".jpg");
+					imgFile.delete();
 				}
 				finish();
 			}
 		});
-		
+
 		buttonSave.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				saveImage();
 				finish();
 			}
 		});
-		
+
 		buttonNewTag.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				
-				Intent i = new Intent(NewImageActivity.this, NewTagActivity.class);
-				startActivity(i);
+				newTag=true;
+				Intent intent = new Intent(buttonNewTag.getContext(), NewTagActivity.class);
+				startActivity(intent);
 			}
 		});
-		
+
 		spinnerTag.setOnItemSelectedListener(setupSpinListener());
-		
-		
+
+
 	}
 
-	/** Do not display list of condition entries on creation.
-	 * 
-	 */
 	@Override
 	protected void customInit() {
 		initImage = ConditionEntry.createDummyEntry();
@@ -154,15 +96,25 @@ public class NewImageActivity extends FActivity{
 		//get the saved image name and date
 		imageName = extras.getString("imageName");
 		date = extras.getString("date");
+		newTag=false;
 	}
-
 
 	@Override
 	protected int myLayout() {
 		return R.layout.newphoto;
 	}
 	
-	/** Save the current tag to the database 
+	@Override
+	public void onResume(){
+		super.onResume();
+		if(newTag){
+			spinnerTag.setSelection(spinnerTag.getCount()-1);
+		}
+		else
+			spinnerTag.setSelection(0);
+	}
+
+	/** Save the current image to the database 
 	 * 
 	 */
 	private void saveImage() {
@@ -196,5 +148,20 @@ public class NewImageActivity extends FActivity{
 		}
 		finish();
 	}
-    
+	
+	/** Setup the OnItemSelectedListener for the Tag Spinner
+	 */
+	private OnItemSelectedListener setupSpinListener() {
+		OnItemSelectedListener listener = new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View v,
+					int pos, long row) {
+				tags = parent.getItemAtPosition(pos);
+			}
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {}
+		};
+		return listener;
+	}
 }

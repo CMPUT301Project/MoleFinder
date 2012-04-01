@@ -1,5 +1,11 @@
 package model.classes;
 
+/**
+ * This the ConditionTag class used to store entries from the database into ConditionTag objects.
+ * 
+ * @author mBesset
+ */
+
 public class ConditionTag extends DatabaseEntry {
 	public static final String DUMMY_NAME = "_dummy_";
 	public static final int DUMMY_ID = -1;

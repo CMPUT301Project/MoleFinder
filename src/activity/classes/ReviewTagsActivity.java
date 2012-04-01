@@ -18,7 +18,6 @@ import android.widget.AdapterView.OnItemClickListener;
  * the user to the Activity where they may edit or delete it.
  * 
  * @author mbessett
- *
  */
 
 public class ReviewTagsActivity extends FActivity {
@@ -26,7 +25,6 @@ public class ReviewTagsActivity extends FActivity {
 	private ListView list;
 	private Button addButton;
 	private Button compareButton;
-	private Button searchButton;
 
 	/** Link the Spinner and ListView to their respective ids.
 	 * 
@@ -35,9 +33,10 @@ public class ReviewTagsActivity extends FActivity {
 	protected void findViews() {
 		list = (ListView) findViewById(R.id.listView1);
 		spinner = (Spinner) findViewById(R.id.spinner1);
-		addButton = (Button) findViewById(R.id.addNewButton);		
+		addButton = (Button) findViewById(R.id.addNewButton);
+		addButton.setText("Create New Tag");
 		compareButton = (Button) findViewById(R.id.compareButton);
-		searchButton = (Button) findViewById(R.id.advancedButton);
+		compareButton.setVisibility(View.GONE); // no tags comparison
 	}
 
 	/** Make the ListView and Button clickable.
@@ -70,10 +69,7 @@ public class ReviewTagsActivity extends FActivity {
 	 */
 	@Override
 	protected void customInit() {
-		addButton.setText("Create New Tag");
 		spinner.setVisibility(View.GONE);
-		compareButton.setVisibility(View.GONE);
-		searchButton.setVisibility(View.GONE); 
 	}
 
 	@Override

@@ -16,6 +16,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * This is the MoleFinderArrayAdapter, it is used to put the images and text fields
+ * into the layout used to view images.
+ * 
+ * @author mBessett
+ *
+ */
+
 public class MoleFinderArrayAdapter extends ArrayAdapter<DatabaseEntry> {
     Activity context;
     List<DatabaseEntry> items;
@@ -24,6 +32,7 @@ public class MoleFinderArrayAdapter extends ArrayAdapter<DatabaseEntry> {
     int titleTextId;		// TextView to display title in
     int commentTextid;		// TextView to display comment in
  
+    //constructor 1
     public MoleFinderArrayAdapter(Activity context, int layoutId, int imageId, int titleTextId, int commentTextId,
     		List<DatabaseEntry> items) {
         
@@ -36,6 +45,7 @@ public class MoleFinderArrayAdapter extends ArrayAdapter<DatabaseEntry> {
         this.commentTextid = commentTextId;
     }
     
+    //constructor 2
     public MoleFinderArrayAdapter(Activity context, int layoutId, int titleTextId, int commentTextId,
     		List<DatabaseEntry> items) {
         
@@ -47,6 +57,13 @@ public class MoleFinderArrayAdapter extends ArrayAdapter<DatabaseEntry> {
         this.commentTextid = commentTextId;
     }
  
+    /**
+     * getView is used to join the images with the image views and
+     * to set the text of the text views
+     * @param	pos position of the item in the ListView
+     * 			View is not used
+     * 			ViewGroup is not used
+     */
     public View getView(int pos, View convertView, ViewGroup parent)
     {
     	// current row
@@ -71,8 +88,6 @@ public class MoleFinderArrayAdapter extends ArrayAdapter<DatabaseEntry> {
         title.setText(items.get(pos).getTitle());
         comment.setText(items.get(pos).getDescription());
  
-        notifyDataSetChanged();
         return(row);
-        
     }
 } 

@@ -1,8 +1,5 @@
 package activity.classes;
 
-import java.util.Collections;
-import java.util.List;
-
 import controller.classes.CameraController;
 import model.classes.DatabaseEntry;
 import mole.finder.R;
@@ -10,7 +7,6 @@ import mole.finder.R;
 import adapter.classes.MoleFinderArrayAdapter;
 import adapter.classes.MoleFinderSpinnerAdapter;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -19,10 +15,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
-import android.content.SharedPreferences;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 /** The ReviewImagesActivity displays a list of available tags
  * in the spinner at the top, and once selected displays a list
@@ -32,7 +26,6 @@ import android.widget.Toast;
  * next page and you may get exceptions. 
  * 
  * @author mbessett
- *
  */
 
 public class ReviewImagesActivity extends FActivity {
@@ -41,10 +34,8 @@ public class ReviewImagesActivity extends FActivity {
 	private ListView list;
 	private Button addButton;
 	private Button compareButton;
-	private Button searchButton;
 
 	// internal variables
-	private boolean mostRecentFirst;
 	private int spinnerPos;	
 	private String tag;
 	private String layout;
@@ -55,45 +46,21 @@ public class ReviewImagesActivity extends FActivity {
 	private CameraController camera;
 
 	// fixed values
-	private final String PREFS = "ReviewImagesSpinnerPos";
-	private final String S_KEY = "pos";
 	private final int CAPTURE_CODE = 111;
 	private final int COMPARE_CODE = 222;
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		super.onActivityResult(requestCode, resultCode, intent);
-		switch(requestCode){
-		case CAPTURE_CODE:
-			
-			if(resultCode== RESULT_OK){
 
-				Intent intentNewImageActivity = new Intent(ReviewImagesActivity.this, NewImageActivity.class);
-				intentNewImageActivity.putExtra("imageName", imageName);
-				intentNewImageActivity.putExtra("date", date);
-				startActivity(intentNewImageActivity);
-	
-			} break;
-		case COMPARE_CODE: 
-			break;
-		}
-	}
-
-	@Override
-	public void onPause() {
-		setSpinnerPos(spinner.getSelectedItemPosition());
-		super.onPause();
-	}
-
-	/** Find Spinner, ListView, and Buttons
+	/** Find Spinner and ListView.    
+	 * Get the position and value of the spinner from the file, or a default value if the
+	 * key-value pair does not exist.
 	 */
 	@Override
 	protected void findViews() {
 		spinner = (Spinner) findViewById(R.id.spinner1);
 		list = (ListView) findViewById(R.id.listView1);	
-		addButton = (Button) findViewById(R.id.addNewButton);		
+		addButton = (Button) findViewById(R.id.addNewButton);
+		addButton.setText("Capture New Image");
 		compareButton = (Button) findViewById(R.id.compareButton);
-		searchButton = (Button) findViewById(R.id.advancedButton);
+		compareButton.setText("Compare Two Images");
 	}
 
 	/** Allow list and spinner items to be clicked.
@@ -113,18 +80,13 @@ public class ReviewImagesActivity extends FActivity {
 				startActivityForResult(intent,CAPTURE_CODE);
 			}
 		});
-		compareButton.setOnClickListener(switchActListener(CompareActivity.class));
-		searchButton.setOnClickListener(switchActListener(AdvancedSearchActivity.class));
-	}
-	
-	private OnClickListener switchActListener(final Class<?> newAct) {
-		return new OnClickListener() {			
+		compareButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(ReviewImagesActivity.this, newAct);
+				Intent intent = new Intent(ReviewImagesActivity.this, CompareActivity.class);
 				startActivity(intent);
 			}
-		};
+		});
 	}
 
 	/** Keep the list of tags in the Spinner updated.
@@ -133,13 +95,8 @@ public class ReviewImagesActivity extends FActivity {
 	@Override
 	protected void updateView() {
 		model.fetchTags();
-		List<DatabaseEntry> tagList = model.getTags();
-		spinner.setAdapter(new MoleFinderSpinnerAdapter(this, tagList));
-		int currentSize = tagList.size();
-		if (getSpinnerPos() < currentSize) {
-			spinner.setSelection(getSpinnerPos());
-		}
-		updateList();
+		spinner.setAdapter(new MoleFinderSpinnerAdapter(this, model.getTags()));
+		spinner.setSelection(getSpinnerPos());
 	}
 
 	/** Do not display list of condition entries on creation.
@@ -150,10 +107,6 @@ public class ReviewImagesActivity extends FActivity {
 	protected void customInit() {
 		camera = new CameraController();
 		setTag("");
-		setMostRecentFirst(true);
-		addButton.setText("Capture New");
-		compareButton.setText("Compare");
-		searchButton.setText("Adv. Search");
 
 		Class<?> next = (Class<?>) getExtra("FORWARD");
 		setForwardView(next);
@@ -188,13 +141,40 @@ public class ReviewImagesActivity extends FActivity {
 				Object tag = parent.getItemAtPosition(pos);				
 				// set attributes
 				setTag(tag.toString());
+
 				setSpinnerPos(pos);
+				// only need to update the list when new tag selected
 				updateList();
 			}
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {}
 		};
 		return listener;
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
+		switch(requestCode){
+		case CAPTURE_CODE:
+			
+			if(resultCode== RESULT_OK){
+
+				Intent intentNewImageActivity = new Intent(ReviewImagesActivity.this, NewImageActivity.class);
+				intentNewImageActivity.putExtra("imageName", imageName);
+				intentNewImageActivity.putExtra("date", date);
+				startActivity(intentNewImageActivity);
+	
+			} break;
+		case COMPARE_CODE: 
+			break;
+		}
+	}
+	
+	@Override
+	public void onPause() {
+		setSpinnerPos(spinner.getSelectedItemPosition());
+		super.onPause();
 	}
 
 	/** This uses the activity's tag attribute to create a list
@@ -204,21 +184,14 @@ public class ReviewImagesActivity extends FActivity {
 	private void updateList() {
 		if (getTag() != "") {
 			model.fetchConditions(getTag());
-			List<DatabaseEntry> conditions = model.getConditions();
-			if (isMostRecentFirst()) {
-				Collections.reverse(conditions);
-			}
-			
 			list.setAdapter(new MoleFinderArrayAdapter(this, R.layout.list_view_layout,
-					R.id.imageView, R.id.date_text, R.id.tag_text, conditions));
+					R.id.imageView, R.id.date_text, R.id.tag_text, model.getConditions()));
 		}
-		
 	}
 
 	/** Setup the OnItemSelectedListener for the Condition ListView
 	 * 
 	 */
-	// TODO When image is clicked on display the image larger
 	private OnItemClickListener setupListListener() {
 		// allow for clicks
 		OnItemClickListener listener = new OnItemClickListener() {
@@ -235,6 +208,10 @@ public class ReviewImagesActivity extends FActivity {
 		return listener;
 	}
 
+	/**
+	 * nextView is used to set the layout to the next view and start the next activity.
+	 * @param id of the item selected in the ListView
+	 */
 	private void nextView(int id) {
 		Intent intent = new Intent(ReviewImagesActivity.this, getForwardView());
 		intent.putExtra("ID", id);
@@ -280,13 +257,5 @@ public class ReviewImagesActivity extends FActivity {
 
 	public String getLayout() {
 		return layout;
-	}
-
-	public boolean isMostRecentFirst() {
-		return mostRecentFirst;
-	}
-
-	public void setMostRecentFirst(boolean mostRecentFirst) {
-		this.mostRecentFirst = mostRecentFirst;
 	}
 }
