@@ -18,7 +18,6 @@ import android.widget.AdapterView.OnItemClickListener;
  * the user to the Activity where they may edit or delete it.
  * 
  * @author mbessett
- *
  */
 
 public class ReviewTagsActivity extends FActivity {

@@ -2,7 +2,6 @@ package activity.classes;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,9 +12,16 @@ import android.widget.TextView;
 import model.classes.ConditionUser;
 import mole.finder.R;
 
+/**
+ * This is the NewPasswordActivity class, it is only called on the initial creation of the database.
+ * This is where the user will set his or her password that will be used to log into the application
+ * in future use.
+ * 
+ * @author jletourn
+ */
+
 public class NewPasswordActivity extends FActivity{
 
-	
 	private EditText passwd;
 	private CheckBox patient;
 	private CheckBox doctor;
@@ -31,7 +37,6 @@ public class NewPasswordActivity extends FActivity{
 		enterPass = (TextView) findViewById(R.id.EnterPassword);
 	}
 
-
 	@Override
 	protected void setClickListeners() {
 		login.setOnClickListener(new OnClickListener() {
@@ -42,7 +47,32 @@ public class NewPasswordActivity extends FActivity{
 		});
 		
 	}
+
+	@Override
+	protected void updateView() {
+		doctor.setChecked(false);
+		doctor.setClickable(false);
+		patient.setChecked(true);
+		patient.setClickable(false);
+	}
+
+	@Override
+	protected void customInit() {
+		enterPass.setText("Please enter a Password to hide your information");
+		enterPass.setTextColor(Color.RED);
+	}
+
+	@Override
+	protected int myLayout() {
+		return R.layout.login;
+	}
 	
+	/**
+	 * submitUser is used to check conditions such as if the password field is not
+	 * empty before saving the users password to the database.
+	 * @param 
+	 * @return void
+	 */
 	public void submitUser(){
 		String password = passwd.getText().toString();
 		if(password.equals("")){
@@ -62,28 +92,6 @@ public class NewPasswordActivity extends FActivity{
 			finish();
 		}
 		
-	}
-
-	@Override
-	protected void updateView() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void customInit() {
-		enterPass.setText("Please enter a Password to hide your information");
-		enterPass.setTextColor(Color.RED);
-		doctor.setChecked(false);
-		doctor.setClickable(false);
-		patient.setChecked(true);
-		patient.setClickable(false);
-		
-	}
-
-	@Override
-	protected int myLayout() {
-		return R.layout.login;
 	}
 
 }

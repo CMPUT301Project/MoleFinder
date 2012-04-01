@@ -13,7 +13,13 @@ import android.widget.TextView;
 import model.classes.ConditionEntry;
 import mole.finder.R;
 
-// TODO needs button functionality
+/**
+ * This is the ImageActivity class this activity allows the user to view
+ * his/her images in an ImageView. There is also edit and delete functionality.
+ * 
+ * @author jletourn
+ */
+
 public class ImageActivity extends FActivity {
 	
 	private ImageView image;
@@ -27,8 +33,7 @@ public class ImageActivity extends FActivity {
 		image = (ImageView) findViewById(R.id.full_size_image);
 		comments = (TextView) findViewById(R.id.textView_comments);	
 		editButton = (Button) findViewById(R.id.buttonImageEdit);
-		deleteButton = (Button) findViewById(R.id.buttonImageDelete);
-		
+		deleteButton = (Button) findViewById(R.id.buttonImageDelete);	
 	}
 
 	@Override
@@ -45,7 +50,6 @@ public class ImageActivity extends FActivity {
 		deleteButton.setOnClickListener(new View.OnClickListener() {	
 			public void onClick(View v) {
 				ConditionEntry entry = model.getOneEntry(id);
-
 	        	File imgFile = new File("/sdcard/MoleFinderPics/" + entry.getImage() + ".jpg");
 	        	imgFile.delete();
 				model.deleteImage(entry);
@@ -73,14 +77,10 @@ public class ImageActivity extends FActivity {
 
 	@Override
 	protected void customInit() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	protected int myLayout() {
 		return R.layout.image;
 	}
-
-	
 }

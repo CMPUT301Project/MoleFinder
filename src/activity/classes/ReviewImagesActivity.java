@@ -7,7 +7,6 @@ import mole.finder.R;
 import adapter.classes.MoleFinderArrayAdapter;
 import adapter.classes.MoleFinderSpinnerAdapter;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,10 +15,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
-import android.content.SharedPreferences;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 /** The ReviewImagesActivity displays a list of available tags
  * in the spinner at the top, and once selected displays a list
@@ -29,7 +26,6 @@ import android.widget.Toast;
  * next page and you may get exceptions. 
  * 
  * @author mbessett
- *
  */
 
 public class ReviewImagesActivity extends FActivity {
@@ -50,35 +46,8 @@ public class ReviewImagesActivity extends FActivity {
 	private CameraController camera;
 
 	// fixed values
-	private final String PREFS = "ReviewImagesSpinnerPos";
-	private final String S_KEY = "pos";
 	private final int CAPTURE_CODE = 111;
 	private final int COMPARE_CODE = 222;
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		super.onActivityResult(requestCode, resultCode, intent);
-		switch(requestCode){
-		case CAPTURE_CODE:
-			
-			if(resultCode== RESULT_OK){
-
-				Intent intentNewImageActivity = new Intent(ReviewImagesActivity.this, NewImageActivity.class);
-				intentNewImageActivity.putExtra("imageName", imageName);
-				intentNewImageActivity.putExtra("date", date);
-				startActivity(intentNewImageActivity);
-	
-			} break;
-		case COMPARE_CODE: 
-			break;
-		}
-	}
-
-	@Override
-	public void onPause() {
-		setSpinnerPos(spinner.getSelectedItemPosition());
-		super.onPause();
-	}
 
 	/** Find Spinner and ListView.    
 	 * Get the position and value of the spinner from the file, or a default value if the
@@ -182,6 +151,31 @@ public class ReviewImagesActivity extends FActivity {
 		};
 		return listener;
 	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
+		switch(requestCode){
+		case CAPTURE_CODE:
+			
+			if(resultCode== RESULT_OK){
+
+				Intent intentNewImageActivity = new Intent(ReviewImagesActivity.this, NewImageActivity.class);
+				intentNewImageActivity.putExtra("imageName", imageName);
+				intentNewImageActivity.putExtra("date", date);
+				startActivity(intentNewImageActivity);
+	
+			} break;
+		case COMPARE_CODE: 
+			break;
+		}
+	}
+	
+	@Override
+	public void onPause() {
+		setSpinnerPos(spinner.getSelectedItemPosition());
+		super.onPause();
+	}
 
 	/** This uses the activity's tag attribute to create a list
 	 * of Condition entries with the same tag
@@ -198,7 +192,6 @@ public class ReviewImagesActivity extends FActivity {
 	/** Setup the OnItemSelectedListener for the Condition ListView
 	 * 
 	 */
-	// TODO When image is clicked on display the image larger
 	private OnItemClickListener setupListListener() {
 		// allow for clicks
 		OnItemClickListener listener = new OnItemClickListener() {
@@ -215,6 +208,10 @@ public class ReviewImagesActivity extends FActivity {
 		return listener;
 	}
 
+	/**
+	 * nextView is used to set the layout to the next view and start the next activity.
+	 * @param id of the item selected in the ListView
+	 */
 	private void nextView(int id) {
 		Intent intent = new Intent(ReviewImagesActivity.this, getForwardView());
 		intent.putExtra("ID", id);

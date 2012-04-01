@@ -10,7 +10,6 @@ import android.os.Bundle;
  * application.
  * 
  * @author mbessett
- *
  */
 public abstract class FActivity extends Activity {
 	protected MoleFinderModel model;

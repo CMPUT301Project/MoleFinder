@@ -1,8 +1,6 @@
 package model.classes;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -13,7 +11,6 @@ import android.database.Cursor;
  * to be displayed elsewhere.
  * 
  * @author mbessett
- *
  */
 
 public class MoleFinderModel {
@@ -50,7 +47,7 @@ public class MoleFinderModel {
 		tags = new ArrayList<DatabaseEntry>();
 		users = new ArrayList<DatabaseEntry>();
 		getTags(); // fill on construction
-		//temp(); // test database items
+		
 	}
 	
 	/** Empty the current list of conditions.
@@ -159,8 +156,7 @@ public class MoleFinderModel {
 	}
 	
 	/** Acquire one ConditionUser object from the database.
-	 * 
-	 * @param id RowId in the database image table. 
+	 *  
 	 * @return A ConditionUser object corresponding to that
 	 * row in the table.
 	 */
@@ -186,6 +182,10 @@ public class MoleFinderModel {
 		DBManager.close();
 	}
 	
+	/** Delete the image. 
+	 * 
+	 * @param entry The entry to remove. 
+	 */
 	public void deleteImage(ConditionEntry entry){
 		DBManager.open();
 		DBManager.deleteImageEntry(entry.getId());		
@@ -245,7 +245,7 @@ public class MoleFinderModel {
 		DBManager.close();
 	}
 	
-	/** Store a new ConditionTag in the database.
+	/** Store a new ConditionEntry in the database.
 	 * 
 	 * @param ConditionEntry object.
 	 */
@@ -265,10 +265,15 @@ public class MoleFinderModel {
 		DBManager.close();
 	}
 	
+	/**
+	 * Check is there is a user in the database, if not return true
+	 * @return true is this is a new user.
+	 */
 	public boolean isNewUser(){
 		DBManager.open();
 		Cursor cursor = DBManager.fetchPassword();
 		if(!cursor.moveToFirst()){
+			DBManager.close();
 			return true;
 		}
 		DBManager.close();
@@ -317,16 +322,13 @@ public class MoleFinderModel {
 	}
 	
 	// start DB with some test objects
-	private void temp() {			
+	public void initialiseTags() {			
 		DBManager.open();
-		DBManager.deleteAllEntries("Face");
-		DBManager.deleteAllEntries("Foot");
-		DBManager.createTagEntry("Face", "This is your face.");
-		String today = DateFormat.getDateInstance().format(new Date());
-		String img = "img";
-		DBManager.createImageEntry("Face", today, "Look at that thing on your face", img);
-		DBManager.createTagEntry("Foot", "This is your foot. You only get one.");
-		DBManager.createImageEntry("Foot", today, "You only have one foot?", img);
+		DBManager.createTagEntry("Face","");
+		DBManager.createTagEntry("Foot", "");
+		DBManager.createTagEntry("Hand","");
+		DBManager.createTagEntry("Leg", "");
+		DBManager.createTagEntry("Arm","");
 		DBManager.close();
 	}
 }

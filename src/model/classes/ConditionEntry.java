@@ -1,5 +1,10 @@
 package model.classes;
 
+/**
+ * This the ConditionEntry class used to store entries from the database into ConditionEntry objects.
+ * 
+ * @author jletourn
+ */
 
 public class ConditionEntry extends DatabaseEntry {
 	public static final String DUMMY_NAME = "_dummy_";
@@ -51,13 +56,12 @@ public class ConditionEntry extends DatabaseEntry {
 		return getDate();
 	}
 	
-	/** Compare two ConditionTag objects. Item ID is not considered.
+	/** Compare two ConditionEntry objects. Item ID is not considered.
 	 * 
-	 * @param other The ConditionTag to compare to.
+	 * @param other The ConditionEntry to compare to.
 	 * @return -1: Comparing a dummy object
 	 * 			0: Tags are the same
 	 * 			1: Tags have a different name
-	 * 			2: Tags have the same name, different comment
 	 */
 	public int compareTo(ConditionEntry other) {
 		// comparing to dummy

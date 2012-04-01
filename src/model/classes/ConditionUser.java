@@ -1,5 +1,11 @@
 package model.classes;
 
+/**
+ * This the ConditionUser class used to store entries from the database into ConditionUser objects.
+ * 
+ * @author jletourn
+ */
+
 public class ConditionUser extends DatabaseEntry {
 
 	private String userName;

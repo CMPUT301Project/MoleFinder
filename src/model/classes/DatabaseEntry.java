@@ -5,8 +5,8 @@ package model.classes;
  * a ListView or Spinner. 
  * 
  * @author mbessett
- *
  */
+
 public abstract class DatabaseEntry {
 	// row id this entry
 	private int id;

@@ -19,7 +19,7 @@
         android:label="@string/app_name" >
         <activity
             android:name="activity.classes.LoginActivity"
-            android:label="Login" >
+            android:label="MoleFinder" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,10 +51,16 @@
         <activity
             android:name="activity.classes.ReviewImagesActivity"
             android:label="Review Images" >
+            <intent-filter>
+                <category android:name="android.intent.category.TAB" />
+            </intent-filter>
         </activity>
         <activity
             android:name="activity.classes.ReviewTagsActivity"
             android:label="Review Tags" >
+            <intent-filter>
+                <category android:name="android.intent.category.TAB" />
+            </intent-filter>
         </activity>
         <activity
             android:name="activity.classes.NewTagActivity"
@@ -79,6 +85,9 @@
         <activity
             android:name="activity.classes.ReviewPatientsActivity"
             android:label="Review Patients" >
+            <intent-filter>
+                <category android:name="android.intent.category.TAB" />
+            </intent-filter>
         </activity>
         <activity
             android:name="activity.classes.NewPasswordActivity"

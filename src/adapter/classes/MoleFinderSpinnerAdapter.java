@@ -10,6 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+/**
+ * This is the MoleFinderSpinnerAdapter used to fill the spinners with tag entries.
+ * 
+ * @author mBessett
+ */
+
 public class MoleFinderSpinnerAdapter extends ArrayAdapter<DatabaseEntry> {
     Activity context;
     List<DatabaseEntry> items;
@@ -21,6 +27,13 @@ public class MoleFinderSpinnerAdapter extends ArrayAdapter<DatabaseEntry> {
         this.items = items;
     }
  
+    /**
+     * getView is used to join the images with the image views and
+     * to set the text of the text views
+     * @param	pos position of the item in the ListView
+     * 			View is not used
+     * 			ViewGroup is not used
+     */
     public View getView(int pos, View convertView, ViewGroup parent)
     {
     	// current row
@@ -29,10 +42,6 @@ public class MoleFinderSpinnerAdapter extends ArrayAdapter<DatabaseEntry> {
         TextView title = (TextView)row.findViewById(android.R.id.text1);
  
         // set text
-        
-        // THIS IS STILL GIVING A WEIRD BUG!!!
-        // 	when there are no tags, or when you add the first tag and go to view it
-        //	 will look into more later
         if (!items.isEmpty()) {
         	DatabaseEntry item = items.get(pos);
         	title.setText(item.getTitle());
