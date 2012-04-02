@@ -81,6 +81,29 @@ public class MoleFinderModel {
 		DBManager.close();
 	}
 	
+	/** Fill the condition list with entries that match user input
+	 * advanced search criteria. 
+	 * 
+	 * @param tag The grouping of entries to search in.
+	 * @param interval The time in days from the current date to search.
+	 * @param displaying The number of results to display.
+	 * @param recentFirst Display in chronological order?
+	 */
+	public void fetchSpecificConditions(String tag, int interval, int displaying) {
+		clearConditions();
+		DBManager.open();
+		Cursor cur = DBManager.fetchAdvancedConditions(tag, interval);
+		cur.moveToFirst();
+		int count = 0;
+		while (!cur.isAfterLast() && count++ < displaying) {
+			DatabaseEntry entry = cursorToCondition(cur);
+			conditions.add(entry);
+			cur.moveToNext();
+		}
+		cur.close();
+		DBManager.close();
+	}
+	
 	/** Converts the first element in the cursor to a ConditionEntry.
 	 * 
 	 * @param cur List of ConditionEntry data returned from database

@@ -293,5 +293,16 @@ public class DatabaseManager{
 		return mDb.query(DATABASE_TAG_TABLE, new String[] {KEY_ROWID, KEY_TAG, KEY_COMMENTS}, 
 				null, null, null, null, null);
 	}
+	
+	/** Return a cursor over the list of tags that are within the time interval and 
+	 * match the tag. 
+	 *  
+	 * @param tag The group of images to search. 
+	 * @param interval The time (in days) away from the current date to search.
+	 * @return
+	 */
+	public Cursor fetchAdvancedConditions(String tag, int interval) {
+		return null;
+	}
 
 }
