@@ -87,19 +87,30 @@ public class MoleFinderModel {
 	 * @param tag The grouping of entries to search in.
 	 * @param interval The time in days from the current date to search.
 	 * @param displaying The number of results to display.
-	 * @param recentFirst Display in chronological order?
+	 * @param recentFirst Fetch in chronological order?
 	 */
-	public void fetchSpecificConditions(String tag, int interval, int displaying) {
+	public void fetchSpecificConditions(String tag, int interval, 
+			int displaying, boolean mostRecentFirst) {
 		clearConditions();
 		DBManager.open();
 		Cursor cur = DBManager.fetchAdvancedConditions(tag, interval);
-		cur.moveToFirst();
+		
+		// sqlite appends new items to the end of the existing tables
 		int count = 0;
-		while (!cur.isAfterLast() && count++ < displaying) {
-			DatabaseEntry entry = cursorToCondition(cur);
-			conditions.add(entry);
-			cur.moveToNext();
+		if (mostRecentFirst) {			
+			for (cur.moveToLast(), count = 0; !cur.isBeforeFirst() && count < displaying;
+					cur.moveToPrevious(), count++) {
+				DatabaseEntry entry = cursorToCondition(cur);
+				conditions.add(entry);
+			}
 		}
+		else {
+			for (cur.moveToFirst(), count = 0; !cur.isAfterLast() && count < displaying;
+					cur.moveToNext(), count++) {				
+				DatabaseEntry entry = cursorToCondition(cur);
+				conditions.add(entry);				
+			}
+		}		
 		cur.close();
 		DBManager.close();
 	}

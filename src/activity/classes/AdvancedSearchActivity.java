@@ -4,6 +4,8 @@ import java.util.List;
 
 import adapter.classes.MoleFinderSpinnerAdapter;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -44,10 +46,14 @@ public class AdvancedSearchActivity extends FActivity {
 	private boolean isMostRecentFirst;
 	private String tag;
 	
+	/** No pausing this activity. Going back abandons your search.
+	 * 
+	 */
 	@Override
 	public void onPause() {
-		setSpinnerPos(spinner.getSelectedItemPosition());
 		super.onPause();
+		setResult(Activity.RESULT_CANCELED);
+		this.finish();
 	}
 
 	@Override
@@ -98,7 +104,7 @@ public class AdvancedSearchActivity extends FActivity {
 					int pos, long row) {
 				// grab item
 				Object tag = parent.getItemAtPosition(pos);				
-				// set attributes
+				// set attributes				
 				setTag(tag.toString());
 				setSpinnerPos(pos);
 			}
@@ -126,16 +132,19 @@ public class AdvancedSearchActivity extends FActivity {
 		case R.id.radioRecentLast: setMostRecentFirst(false); break;
 		}
 		
-		String text = nResults.getText().toString();
+		String text = nResults.getText().toString();		
 		if (!text.equals("")) {
 			setDisplayResults(Integer.parseInt(text));
 		}
 		
+		//int pos = spinner.getSelectedItemPosition();
+		
 		Intent intent = new Intent(AdvancedSearchActivity.this, ReviewImagesActivity.class);
-		intent.putExtra("TAG", getTag());
+		//intent.putExtra("TAG", getTag());
 		intent.putExtra("INTERVAL", getSearchInterval());
 		intent.putExtra("ORDER", isMostRecentFirst());
 		intent.putExtra("RESULTS", getDisplayResults());
+		//intent.putExtra("POS", pos);
 		setResult(Activity.RESULT_OK, intent);
 		this.finish();
 	}
@@ -170,9 +179,14 @@ public class AdvancedSearchActivity extends FActivity {
 		orderFirst.setText("Most Recent First");
 		orderLast.setText("Most Recent Last");
 		
-		searchButton.setText("Search");
+		searchButton.setText("View Matching '"+getExtra("IN_TAG").toString()+"' Entries");
 		
 		setSearchInterval(0);
+		setDisplayResults(999);
+		
+		// VERY BUGGY..so i hid them for now
+		spinner.setVisibility(View.GONE);
+		spinnerLabel.setVisibility(View.GONE);
 	}
 
 	@Override

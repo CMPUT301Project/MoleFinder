@@ -4,16 +4,21 @@ import java.util.Collections;
 import java.util.List;
 
 import controller.classes.CameraController;
+import model.classes.ConditionTag;
 import model.classes.DatabaseEntry;
 import mole.finder.R;
 
 import adapter.classes.MoleFinderArrayAdapter;
 import adapter.classes.MoleFinderSpinnerAdapter;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -40,7 +45,6 @@ public class ReviewImagesActivity extends FActivity {
 	private Button searchButton;
 
 	// internal variables
-	private boolean mostRecentFirst;
 	private boolean advancedResults;
 	private int spinnerPos;	
 	private String tag;
@@ -72,16 +76,27 @@ public class ReviewImagesActivity extends FActivity {
 			} break;
 		case COMPARE_CODE: 
 			break;
-			
+
 		case SEARCH_CODE:
-			displayAdvancedSearchResults();					
-			break;
+			if (resultCode == RESULT_OK) {
+				displayAdvancedSearchResults(intent);
+			}
+			break;			
 		}
 	}
-	
-	private void displayAdvancedSearchResults() {
-		setAdvancedResults(true); // skip normal ui update
-		
+
+	private void displayAdvancedSearchResults(Intent data) {
+		setAdvancedResults(true); // skip normal ui update					
+		//String tag = data.getStringExtra("TAG");		
+		int interval = data.getIntExtra("INTERVAL", 0);
+		int displaying = data.getIntExtra("RESULTS", 999);		
+		//int pos = data.getIntExtra("POS", 0);
+		//setSpinnerPos(pos);
+		boolean recentFirst = data.getBooleanExtra("ORDER", true);
+
+		model.fetchSpecificConditions(getTag(), interval, displaying, recentFirst);
+		list.setAdapter(new MoleFinderArrayAdapter(this, R.layout.list_view_layout,
+				R.id.imageView, R.id.date_text, R.id.tag_text, model.getConditions()));				
 	}
 	
 	/** Save the current spinner position.
@@ -110,7 +125,9 @@ public class ReviewImagesActivity extends FActivity {
 	 */
 	@Override
 	protected void setClickListeners() {
-		spinner.setOnItemSelectedListener(setupSpinListener());
+		spinner.setOnTouchListener(setupSpinTouch());
+		spinner.setOnItemSelectedListener(setupSpinListener());		
+		
 		list.setOnItemClickListener(setupListListener());
 		addButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -127,6 +144,8 @@ public class ReviewImagesActivity extends FActivity {
 			@Override
 			public void onClick(View v) {				
 				Intent intent = new Intent(ReviewImagesActivity.this, AdvancedSearchActivity.class);
+				intent.putExtra("IN_TAG", getTag());
+				setAdvancedResults(true);
 				startActivityForResult(intent, SEARCH_CODE);
 			}
 		});
@@ -144,32 +163,34 @@ public class ReviewImagesActivity extends FActivity {
 
 
 	/** Keep the list of tags in the Spinner updated.
-	 * 
+	 * Only update the list if not displaying advanced
+	 * search results.
 	 */
 	@Override
 	protected void updateView() {
 		model.fetchTags();
 		List<DatabaseEntry> tagList = model.getTags();
-		spinner.setAdapter(new MoleFinderSpinnerAdapter(this, tagList));
 		int currentSize = tagList.size();
+		
 		if (getSpinnerPos() < currentSize) {
 			spinner.setSelection(getSpinnerPos());
 		}
-		if (isAdvancedResults()) {
+		
+		if (!isAdvancedResults()) {
+			spinner.setAdapter(new MoleFinderSpinnerAdapter(this, tagList));
 			updateList();
 		}
 	}
 
-	/** Do not display list of condition entries on creation.
-	 * Also setup which class to return to after selection.
+	/** Hide appropriate UI items, set the next activity,
+	 * and initialise state variables.
 	 * 
 	 */
 	@Override
 	protected void customInit() {
 		camera = new CameraController();
 		setTag("");		
-		searchButton.setText("Adv. Search");
-		setMostRecentFirst(true);
+		searchButton.setText("Hone List");
 		setAdvancedResults(false);
 
 		Class<?> next = (Class<?>) getExtra("FORWARD");
@@ -214,7 +235,24 @@ public class ReviewImagesActivity extends FActivity {
 			public void onNothingSelected(AdapterView<?> arg0) {}
 		};
 		return listener;
-	}	
+	}
+	
+	/** If the spinner is touched, no longer displaying advanced search results.
+	 * Reset the flag.
+	 * 
+	 * @return An OnTouchListener for the Spinner.
+	 */
+	private OnTouchListener setupSpinTouch() {
+		OnTouchListener listener = new OnTouchListener() {			
+			@Override
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+				setAdvancedResults(false);
+				return false;
+			}
+		};
+		
+		return listener;
+	}
 
 	/** This uses the activity's tag attribute to create a list
 	 * of Condition entries with the same tag
@@ -224,9 +262,6 @@ public class ReviewImagesActivity extends FActivity {
 		if (getTag() != "") {
 			model.fetchConditions(getTag());
 			List<DatabaseEntry> conditions = model.getConditions();
-			if (isMostRecentFirst()) {
-				Collections.reverse(conditions);
-			}
 			list.setAdapter(new MoleFinderArrayAdapter(this, R.layout.list_view_layout,
 					R.id.imageView, R.id.date_text, R.id.tag_text, conditions));
 		}
@@ -300,14 +335,6 @@ public class ReviewImagesActivity extends FActivity {
 
 	public String getLayout() {
 		return layout;
-	}
-
-	public void setMostRecentFirst(boolean mostRecentFirst) {
-		this.mostRecentFirst = mostRecentFirst;
-	}
-
-	public boolean isMostRecentFirst() {
-		return mostRecentFirst;
 	}
 
 	public void setAdvancedResults(boolean advancedResults) {

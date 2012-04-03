@@ -1,7 +1,15 @@
 package model.classes;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+
+import activity.classes.AdvancedSearchActivity;
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -299,10 +307,31 @@ public class DatabaseManager{
 	 *  
 	 * @param tag The group of images to search. 
 	 * @param interval The time (in days) away from the current date to search.
-	 * @return
+	 * @return 
 	 */
-	public Cursor fetchAdvancedConditions(String tag, int interval) {
-		return null;
+	public Cursor fetchAdvancedConditions(String tag, int interval) {						
+		String where = KEY_TAG + " = " + "'" + tag + "'";
+		String[] args = null;
+		
+		if (interval > 0) {
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.DAY_OF_YEAR, -1*interval);
+			Date today = new Date();
+			Date startDate = cal.getTime();
+			
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			format.setTimeZone(TimeZone.getTimeZone("GMT"));
+			String from = format.format(startDate);
+			String to = format.format(today);
+						
+			where += " AND " + KEY_DATE + " BETWEEN ? AND ?"; 
+			args = new String[] { from, to };
+		}
+
+		String[] columns = new String[] { KEY_ROWID, KEY_TAG, KEY_DATE, KEY_COMMENTS, KEY_IMAGE };
+		
+		return mDb.query(DATABASE_IMAGE_TABLE, columns, where, args, 
+				null, null, null);
 	}
 
 }
