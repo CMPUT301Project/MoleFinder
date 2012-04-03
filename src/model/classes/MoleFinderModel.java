@@ -70,7 +70,13 @@ public class MoleFinderModel {
 	public void fetchConditions(String tag) {		
 		clearConditions();
 		DBManager.open();
-		Cursor cur = DBManager.fetchAllImages(tag);
+		Cursor cur;
+		if (tag.equals("All")) {
+			cur = DBManager.fetchAllImages();
+		}
+		else {
+			cur = DBManager.fetchAllImages(tag);
+		}
 		cur.moveToFirst();
 		while (!cur.isAfterLast()) {
 			DatabaseEntry entry = cursorToCondition(cur);

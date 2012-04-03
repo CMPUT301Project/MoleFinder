@@ -281,11 +281,20 @@ public class DatabaseManager{
 				KEY_ROWID + " = " + id, null, null, null, null);
 	}
 	
+	/** Return a Cursor over all the images in the database. 
+	 * 
+	 * @return A Cursor over all images.
+	 */
+	public Cursor fetchAllImages() {
+		String[] columns = new String[] { KEY_ROWID, KEY_TAG, KEY_DATE, KEY_COMMENTS, KEY_IMAGE };
+		return mDb.query(DATABASE_IMAGE_TABLE, columns, null, null, null, null, null);
+	}
+	
 	/**
 	 * Return a Cursor over the list of all Images in the database
 	 * 
 	 * @param tag used to categorize the images
-	 * @return Cursor over all images
+	 * @return Cursor over all images with matching tag.
 	 */
 	public Cursor fetchAllImages(String tag) {
 		return mDb.query(DATABASE_IMAGE_TABLE, new String[] {KEY_ROWID, KEY_TAG, KEY_DATE,
@@ -309,7 +318,7 @@ public class DatabaseManager{
 	 * @param interval The time (in days) away from the current date to search.
 	 * @return 
 	 */
-	public Cursor fetchAdvancedConditions(String tag, int interval) {						
+	public Cursor fetchAdvancedConditions(String tag, int interval) {	
 		String where = KEY_TAG + " = " + "'" + tag + "'";
 		String[] args = null;
 		
