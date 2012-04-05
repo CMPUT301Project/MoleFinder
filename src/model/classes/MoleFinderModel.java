@@ -37,7 +37,7 @@ public class MoleFinderModel {
 		return instance;
 	}
 	
-	/** Private constructor. Use the static method getInstance.
+	/* Private constructor. Use the static method getInstance.
 	 * 
 	 * @param context Database creation requires context
 	 */
@@ -50,13 +50,40 @@ public class MoleFinderModel {
 		
 	}
 	
-	/** Empty the current list of conditions.
+	/* Fake entries to test the date range feature.
+	 * Working as expected.
+	 */
+	private void createTestEntries() {
+		String tag = "Face";
+		String img = ""; 
+		String com = "Comment";
+		int i = 0;
+		ConditionTag t = new ConditionTag(1, tag);
+		saveTag(t);
+		
+		ConditionEntry entry = new ConditionEntry(++i, tag, img, com, "2012-01-12");
+		saveImage(entry);
+		entry = new ConditionEntry(++i, tag, img, com, "2012-01-13");
+		saveImage(entry);
+		entry = new ConditionEntry(++i, tag, img, com, "2012-02-13");
+		saveImage(entry);
+		entry = new ConditionEntry(++i, tag, img, com, "2012-02-15");
+		saveImage(entry);
+		entry = new ConditionEntry(++i, tag, img, com, "2012-03-01");
+		saveImage(entry);
+		entry = new ConditionEntry(++i, tag, img, com, "2012-03-05");
+		saveImage(entry);
+		entry = new ConditionEntry(++i, tag, img, com, "2012-03-13");
+		saveImage(entry);
+	}
+	
+	/** Explicitly empty the current list of conditions.
 	 * 
 	 */
 	public void clearConditions() {
 		conditions.clear();
 	}
-	/** Empty the current list of tags;
+	/** Explicitly empty the current list of tags;
 	 * 
 	 */
 	public void clearTags() {
@@ -70,13 +97,7 @@ public class MoleFinderModel {
 	public void fetchConditions(String tag) {		
 		clearConditions();
 		DBManager.open();
-		Cursor cur;
-		if (tag.equals("All")) {
-			cur = DBManager.fetchAllImages();
-		}
-		else {
-			cur = DBManager.fetchAllImages(tag);
-		}
+		Cursor cur = DBManager.fetchAllImages(tag);
 		cur.moveToFirst();
 		while (!cur.isAfterLast()) {
 			DatabaseEntry entry = cursorToCondition(cur);

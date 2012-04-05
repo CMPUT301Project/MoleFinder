@@ -16,15 +16,16 @@ import android.widget.EditText;
  */
 
 public class NewTagActivity extends FActivity { 
+	// UI
 	private EditText name;
 	private EditText comment;
 	private Button save;
 	private Button cancel; 
 	private Button delete;
-
+	// the original tag, if editing
 	private ConditionTag initTag;
 
-	/** Save the current tag to the database 
+	/* Save the current tag to the database 
 	 * 
 	 */
 	private void saveTag() {
@@ -85,11 +86,11 @@ public class NewTagActivity extends FActivity {
 				NewTagActivity.this.finish();			
 			}
 		});
+		// only allow delete of existing tags
 		if (initTag.getId() == ConditionTag.DUMMY_ID) {
 			delete.setVisibility(View.GONE);
 		}
 		else {
-			// NEED CASCADING DELETE HERE AS WELL!!!
 			delete.setOnClickListener(new View.OnClickListener() {	
 				public void onClick(View v) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(NewTagActivity.this);
@@ -112,7 +113,7 @@ public class NewTagActivity extends FActivity {
 		}
 	}
 
-	/** If editing a tag, display it's current values.
+	/* If editing a tag, display it's current values.
 	 * 
 	 */
 	@Override

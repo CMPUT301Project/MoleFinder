@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class LoginActivity extends FActivity {
-	
+	// UI
 	private EditText passwd;
 	private CheckBox patient;
 	private CheckBox doctor;
@@ -76,7 +76,7 @@ public class LoginActivity extends FActivity {
 		return R.layout.login;
 	}
 	
-	/**
+	/*
 	 * passwordCheck is used to verify the users password by comparing
 	 * the value inputed with the value stored in the database.
 	 * @param password

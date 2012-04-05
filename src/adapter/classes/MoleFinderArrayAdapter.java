@@ -20,7 +20,7 @@ import android.widget.TextView;
  * This is the MoleFinderArrayAdapter, it is used to put the images and text fields
  * into the layout used to view images.
  * 
- * @author mBessett
+ * @author mbessett
  *
  */
 
@@ -32,7 +32,15 @@ public class MoleFinderArrayAdapter extends ArrayAdapter<DatabaseEntry> {
     int titleTextId;		// TextView to display title in
     int commentTextid;		// TextView to display comment in
  
-    //constructor 1
+    /** Explicit constructor, allows caller to set all internal variables. 
+     * 
+     * @param context The calling Activity
+     * @param layoutId The XML layout file ID
+     * @param imageId The ImageView to display the thumb nail
+     * @param titleTextId The TextView to display the title
+     * @param commentTextId The TextView to display the comments
+     * @param items The list of DatabaseEntry objects to display
+     */
     public MoleFinderArrayAdapter(Activity context, int layoutId, int imageId, int titleTextId, int commentTextId,
     		List<DatabaseEntry> items) {
         
@@ -45,7 +53,14 @@ public class MoleFinderArrayAdapter extends ArrayAdapter<DatabaseEntry> {
         this.commentTextid = commentTextId;
     }
     
-    //constructor 2
+    /** Alternate constructor, no image to display.
+     * 
+     * @param context The calling Activity
+     * @param layoutId The XML layout file
+     * @param titleTextId The TextView to display the title
+     * @param commentTextId The TextView to display the comments
+     * @param items The list of DatabaseEntry objects to display
+     */
     public MoleFinderArrayAdapter(Activity context, int layoutId, int titleTextId, int commentTextId,
     		List<DatabaseEntry> items) {
         

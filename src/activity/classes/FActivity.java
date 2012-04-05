@@ -57,7 +57,7 @@ public abstract class FActivity extends Activity {
 	 */
 	protected abstract void updateView();
 	
-	/** Some classes may need initialization in a particular
+	/** Some classes may need initialisation in a particular
 	 * order. This method provides the ability to do that.
 	 * 
 	 */
@@ -69,7 +69,7 @@ public abstract class FActivity extends Activity {
 	protected abstract int myLayout();
 	
 	
-	/** Retrieve extras passed to the view. User must explicitly
+	/** Retrieve extras passed to the view. Caller must explicitly
 	 * cast before use.
 	 * 
 	 * @param key The String value denoting the extra

@@ -18,17 +18,19 @@ import android.widget.AdapterView.OnItemSelectedListener;
 
 /**
  * This is the NewImageActivity class it is used to save images and call the camera activities.
+ * 
  * @author jletourn
  *
  */
 
 public class NewImageActivity extends FActivity{
-
+	// UI
 	private Button buttonSave;
 	private Button buttonCancel;
 	private Button buttonNewTag;
 	private Spinner spinnerTag;
 	private EditText edittextComments;
+	// internal values
 	private String imageName;
 	private String date;
 	private ConditionEntry initImage;
@@ -104,6 +106,10 @@ public class NewImageActivity extends FActivity{
 		return R.layout.newphoto;
 	}
 	
+	/** Set the spinner to select a newly created tag if
+	 * it exists, else default to the first tag in the list. 
+	 * 
+	 */
 	@Override
 	public void onResume(){
 		super.onResume();
@@ -114,7 +120,7 @@ public class NewImageActivity extends FActivity{
 			spinnerTag.setSelection(0);
 	}
 
-	/** Save the current image to the database 
+	/* Save the current image to the database 
 	 * 
 	 */
 	private void saveImage() {
@@ -149,7 +155,7 @@ public class NewImageActivity extends FActivity{
 		finish();
 	}
 	
-	/** Setup the OnItemSelectedListener for the Tag Spinner
+	/* Setup the OnItemSelectedListener for the Tag Spinner
 	 */
 	private OnItemSelectedListener setupSpinListener() {
 		OnItemSelectedListener listener = new OnItemSelectedListener() {

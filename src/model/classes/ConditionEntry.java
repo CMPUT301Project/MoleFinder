@@ -20,28 +20,49 @@ public class ConditionEntry extends DatabaseEntry {
 	private String image;
 
 
-	// constructor 1 (comment is optional)
+	/** Constructor 1. Entry with no comment.
+	 * 
+	 * @param id The RowID of the entry
+	 * @param tag The tag grouping of this image
+	 * @param image The image name
+	 */
 	public ConditionEntry(int id, String tag, String image) {
 		super(id);
 		this.setTag(tag);
 		this.setImage(image);
 	}
-	// constructor 2
+	/** Constructor 2. Explicit constructor.
+	 * 
+	 * @param id The RowID of the entry
+	 * @param tag The tag grouping of the image
+	 * @param image The image name
+	 * @param comment The image comments
+	 * @param date The date in yyyy-MM-dd format
+	 */
 	public ConditionEntry(int id, String tag, String image, String comment, String date) {
 		this(id, tag, image);
 		this.setComment(comment);
 		this.setDate(date);
 	}
-	// constructor 3
+	/** Copy constructor
+	 * 
+	 * @param input The ConditionEntry to duplicate
+	 */
 	public ConditionEntry(ConditionEntry input) {
 		this(input.getId(), input.getTag(), input.getImage());
 	}
 	
+	/** Create a fake (placeholder) ConditionEntry
+	 * 
+	 * @return The placeholder object.
+	 */
 	public static ConditionEntry createDummyEntry() {
 		return new ConditionEntry(DUMMY_ID, DUMMY_NAME, DUMMY_IMAGE);
 	}
 	
-	
+	/** Return a String uniquely identifying this entry.
+	 * 
+	 */
 	@Override
 	public String toString() {
 		return new String(getId() + " " + getTag() + 
@@ -59,9 +80,7 @@ public class ConditionEntry extends DatabaseEntry {
 	/** Compare two ConditionEntry objects. Item ID is not considered.
 	 * 
 	 * @param other The ConditionEntry to compare to.
-	 * @return -1: Comparing a dummy object
-	 * 			0: Tags are the same
-	 * 			1: Tags have a different name
+	 * @return The result code of the comparison.
 	 */
 	public int compareTo(ConditionEntry other) {
 		// comparing to dummy

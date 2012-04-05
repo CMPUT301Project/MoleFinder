@@ -8,17 +8,20 @@
         android:id="@+id/spinner1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true" 
+        />
 
     <ListView
         android:id="@+id/listView1"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:layout_below="@id/spinner1"
+        android:layout_above="@+id/bottomButtons"
         >
     </ListView>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@id/bottomButtons"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal" 
@@ -47,4 +50,6 @@
         android:layout_weight="33" />
 
 	</LinearLayout>
+	
+    
 </RelativeLayout>

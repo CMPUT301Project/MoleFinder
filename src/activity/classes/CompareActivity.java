@@ -20,9 +20,10 @@ import android.widget.ImageView;
  */
 
 public class CompareActivity extends FActivity {
+	// UI
 	private ImageView top;
 	private ImageView bottom;
-	
+	// names of the images to load from SDCard
 	private String topImage;
 	private String bottomImage;
 
@@ -32,7 +33,7 @@ public class CompareActivity extends FActivity {
 		bottom = (ImageView) findViewById(R.id.imageCompareBottom);		
 	}
 
-	/** Clicking on the image views allows the user to select which 
+	/* Clicking on the image views allows the user to select which 
 	 * image is displayed.
 	 * 
 	 */
@@ -54,7 +55,7 @@ public class CompareActivity extends FActivity {
 		});
 	}
 	
-	/** Create an intent that links to ReviewImagesActivity, and sets
+	/* Create an intent that links to ReviewImagesActivity, and sets
 	 * the layout extra to either "top" or "bottom" depending on which
 	 * picture you are selecting.
 	 * 
@@ -68,7 +69,7 @@ public class CompareActivity extends FActivity {
 		return intent;
 	}
 
-	/** Display the images, if they exist on the SDCard.
+	/* Display the images, if they exist on the SDCard.
 	 * 
 	 */
 	@Override
@@ -85,7 +86,7 @@ public class CompareActivity extends FActivity {
         }        
 	}
 
-	/** Images are distinguished in this class by name,
+	/* Images are distinguished in this class by name,
 	 * this method sets the correct image name depending
 	 * on the LAYOUT extra passed when returning from 
 	 * image selection.
@@ -106,7 +107,8 @@ public class CompareActivity extends FActivity {
 		}				
 	}
 
-	/** Returning from image selection, save the name of the image.
+	/** Returning from image selection, save the name of the image
+	 * to the appropriate variable.
 	 * 
 	 */
 	// called BEFORE onResume
@@ -118,7 +120,7 @@ public class CompareActivity extends FActivity {
 		} 		
 	}
 
-	/** Comparing new images, clear the image names. 
+	/* Comparing new images, clear the image names. 
 	 * 
 	 */
 	@Override
@@ -132,6 +134,7 @@ public class CompareActivity extends FActivity {
 		return R.layout.compare;
 	}
 
+	// getters/setters
 	public void setTopImage(String topImage) {
 		this.topImage = topImage;
 	}

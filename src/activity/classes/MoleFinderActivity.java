@@ -8,10 +8,15 @@ import android.os.Bundle;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
+/** This is the main activity for MoleFinder. It uses a TabHost
+ * to switch between the 3 main action categories available in 
+ * the application - Images,Tags,Patients.
+ * 
+ * @author mbessett
+ *
+ */
+
 public class MoleFinderActivity extends TabActivity {
-	/** Set up the tab host to contain tabs for images and tags. 
-	 * 
-	 */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);

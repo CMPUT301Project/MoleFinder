@@ -21,7 +21,7 @@ import mole.finder.R;
  */
 
 public class NewPasswordActivity extends FActivity{
-
+	// UI
 	private EditText passwd;
 	private CheckBox patient;
 	private CheckBox doctor;

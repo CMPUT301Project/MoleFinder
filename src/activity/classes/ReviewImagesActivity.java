@@ -1,18 +1,14 @@
 package activity.classes;
 
-import java.util.Collections;
 import java.util.List;
 
 import controller.classes.CameraController;
-import model.classes.ConditionTag;
 import model.classes.DatabaseEntry;
 import mole.finder.R;
 
 import adapter.classes.MoleFinderArrayAdapter;
 import adapter.classes.MoleFinderSpinnerAdapter;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -29,9 +25,7 @@ import android.widget.Spinner;
 /** The ReviewImagesActivity displays a list of available tags
  * in the spinner at the top, and once selected displays a list
  * of conditions that are currently stored in the database with
- * the corresponding tag. Be sure to include the "FORWARD" extra
- * when calling this view or you will not be able to link to the 
- * next page and you may get exceptions. 
+ * the corresponding tag. 
  * 
  * @author mbessett
  */
@@ -108,19 +102,19 @@ public class ReviewImagesActivity extends FActivity {
 		super.onPause();
 	}
 
-	/** Find Spinner, ListView, and Buttons
+	/* Find Spinner, ListView, and Buttons
 	 */
 	@Override
 	protected void findViews() {
 		spinner = (Spinner) findViewById(R.id.spinner1);
-		list = (ListView) findViewById(R.id.listView1);	
+		
 		addButton = (Button) findViewById(R.id.addNewButton);		
 		compareButton = (Button) findViewById(R.id.compareButton);
 		searchButton = (Button) findViewById(R.id.advancedButton);
-		
+		list = (ListView) findViewById(R.id.listView1);	
 	}
 
-	/** Allow list and spinner items to be clicked.
+	/* Allow list and spinner items to be clicked.
 	 * 
 	 */
 	@Override
@@ -162,7 +156,7 @@ public class ReviewImagesActivity extends FActivity {
 	}
 
 
-	/** Keep the list of tags in the Spinner updated.
+	/* Keep the list of tags in the Spinner updated.
 	 * Only update the list if not displaying advanced
 	 * search results.
 	 */
@@ -182,7 +176,7 @@ public class ReviewImagesActivity extends FActivity {
 		}
 	}
 
-	/** Hide appropriate UI items, set the next activity,
+	/* Hide appropriate UI items, set the next activity,
 	 * and initialise state variables.
 	 * 
 	 */
@@ -213,7 +207,7 @@ public class ReviewImagesActivity extends FActivity {
 		return R.layout.review;
 	}
 
-	/** Setup the OnItemSelectedListener for the Tag Spinner, and
+	/* Setup the OnItemSelectedListener for the Tag Spinner, and
 	 * remember the Spinner position.
 	 * 
 	 */
@@ -237,7 +231,7 @@ public class ReviewImagesActivity extends FActivity {
 		return listener;
 	}
 	
-	/** If the spinner is touched, no longer displaying advanced search results.
+	/* If the spinner is touched, no longer displaying advanced search results.
 	 * Reset the flag.
 	 * 
 	 * @return An OnTouchListener for the Spinner.
@@ -254,7 +248,7 @@ public class ReviewImagesActivity extends FActivity {
 		return listener;
 	}
 
-	/** This uses the activity's tag attribute to create a list
+	/* This uses the activity's tag attribute to create a list
 	 * of Condition entries with the same tag
 	 *
 	 */
@@ -267,7 +261,7 @@ public class ReviewImagesActivity extends FActivity {
 		}
 	}
 
-	/** Setup the OnItemSelectedListener for the Condition ListView
+	/* Setup the OnItemSelectedListener for the Condition ListView
 	 * 
 	 */
 	private OnItemClickListener setupListListener() {
@@ -286,7 +280,7 @@ public class ReviewImagesActivity extends FActivity {
 		return listener;
 	}
 
-	/**
+	/*
 	 * nextView is used to set the layout to the next view and start the next activity.
 	 * @param id of the item selected in the ListView
 	 */

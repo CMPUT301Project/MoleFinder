@@ -21,11 +21,12 @@ import mole.finder.R;
  */
 
 public class ImageActivity extends FActivity {
-	
+	// UI
 	private ImageView image;
 	private TextView comments;
 	private Button editButton;
 	private Button deleteButton;
+	// internal values
 	private int id;
 	
 	@Override

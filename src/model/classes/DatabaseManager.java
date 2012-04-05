@@ -5,11 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import activity.classes.AdvancedSearchActivity;
-import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -75,6 +72,9 @@ public class DatabaseManager{
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		}
 
+		/** Create the database tables.
+		 * 
+		 */
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(DATABASE_CREATE_IMAGE);	//runs the create table statement
@@ -82,6 +82,9 @@ public class DatabaseManager{
 			db.execSQL(DATABASE_CREATE_LOGIN);
 			}
 
+		/** Update the table rows.
+		 * 
+		 */
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
@@ -287,7 +290,8 @@ public class DatabaseManager{
 	 */
 	public Cursor fetchAllImages() {
 		String[] columns = new String[] { KEY_ROWID, KEY_TAG, KEY_DATE, KEY_COMMENTS, KEY_IMAGE };
-		return mDb.query(DATABASE_IMAGE_TABLE, columns, null, null, null, null, null);
+		String order = KEY_DATE + " ASC";
+		return mDb.query(DATABASE_IMAGE_TABLE, columns, null, null, null, null, order);
 	}
 	
 	/**
@@ -297,8 +301,10 @@ public class DatabaseManager{
 	 * @return Cursor over all images with matching tag.
 	 */
 	public Cursor fetchAllImages(String tag) {
-		return mDb.query(DATABASE_IMAGE_TABLE, new String[] {KEY_ROWID, KEY_TAG, KEY_DATE,
-				KEY_COMMENTS, KEY_IMAGE}, KEY_TAG + " = " + "'" + tag + "'", null, null, null, null);
+		String[] columns = new String[] {KEY_ROWID, KEY_TAG, KEY_DATE, KEY_COMMENTS, KEY_IMAGE};
+		String where = KEY_TAG + " = " + "'" + tag + "'";
+		String order = KEY_DATE + " ASC";
+		return mDb.query(DATABASE_IMAGE_TABLE, columns, where, null, null, null, order);
 	}
 
 	/**
@@ -314,9 +320,9 @@ public class DatabaseManager{
 	/** Return a cursor over the list of tags that are within the time interval and 
 	 * match the tag. 
 	 *  
-	 * @param tag The group of images to search. 
-	 * @param interval The time (in days) away from the current date to search.
-	 * @return 
+	 * @param tag The group of images to search
+	 * @param interval The time (in days) away from the current date to search
+	 * @return A Cursor over the matching tags 
 	 */
 	public Cursor fetchAdvancedConditions(String tag, int interval) {	
 		String where = KEY_TAG + " = " + "'" + tag + "'";
@@ -338,9 +344,8 @@ public class DatabaseManager{
 		}
 
 		String[] columns = new String[] { KEY_ROWID, KEY_TAG, KEY_DATE, KEY_COMMENTS, KEY_IMAGE };
-		
-		return mDb.query(DATABASE_IMAGE_TABLE, columns, where, args, 
-				null, null, null);
+		String order = KEY_DATE + " ASC";
+		return mDb.query(DATABASE_IMAGE_TABLE, columns, where, args, null, null, order);
 	}
 
 }

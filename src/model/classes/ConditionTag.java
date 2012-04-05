@@ -3,7 +3,7 @@ package model.classes;
 /**
  * This the ConditionTag class used to store entries from the database into ConditionTag objects.
  * 
- * @author mBesset
+ * @author mbessett
  */
 
 public class ConditionTag extends DatabaseEntry {
@@ -13,23 +13,40 @@ public class ConditionTag extends DatabaseEntry {
 	public static final int DIFF_NAME = 222;
 	public static final int DIFF_COMMENT = 333;
 	
-	private String name, comment;
+	private String name;
+	private String comment;
 
-	// constructor 1 (comment optional)
+	/** Constructor 1. Tag without a comment.
+	 *  
+	 * @param id The RowID of this tag
+	 * @param name The name of this tag
+	 */
 	public ConditionTag(int id, String name) {
 		super(id);
 		this.setName(name);
 	}
-	// constructor 2
+	/** Constructor 2. Comment constructor
+	 * 
+	 * @param id The RowID of this tag
+	 * @param name The name of this tag
+	 * @param comment The commments associated with this tag
+	 */
 	public ConditionTag(int id, String name, String comment) {
 		this(id, name);
 		this.setComment(comment);
 	}
-	// constructor 3
+	/** Copy Constructor.
+	 * 
+	 * @param input The ConditionTag to duplicate
+	 */
 	public ConditionTag(ConditionTag input) {
 		this(input.getId(), input.getName(), input.getComment());
 	}
 	
+	/**  Return a fake (placeholder) ConditionTag object.
+	 * 
+	 * @return The placeholder tag.
+	 */
 	public static ConditionTag createDummyTag() {
 		return new ConditionTag(DUMMY_ID, DUMMY_NAME);
 	}
@@ -37,10 +54,7 @@ public class ConditionTag extends DatabaseEntry {
 	/** Compare two ConditionTag objects. Item ID is not considered.
 	 * 
 	 * @param other The ConditionTag to compare to.
-	 * @return -1: Comparing a dummy object
-	 * 			0: Tags are the same
-	 * 			1: Tags have a different name
-	 * 			2: Tags have the same name, different comment
+	 * @return Tag comparison result code.
 	 */
 	public int compareTo(ConditionTag other) {
 		// comparing to dummy
@@ -64,6 +78,9 @@ public class ConditionTag extends DatabaseEntry {
 		}
 	}
 	
+	/** Return the name of this tag.
+	 * 
+	 */
 	@Override
 	public String toString() {
 		return getName();

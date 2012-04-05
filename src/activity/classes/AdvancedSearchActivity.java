@@ -4,8 +4,6 @@ import java.util.List;
 
 import adapter.classes.MoleFinderSpinnerAdapter;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,13 +18,24 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import model.classes.DatabaseEntry;
 import mole.finder.R;
 
+/** This activity allows users to input additional parameters when 
+ * browsing through their images. The tag has already been selected 
+ * from the previous activity, and now the user can decide to filter 
+ * the resulting list based on date, as well as deciding how many 
+ * results to display and the order in which they appear. 
+ * 
+ * @author mbessett
+ *
+ */
 public class AdvancedSearchActivity extends FActivity {
 	// UI
 	private Spinner spinner;
+	
 	private TextView spinnerLabel;
 	private TextView timeLabel;
 	private TextView resultsLabel;
 	private TextView orderLabel;
+	
 	private RadioGroup timeGroup;
 	private RadioGroup orderGroup;
 	private RadioButton timeOneWeek;
@@ -36,6 +45,7 @@ public class AdvancedSearchActivity extends FActivity {
 	private RadioButton timeAll;
 	private RadioButton orderFirst;
 	private RadioButton orderLast;
+	
 	private EditText nResults;
 	private Button searchButton;
 	
@@ -46,7 +56,7 @@ public class AdvancedSearchActivity extends FActivity {
 	private boolean isMostRecentFirst;
 	private String tag;
 	
-	/** No pausing this activity. Going back abandons your search.
+	/** No pausing this activity. Selecting back abandons your search.
 	 * 
 	 */
 	@Override
@@ -62,6 +72,7 @@ public class AdvancedSearchActivity extends FActivity {
 		
 		spinnerLabel = (TextView) findViewById(R.id.spinnerLabel);
 		timeLabel = (TextView) findViewById(R.id.radio_label);
+		resultsLabel = (TextView) findViewById(R.id.resultsLabel);
 		orderLabel = (TextView) findViewById(R.id.orderLabel);
 		
 		timeGroup = (RadioGroup) findViewById(R.id.radioGroupTime);
@@ -76,8 +87,7 @@ public class AdvancedSearchActivity extends FActivity {
 		orderLast = (RadioButton) findViewById(R.id.radioRecentLast);
 		
 		searchButton = (Button) findViewById(R.id.buttonSearch);
-		nResults = (EditText) findViewById(R.id.editResults);
-		resultsLabel = (TextView) findViewById(R.id.resultsLabel);
+		nResults = (EditText) findViewById(R.id.editResults);		
 	}
 
 	@Override
@@ -90,15 +100,15 @@ public class AdvancedSearchActivity extends FActivity {
 			}
 		});		
 	}
-	
-	/** Setup the OnItemSelectedListener for the Tag Spinner, and
-	 * remember the Spinner position.
-	 * 
-	 */
+
 	private OnItemSelectedListener setupSpinListener() {
 		// allow for clicks
 		OnItemSelectedListener listener = new OnItemSelectedListener() {
 
+			/** Save the current spinner position and the name of the
+			 * current tag.
+			 * 
+			 */
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View v,
 					int pos, long row) {
@@ -114,7 +124,7 @@ public class AdvancedSearchActivity extends FActivity {
 		return listener;
 	}
 	
-	/** Get the search parameters entered by the user and send the necessary
+	/* Get the search parameters entered by the user and send the necessary
 	 * information to the ReviewImagesActivity to display the results. 
 	 * 
 	 */
@@ -137,8 +147,7 @@ public class AdvancedSearchActivity extends FActivity {
 			setDisplayResults(Integer.parseInt(text));
 		}
 		
-		//int pos = spinner.getSelectedItemPosition();
-		
+		//int pos = spinner.getSelectedItemPosition();		
 		Intent intent = new Intent(AdvancedSearchActivity.this, ReviewImagesActivity.class);
 		//intent.putExtra("TAG", getTag());
 		intent.putExtra("INTERVAL", getSearchInterval());
@@ -149,7 +158,7 @@ public class AdvancedSearchActivity extends FActivity {
 		this.finish();
 	}
 
-	/** Keep the tag spinner updated, and use last position if valid. 
+	/* Keep the tag spinner updated, and use last position if valid. 
 	 * 
 	 */
 	@Override

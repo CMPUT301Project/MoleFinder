@@ -10,13 +10,18 @@ package model.classes;
 public abstract class DatabaseEntry {
 	// row id this entry
 	private int id;
-	
-	// constructor
+	 
+	/** Basic Constructor.
+	 * 
+	 * @param id The RowID of this entry
+	 */
 	public DatabaseEntry(int id) {
 		this.id = id;		
 	}
 	
-	// return a String representation of the entry
+	/** Return the string representation of this object.
+	 * 
+	 */
 	public abstract String toString();
 
 	// getters/setters

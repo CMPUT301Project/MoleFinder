@@ -10,6 +10,8 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -21,13 +23,14 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 
 public class ReviewTagsActivity extends FActivity {
+	// UI
 	private Spinner spinner;
 	private ListView list;
 	private Button addButton;
 	private Button compareButton;
 	private Button searchButton;
 
-	/** Link the Spinner and ListView to their respective ids.
+	/* Link the Spinner and ListView to their respective ids.
 	 * 
 	 */
 	@Override
@@ -39,7 +42,7 @@ public class ReviewTagsActivity extends FActivity {
 		searchButton = (Button) findViewById(R.id.advancedButton);
 	}
 
-	/** Make the ListView and Button clickable.
+	/* Make the ListView and Button clickable.
 	 * 
 	 */
 	@Override
@@ -54,7 +57,7 @@ public class ReviewTagsActivity extends FActivity {
 		list.setOnItemClickListener(setupListListener());		
 	}
 
-	/** Keep the list of tags consistent with the database.
+	/* Keep the list of tags consistent with the database.
 	 * 
 	 */
 	@Override
@@ -64,7 +67,7 @@ public class ReviewTagsActivity extends FActivity {
 				R.id.tag_text, R.id.comments_text, model.getTags()));
 	}
 
-	/** Hide the spinner. 
+	/* Hide the spinner and align the list to the top. 
 	 * 
 	 */
 	@Override
@@ -73,6 +76,11 @@ public class ReviewTagsActivity extends FActivity {
 		compareButton.setVisibility(View.GONE);
 		searchButton.setVisibility(View.GONE);
 		spinner.setVisibility(View.GONE);
+		
+		LayoutParams params = (LayoutParams) list.getLayoutParams();
+		params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+		list.setLayoutParams(params); //causes layout update
+
 	}
 
 	@Override
@@ -80,7 +88,7 @@ public class ReviewTagsActivity extends FActivity {
 		return R.layout.review;
 	}
 	
-	/** Setup the OnItemSelectedListener for the Condition ListView
+	/* Setup the OnItemSelectedListener for the Condition ListView
 	 * 
 	 */
 	private OnItemClickListener setupListListener() {

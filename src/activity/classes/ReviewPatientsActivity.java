@@ -8,7 +8,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import mole.finder.R;
 
+/** This activity allows doctor users to manage the patients they have
+ * saved in their system or add new patients if necessary.
+ * 
+ * @author mbessett
+ *
+ */
+
 public class ReviewPatientsActivity extends FActivity {
+	// UI
 	private TextView message;
 	private Button button;
 

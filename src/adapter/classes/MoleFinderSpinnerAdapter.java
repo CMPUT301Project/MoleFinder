@@ -11,15 +11,20 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 /**
- * This is the MoleFinderSpinnerAdapter used to fill the spinners with tag entries.
+ * The MoleFinderSpinnerAdapter is used to fill the spinners with tag entries.
  * 
- * @author mBessett
+ * @author mbessett
  */
 
 public class MoleFinderSpinnerAdapter extends ArrayAdapter<DatabaseEntry> {
     Activity context;
     List<DatabaseEntry> items;
  
+    /** Set the context and list of items to display.
+     * 
+     * @param context The calling Activity
+     * @param items The list of DatabaseEntry objects to display
+     */
     public MoleFinderSpinnerAdapter(Activity context, List<DatabaseEntry> items) {
         
     	super(context, android.R.layout.simple_spinner_dropdown_item, items); 
