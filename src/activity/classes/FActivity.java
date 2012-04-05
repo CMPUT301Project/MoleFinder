@@ -5,9 +5,9 @@ import android.app.Activity;
 import android.os.Bundle;
 
 
-/** The FView abstract class provides the basic functionality
- * and interface for a generic Activity for the MoleFinder
- * application.
+/** This abstract class provides the basic functionality
+ * and order of creation operations for a generic Activity 
+ * for the MoleFinder application.
  * 
  * @author mbessett
  */

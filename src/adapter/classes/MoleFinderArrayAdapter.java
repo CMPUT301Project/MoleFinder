@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
- * This is the MoleFinderArrayAdapter, it is used to put the images and text fields
+ * This adapter is used to put the images and text fields
  * into the layout used to view images.
  * 
  * @author mbessett

@@ -5,7 +5,7 @@ import android.graphics.Color;
 
 
 /**
- * This is a Class that was provided by Dr. Hindle for use.
+ * This is a class that was provided by Dr Hindle for use.
  */
 public class BogoPicGen {
 	public static Bitmap generateBitmap(int width, int height) {

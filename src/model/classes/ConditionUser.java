@@ -1,7 +1,8 @@
 package model.classes;
 
 /**
- * This the ConditionUser class used to store entries from the database into ConditionUser objects.
+ * This data class converts Cursor objects returned from the database
+ * into ConditionUser objects.
  * 
  * @author jletourn
  */

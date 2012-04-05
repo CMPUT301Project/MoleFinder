@@ -1,7 +1,8 @@
 package model.classes;
 
 /**
- * This the ConditionEntry class used to store entries from the database into ConditionEntry objects.
+ * This data class converts Cursor objects returned from the database
+ * into ConditionEntry objects.
  * 
  * @author jletourn
  */

@@ -15,9 +15,9 @@ import android.util.Log;
 
 
 /**
- * DatabaseManager is the database controller for the MoleFinder application,
- * the database contains two tables. One table is for storing the references to users images
- * and the other table is the tags of the images used for sorting. This class gives the 
+ * This is the database controller for the MoleFinder application,
+ * the database contains three tables. One table is for storing the references to images,
+ * one for the tags of those images, and one for users. This class gives the 
  * database functionality such as deleting, inserting and fetching database entries.
  * @author jletourn
  *

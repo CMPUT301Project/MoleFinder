@@ -22,7 +22,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-/** The ReviewImagesActivity displays a list of available tags
+/** This activity displays a list of available tags
  * in the spinner at the top, and once selected displays a list
  * of conditions that are currently stored in the database with
  * the corresponding tag. 

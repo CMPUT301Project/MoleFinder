@@ -1,7 +1,8 @@
 package model.classes;
 
 /**
- * This the ConditionTag class used to store entries from the database into ConditionTag objects.
+ * This data class converts Cursor objects returned from the database
+ * into ConditionTag objects.
  * 
  * @author mbessett
  */

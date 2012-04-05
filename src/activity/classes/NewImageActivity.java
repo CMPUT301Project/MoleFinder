@@ -17,7 +17,7 @@ import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 /**
- * This is the NewImageActivity class it is used to save images and call the camera activities.
+ * This activity is used to save images and call the camera activities.
  * 
  * @author jletourn
  *

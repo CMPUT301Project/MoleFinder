@@ -11,7 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 /**
- * The MoleFinderSpinnerAdapter is used to fill the spinners with tag entries.
+ * This adapter is used to fill spinners with tag entries.
  * 
  * @author mbessett
  */

@@ -11,6 +11,13 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+/**
+ * This activity allows the user to login using a password set on
+ * initial use of the application.
+ * 
+ * @author jletourn
+ */
+
 public class LoginActivity extends FActivity {
 	// UI
 	private EditText passwd;
@@ -19,14 +26,6 @@ public class LoginActivity extends FActivity {
 	private Button login;
 	private ConditionUser user;
 	private TextView enterPass;
-	
-	/**
-	 * This is the LoginActivity class, it is used to provide a simple login
-	 * page for user security. It allows the user to login using a password set on
-	 * initial use of the application.
-	 * 
-	 * @author jletourn
-	 */
 	
 	@Override
 	protected void findViews() {

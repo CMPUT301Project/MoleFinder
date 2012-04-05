@@ -54,6 +54,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
+
+/** This is a class that was provided by Dr Hindle for use.
+ * 
+ *
+ */
+
 public class BogoPicGenActivity extends Activity {
 
 	Uri imageFileUri;

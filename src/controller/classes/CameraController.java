@@ -12,7 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 
 /**
- * This is the CameraController class that will set up the file path and name
+ * This class sets up the file path and name
  * the image that is being stored.
  * @author jletourn
  *

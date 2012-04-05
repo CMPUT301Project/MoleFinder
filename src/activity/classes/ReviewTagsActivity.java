@@ -15,7 +15,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemClickListener;
 
-/** The ReviewTagsActivity class displays a clickable list
+/** This activity displays a clickable list
  * of tags currently in the database. Selecting one directs
  * the user to the Activity where they may edit or delete it.
  * 

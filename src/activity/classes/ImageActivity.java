@@ -14,8 +14,8 @@ import model.classes.ConditionEntry;
 import mole.finder.R;
 
 /**
- * This is the ImageActivity class this activity allows the user to view
- * his/her images in an ImageView. There is also edit and delete functionality.
+ * This activity allows the user to view his/her images in an ImageView. 
+ * There is also edit and delete functionality.
  * 
  * @author jletourn
  */

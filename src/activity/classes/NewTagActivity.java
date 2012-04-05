@@ -9,8 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-/** This is the NewTagActivity class, it creates or overwrites a tag stored in 
- * the database.
+/** This activity creates or overwrites a tag stored in the database.
  * 
  * @author mbessett
  */

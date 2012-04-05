@@ -1,6 +1,6 @@
 package model.classes;
 
-/** DatabaseEntry is an abstract class representing rows in the application database.
+/** This abstract class represents rows in the application database.
  * This abstraction allows different types of DatabaseEntry objects to be displayed in
  * a ListView or Spinner. 
  * 

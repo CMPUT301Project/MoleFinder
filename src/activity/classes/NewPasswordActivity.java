@@ -13,9 +13,9 @@ import model.classes.ConditionUser;
 import mole.finder.R;
 
 /**
- * This is the NewPasswordActivity class, it is only called on the initial creation of the database.
- * This is where the user will set his or her password that will be used to log into the application
- * in future use.
+ * This activity is only called on the initial creation of the database to allow
+ * the user to set the password they will use to log into the application in the
+ * future.
  * 
  * @author jletourn
  */

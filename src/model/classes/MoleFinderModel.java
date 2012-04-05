@@ -6,9 +6,8 @@ import java.util.List;
 import android.content.Context;
 import android.database.Cursor;
 
-/** MoleFinderModel represents the current data in the system.
- * It uses the DatabaseManager to create lists of objects 
- * to be displayed elsewhere.
+/** This model class interacts with the DatabaseManager to provide
+ * usable objects when querying the database. 
  * 
  * @author mbessett
  */
@@ -374,7 +373,7 @@ public class MoleFinderModel {
 	}
 	
 	// start DB with some test objects
-	public void initialiseTags() {			
+	private void initialiseTags() {			
 		DBManager.open();
 		DBManager.createTagEntry("Face","");
 		DBManager.createTagEntry("Foot", "");
