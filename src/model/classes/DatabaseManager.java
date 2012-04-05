@@ -324,9 +324,17 @@ public class DatabaseManager{
 	 * @param interval The time (in days) away from the current date to search
 	 * @return A Cursor over the matching tags 
 	 */
-	public Cursor fetchAdvancedConditions(String tag, int interval) {	
+	public Cursor fetchAdvancedConditions(String tag, int interval, boolean mostRecentFirst) {	
+		// setup query clauses
 		String where = KEY_TAG + " = " + "'" + tag + "'";
 		String[] args = null;
+		String suffix;
+		if (mostRecentFirst) {
+			suffix = " DESC";
+		}
+		else {
+			suffix = " ASC";
+		}
 		
 		if (interval > 0) {
 			Calendar cal = Calendar.getInstance();
@@ -344,7 +352,8 @@ public class DatabaseManager{
 		}
 
 		String[] columns = new String[] { KEY_ROWID, KEY_TAG, KEY_DATE, KEY_COMMENTS, KEY_IMAGE };
-		String order = KEY_DATE + " ASC";
+		String order = KEY_DATE + suffix;
+		// run query
 		return mDb.query(DATABASE_IMAGE_TABLE, columns, where, args, null, null, order);
 	}
 

@@ -48,6 +48,8 @@ public class MoleFinderModel {
 		users = new ArrayList<DatabaseEntry>();
 		getTags(); // fill on construction
 		
+		//createTestEntries();
+		
 	}
 	
 	/* Fake entries to test the date range feature.
@@ -120,28 +122,17 @@ public class MoleFinderModel {
 			int displaying, boolean mostRecentFirst) {
 		clearConditions();
 		DBManager.open();
-		Cursor cur = DBManager.fetchAdvancedConditions(tag, interval);
-		
-		// sqlite appends new items to the end of the existing tables
-		int count = 0;
-		if (mostRecentFirst) {			
-			for (cur.moveToLast(), count = 0; !cur.isBeforeFirst() && count < displaying;
-					cur.moveToPrevious(), count++) {
-				DatabaseEntry entry = cursorToCondition(cur);
-				conditions.add(entry);
-			}
+		Cursor cur = DBManager.fetchAdvancedConditions(tag, interval, mostRecentFirst);
+		int count;
+		for (cur.moveToFirst(), count = 0; !cur.isAfterLast() && count < displaying;
+		cur.moveToNext(), count++) {				
+			DatabaseEntry entry = cursorToCondition(cur);
+			conditions.add(entry);				
 		}
-		else {
-			for (cur.moveToFirst(), count = 0; !cur.isAfterLast() && count < displaying;
-					cur.moveToNext(), count++) {				
-				DatabaseEntry entry = cursorToCondition(cur);
-				conditions.add(entry);				
-			}
-		}		
 		cur.close();
 		DBManager.close();
 	}
-	
+
 	/** Converts the first element in the cursor to a ConditionEntry.
 	 * 
 	 * @param cur List of ConditionEntry data returned from database
