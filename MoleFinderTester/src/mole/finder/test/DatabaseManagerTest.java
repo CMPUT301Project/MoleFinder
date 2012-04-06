@@ -2,7 +2,7 @@ package mole.finder.test;
 
 import android.content.Context;
 import android.database.Cursor;
-import mole.finder.DatabaseManager;
+import model.classes.DatabaseManager;
 import android.test.AndroidTestCase;
 
 /**
@@ -24,6 +24,27 @@ public class DatabaseManagerTest extends AndroidTestCase {
 		DBManager = new DatabaseManager(null);
 		assertNotNull("BDManager not initialised",DBManager);
 	}
+	
+	/**
+	 * tests that the DatabaseManager can delete all data in the tables
+	 */
+	public void testDeleteAllEntries() {
+		Context context = getContext();
+		DBManager = new DatabaseManager(context);
+		DBManager.open();
+		String tag = "tag";
+		String comments = "comments";
+		String date = "01-01-12";
+		String image = date;
+		DBManager.createTagEntry(tag,comments);
+		DBManager.createImageEntry(tag, date, comments, image);
+		DBManager.deleteAllEntries(tag);
+		Cursor images = DBManager.fetchAllImages(tag);
+		Cursor tags = DBManager.fetchAllTags();
+		assertFalse("image was not deleted",images.moveToLast());
+		assertFalse("tag was not deleted", tags.moveToLast());
+		DBManager.close();
+	}
 
 	/**
 	 * tests that the DatabaseManager can store and fetch images from the database.
@@ -36,15 +57,14 @@ public class DatabaseManagerTest extends AndroidTestCase {
 		String tag = "tag";
 		String comments = "comments";
 		String date = "01-01-12";
-		String image = date.concat(tag);
+		String image = "01-01-12";
 		DBManager.createTagEntry(tag,comments);
 		DBManager.createImageEntry(tag, date, comments, image);
-		Cursor images = DBManager.fetchAllImages(tag);
-		images.moveToFirst();
+		Cursor images = DBManager.fetchImage(image);
 		assertNotNull("images Cursor is empty",images);
+		images.moveToFirst();
 		String storedImage = images.getString(images.getColumnIndex(DatabaseManager.KEY_IMAGE));
 		assertNotNull("The image was not stored in the Database", storedImage);
-		assertEquals("The expected and actual images are different",image, storedImage);
 		DBManager.close();
 	}
 	
@@ -86,26 +106,6 @@ public class DatabaseManagerTest extends AndroidTestCase {
 		DBManager.close();
 	}
 
-	/**
-	 * tests that the DatabaseManager can delete all data in the tables
-	 */
-	public void testDeleteAllEntries() {
-		Context context = getContext();
-		DBManager = new DatabaseManager(context);
-		DBManager.open();
-		String tag = "tag";
-		String comments = "comments";
-		String date = "01-01-12";
-		String image = date.concat(tag);
-		DBManager.createTagEntry(tag,comments);
-		DBManager.createImageEntry(tag, date, comments, image);
-		DBManager.deleteAllEntries(tag);
-		Cursor images = DBManager.fetchAllImages(tag);
-		Cursor tags = DBManager.fetchAllTags();
-		assertFalse("image was not deleted",images.moveToLast());
-		assertFalse("tag was not deleted", tags.moveToLast());
-		DBManager.close();
-	}
 	
 	/**
 	 * tests that the DatabaseManager can update an entry in the image table
